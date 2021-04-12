@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ncs.FaqMapper">
+
+
+<!-- SQL 쿼리문에서 비교연산자 사용하는 경우  
+XML에서는  <,>등 비교연산자의 경우 XML규칙상 에러 나기때문에,
+이기호를 연산자로 인식하도록 하기 위해서는 SQL문을 CDATA로 묶어 주어야 한다.
+<![CDATA[ SELECT * FROM table WHERE id > 1 ]]> 
+-->
+
+<!-- SearchCriteria PageList  
+=> searchType 별 검색 조건문 만들기
+=> Sql , include 태그 : 반복되는 쿼리 묶기
+
+=> title Like '%#{keyword}%' 
+=> '%' + #{keyword} + '%'
+=> CONCAT(i1,i2) , ||
+=> CONCAT : 두개의 문자열 합침 
+			3개의 문자열을 합치려면 아래처럼 함수를 함수로 감싸줘야 한다. 
+			( MySql은 3개 가능 )
+			
+=> 만약 keyword 를 선택하지 않은 경우 라면
+   select id from board where id like '%%' ;
+   -> 무조건(전체검색) 과 동일			
+--> 
+<sql id="search">
+  <if test="keyword != null">
+  	<bind name="keyVal" value="'%'+keyword+'%'"/>
+  </if>	
+  <choose>
+  	<when test="searchType=='t'.toString()">
+  		and title Like #{keyVal} )
+  		<!-- and title Like  CONCAT('%',CONCAT(#{keyword},'%')) -->
+  	</when>
+  	<when test="searchType=='c'.toString()">
+  		and content Like #{keyVal} )
+  	</when>
+  	
+  	<when test="searchType=='tc'.toString()">
+  		and title   Like  '%' || #{keyword} || '%' 
+  		or  content Like  '%' || #{keyword} || '%')
+  	</when>
+  	<otherwise>)</otherwise> 
+  </choose>
+</sql>
+
+<select id="searchRowCount" resultType="int">
+<![CDATA[ 	
+	select count(*) from faq where ( seq > 0 ]]>
+	<!-- 조건 id : search -->
+	<include refid="search"></include>
+</select>
+
+ <select id="searchFList" resultType="vo.FaqVO">
+ <![CDATA[
+ select seq,title,content,rnum from
+ (select f.* , ROW_NUMBER() OVER(order by seq desc) rnum from faq f 
+   where seq > 0 ]]>
+  <include refid="search"></include>
+  where rnum between #{sno} and #{eno}
+</select>
+ 
+<!-- PageList -->
+<select id="totalRowCount" resultType="int">
+	select count(*) from faq
+</select>
+<select id="pageList" resultType="vo.FaqVO">
+  select seq,title,rnum  
+  from faq where rnum between #{sno} and #{eno}
+</select>
+
+<insert id="rinsert">
+	INSERT into faq values((select nvl(max(seq),0)+1 from faq), 
+	#{title},#{content})
+</insert>
+
+<!-- ******************************* -->
+<select id="selectList" resultType="vo.FaqVO">
+	 select * from faq order by root desc, step asc
+</select>
+
+<select id="selectOne" resultType="vo.FaqVO">
+	 select * from faq where seq=#{seq}
+</select>
+
+<!-- selectKey Test 
+=> https://deeplify.dev/back-end/spring/select-key
+=> AutoNumbering 을 편리하게 할 수 있도록 지원
+=> DB작업중 먼저 어떤 키값을 가져와서 증가시켜서 입력하거나 혹은 입력후에 증가된 키값을 가져올 필요가 있을때다.
+   selectKey를 이용하면 별도의 쿼리로직 없이 해당 메소드에서 일괄처리할 수가 있음.
+   keyProperty: selectKey구문의 결과가 셋팅될 대상 프로퍼티.
+   resultType: 결과의 타입.
+   order: BEFORE 또는 AFTER
+          BEFORE로 설정하면 키를 먼저 조회하고 그 값을 keyProperty 에 셋팅한 뒤 insert 구문실행.
+          AFTER로 설정하면 insert 구문을 실행한 뒤 selectKey 구문 실행.
+          오라클에서는 insert구문 내부에서 일관된 호출형태로 처리한다.
+   statementType: STATEMENT, PREPARED 또는 CALLABLE중 하나 선택가능.
+          마이바티스에게 Statement, PreparedStatement 또는 CallableStatement를 사용하게 한다.
+          디폴트는 PREPARED.
+-->
+<insert id="insert">
+	<selectKey keyProperty="seq" resultType="int" order="BEFORE">
+		SELECT NVL(MAX(seq),0)+1 FROM faq
+	</selectKey>
+	INSERT INTO faq VALUES(
+		#{seq},
+		#{title}, #{content},
+</insert>
+
+<update id="update">
+	UPDATE faq set title=#{title}, content=#{content} WHERE seq=#{seq} 
+</update>
+
+<delete id="delete">
+	DELETE from faq where seq=#{seq} 
+</delete>
+
+</mapper>  

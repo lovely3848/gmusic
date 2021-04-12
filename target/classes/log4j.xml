@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE log4j:configuration 
+	SYSTEM "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+<!-- <!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd"> 
+	=> 변경됨 : 위 구문으로 변경시켜야 함 -->	
+	
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- Appenders 
+		=> Appender는 Logger로부터 전달된 로그 메시지를 출력한다.
+		=> 1개의 Logger에 여러 개의 Appender를 설정할 수 있다.
+		=> Appender 인터페이스를 구현한 
+		   ConsoleAppender, FileAppender, Daily RollingFileAppender, DBAppender
+		      등을 기본 제공.
+	** Layout
+		=> 로그 메시지를 어떤 형식으로 출력할 것인지 결정한다.	
+	-->
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
+		</layout>
+	</appender>
+	
+<!--**  Application Loggers 
+	** Logger
+		=> Log4J의 핵심 구성 요소로 6개의 로그 레벨을 가지고 있으며 
+		      로그 출력 여부는 로그 레벨에 따라 결정된다.
+		      출력하고자 하는 로그 메시지를 Appender에게 전달한다.
+-->
+	<logger name="com.ncs.green">
+		<level value="info" />
+	</logger>
+	
+	<!-- 3rdparty Loggers -->
+	<logger name="org.springframework.core">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.springframework.beans">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.springframework.context">
+		<level value="info" />
+	</logger>
+
+	<logger name="org.springframework.web">
+		<level value="info" />
+	</logger>
+
+	<!-- Root Logger 
+	=> info, warn, error -> INFO, WARN, ERROR
+    => debug -> 위에 DEBUG 추가
+    => trace -> 위에 TRACE 추가
+    => 실제는 DEBUG, WARN 이 주로 이용됨. 	
+	-->
+	<root>
+		<priority value="trace" />
+		<appender-ref ref="console" />
+	</root>
+	
+</log4j:configuration>

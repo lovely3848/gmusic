@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ncs.GmemberMapper">
+
+	<insert id="insert">
+		insert into gmember values(
+		#{id},#{password},#{sex},#{email},
+		#{phone},#{birthday},#{rid},#{genre1},
+		#{genre2},default,default,#{uploadfile},
+		default
+		)
+	</insert>
+	<!-- 회원 정보조회  -->
+	<select id="selectOne" resultType="vo.GmemberVO">
+		select * from gmember where	id=#{id}
+	</select>
+<!-- 내정보 수정  -->
+	<update id="update">
+		update gmember set password = #{password} ,genre1 = #{genre1}, genre2 =	#{genre2} where id = #{id}
+	</update>
+<!-- 내정보 수정  -->
+<!-- 프로필 수정  -->	
+	<update id="imageupdate">
+		update gmember set uploadfile = #{uploadfile} where id = #{id}
+	</update>
+<!-- 프로필 수정  -->
+<!-- 회원 탈퇴  -->
+	<delete id="delete">
+	DELETE from gmember where id=#{id}
+	</delete>
+<!-- 회원 탈퇴  -->	
+
+	<!-- 회원 가입시 키값 저장 -->
+	<update id="updateAuthkey">
+		update gmember set authkey =
+		#{authkey} where email = #{email}
+	</update>
+
+	<!-- 이메일 인증후 로그인 가능하게 바꾸는 값 -->
+ 	<update id="updateAuthkeyconfirm">
+		update gmember set authkey = 'Y'
+		where id = #{id}
+	</update>
+	
+	<!-- id, email, phone 중복확인 -->
+	<select id="userDuplicationCheck" resultType="int">
+		select count(*) from gmember where 
+		
+		<choose>
+			<when test="id != null and !id.equals('')">
+			id = #{id}
+			</when>
+			<when test="email != null and !email.equals('')">
+			email = #{email}
+			</when>
+			<when test="phone != null and !phone.equals('')">
+			phone = #{phone}
+			</when>
+		</choose>
+		
+	</select>
+
+</mapper>  

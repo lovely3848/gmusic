@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+
+<!--
+*** spring-webmvc 라이브러리에서 설정 가능 Tag 
+ => https://velog.io/@hanblueblue/Spring-mvcannotation-driven
+* mvc:annotation-driven
+Spring MVC 컴포넌트들을 디폴트 설정을 통해 활성화한다.
+Spring MVC @Controller에 요청을 보내기 위해 필요한 HandlerMapping과 HandlerAdapter를 Bean으로 등록한다.
+HandlerMapping : HTTP 요청정보를 이용해서 컨트롤러를 찾아주는 기능
+HandlerAdapter : HandlerMapping을 통해 찾은 컨트롤러를 직접 실행하는 기능을 수행
+Bean을 생성하기 위해 xml 파일에 context:component-scan을 명시하면 이 태그를 포함하지 않아도 MVC 어플리케이션을 작동한다.
+
+* context:component-scan
+특정 패키지 내의 클래스를 스캔하고 Annotation(@Component @Controller @Service @Repository)을 확인한 후 Bean 인스턴스로 생성한다.
+이를 이용하면 @Autowired와 @Qualifier Annotation을 인식할 수 있다.
+context:component-scan을 선언했다면 context:annotation-config를 선언할 필요가 없다.
+
+* context:annotation-config
+ApplicationContext 안에 이미 등록된 Bean들의 Annotation을 활성화하기 위해 사용된다.
+Component-scan과의 차이점은 이 설정은 Bean을 등록하는 작업을 수행하지 않는다는 것이다.
+ -->
+
+	<context:component-scan base-package="com.ncs.green, service, util" />
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		 ** Image Upload & Download
+		 1) Upload : MultipartResolver 설정 -->
+	<beans:bean id="multipartResolver" 
+			class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="-1" />	
+	</beans:bean>
+	<!-- 
+		=> id , name 변경 불가능 
+			: 대부분의 Resolver로 끝나는 클래스의 경우에는 이미 정해져있기 때문에 변경불가능.
+		=> maxUploadSize 는 지정하지 않으면 default 값은 -1 이며 크기 무제한 이 됨. 
+	 -->
+		<!-- 1) JDBC Connection  -->
+	<beans:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<beans:property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<beans:property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:orcl" />
+		<beans:property name="username" value="system" />
+		<beans:property name="password" value="oracle" />
+	</beans:bean>	
+	<!-- 2) Mybatis 설정
+		=> SqlSessionFactory -> SqlSessionTemplate 
+		2.1) SqlSessionFactory
+			- MyBatis 와 연동시  DB 연결과 SQL 실행의 핵심 클래스
+			- SqlSessionFactoryBean 에 의해 생성됨
+	 -->
+	 	<beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<beans:property name="dataSource" ref="dataSource" />
+		<!-- MyBatis 설정 파일의 위치를 지정  : 스프링 동작시 같이 동작 하도록 --> 
+	  	<beans:property name="configLocation" value="classpath:/mybatis-config.xml" /> 
+	  	<!-- SQL을 작성 해놓은 xml 파일 (mapper) 의 위치를 지정합니다. --> 
+	  	<beans:property name="mapperLocations" value="classpath:/mappers/**/*Mapper.xml" /> 
+	  	 <!-- mappers 폴더내의 모든 폴더의 *Mapper.xml 을 인식하도록 해줌 -->
+	    </beans:bean>
+	    	<beans:bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache" >
+		<beans:constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</beans:bean>
+	
+<!-- *** Exception 설정 --> 	
+	<beans:bean id="exceptionResolver" 
+				class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<beans:property name="exceptionMappings">
+			<beans:props> 
+			<!-- 스프링 하에서 발생된 Exception 은 Spring 의  Exception 객체를 사용해야 정확하게 인식함 -->   
+				<beans:prop key="org.springframework.dao.DuplicateKeyException">
+					errorPage/dupExceptionMessage</beans:prop>
+				<beans:prop key="org.springframework.jdbc.UncategorizedSQLException">
+					errorPage/sqlexceptionMessage</beans:prop>
+				<beans:prop key="java.lang.IllegalArgumentException">
+					errorPage/ilexceptionMessage</beans:prop>	
+				<beans:prop key="java.lang.ArithmeticException">
+					errorPage/arexceptionMessage</beans:prop>
+				<beans:prop key="java.lang.NullPointerException">
+					errorPage/npException</beans:prop>
+			</beans:props>
+		</beans:property>
+		<beans:property name="defaultErrorView" 
+						value="errorPage/exceptionMessage" />
+	</beans:bean>	
+	
+	<!--  다운로드 테스트-->
+	   <beans:bean id="viewResolver" 
+         class="org.springframework.web.servlet.view.BeanNameViewResolver">
+      <beans:property name="order" value="1" />
+   </beans:bean>
+	<beans:bean id="download" class="downTest.DownloadView"/> 
+</beans:beans>

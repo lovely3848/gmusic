@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<!-- JUnit Test 를 위한 MemberDAO, VO bean 등록하기 
+		test1) 모두 bean 등록
+		test2) MemberDAO 는 @ , package 등록
+	<bean class="javaTest.MemberDAO" lazy-init="true"/>	
+	<context:component-scan base-package="javaTest" />
+	
+	<bean class="vo.MemberVO" lazy-init="true"/>
+	*************************************************** -->	
+	
+	<!--스프링시큐리티 라이브러리 BcryptPasswordEncoder -->
+	<bean id="bcryptPasswordEncoder" 
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+	
+	
+	<!-- email 인증 관련   -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.gmail.com" />
+        <property name="port" value="587" />
+        <property name="username" value="gmusicprojectmail@gmail.com"/>
+        <property name="password" value="qweasd123!@#" />
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.transport.protocol">smtp</prop>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.debug">true</prop>
+            </props>
+        </property>
+    </bean>
+</beans>

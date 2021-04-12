@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ncs.MusicMapper">
+
+<!-- ******************************* -->
+<select id="selectList" resultType="vo.MusicVO">
+	 select * from music order by releasedate desc, sname
+</select>
+
+<select id="selectOne" resultType="vo.MusicVO">
+	select snum, sname, stitle, singername, releasedate, genre, 
+	REPLACE(lyrics, '-', '') lyrics, country, musicurl, 
+	downloadfile, image, count  from music where
+	snum=#{snum}
+</select>
+
+<update id="musicCount"> <!-- count를 위한 sql -->
+
+   UPDATE music set count=#{count} WHERE snum=#{snum}
+
+</update>
+
+
+</mapper>  

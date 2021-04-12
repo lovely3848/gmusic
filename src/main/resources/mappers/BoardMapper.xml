@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ncs.BoardMapper">
+
+<!-- SearchCriteria pageList 
+=> searchType 별 검색 조건문 만들기 
+=> Sql , include 태그 : 반복되는 퀴리 묶기
+
+=> title Like '%#{keyword}%' 
+=> '%' + #{keyword} + '%'
+=> CONCAT(i1,i2) , ||
+=> CONCAT : 두개의 문자열 합침 
+         3개의 문자열을 합치려면 아래처럼 함수를 함수로 감싸줘야 한다. 
+         ( MySql은 3개 가능 )
+=> 만약 keyword를 선택하지 않은 경우라면
+	select id from gboard where id like '%%' ;
+	-> 무조건과 동일
+-->
+
+<!-- 조건문 만들기 : search
+	=> title Like '%java%' 
+	=> '%' + #{keyword} + '%'
+	=> CONCAT(i1,i2) , ||    <- 스트링 타입 안에서의 연결 연산자
+-->
+<sql id="search">
+	<if test="keyword != null">
+		<bind name="keyVal" value="'%' + keyword + '%'"/>
+	</if>
+	<choose>
+		<when test="searchType=='t'.toString()">
+			and title Like #{keyVal})
+			<!-- and title Like CONCAT('%',CONCAT(#{keyword},'%')) -->
+		</when>
+		<when test="searchType=='w'.toString()">
+			<!-- and id Like '%' || #{keyword} || '%') -->
+			and id Like #{keyVal})
+			<!-- and title Like CONCAT('%',CONCAT(#{keyword},'%')) -->
+		</when>
+		<when test="searchType=='tw'.toString()">
+			and title Like #{keyVal}
+			or id Like #{keyVal})
+			<!-- and title Like CONCAT('%',CONCAT(#{keyword},'%')) -->
+		</when>
+		<otherwise>
+			)
+		</otherwise>
+	</choose>
+</sql>
+
+<!-- SearchCriteria PageList -->  <!-- 부등호 기호를 태그가 아닌 기호라고 처리해줌 CDATA -->
+<select id="searchRowCount" resultType="int">
+<![CDATA[
+	select count(*) from gboard where ( seq > 0 ]]>
+	<!-- 조건 id : search -->
+	<include refid="search"></include>
+</select>
+<select id="searchBList" resultType="vo.BoardVO">
+<![CDATA[
+	select seq,title, id,regdate,count,root,step, rnum from 
+	(select b.* , ROW_NUMBER() OVER(order by root desc, step asc) rnum from gboard b 
+	where seq > 0 ]]><include refid="search"></include>
+	where rnum between #{sno} and #{eno}
+</select> <!-- DB의 출력순서를 나타내는 rnum은 pk를 제외하곤 order by 이전에 값이 정해지므로 ROW_NUMBER()와 OVER() 함수를 쓴다. -->
+
+
+<!-- 
+** CheckBoardList 
+	=> select * from gboard where id in('admin','banana','apple') order by root desc, step asc	
+  -->
+<!-- <select id="checkselectList" resultType="vo.BoardVO">
+	select * from gboard where id in
+	<foreach collection="check" item="it" open="(" close=")" separator=",">
+	#{it}	
+	</foreach>
+	order by root desc, step asc
+</select> -->
+ 
+
+<!-- ** Ajax id BoardList -->
+<!-- <select id="idbList" resultType="vo.BoardVO">
+	 select * from gboard where id=#{id} order by root desc, step asc
+</select>
+ -->
+<!-- 
+** reply insert
+ => 답글 등록과 step증가
+ -->
+<update id="stepUpdate">
+	UPDATE gboard set step=step+1 WHERE root=#{root} and step >= #{step}
+</update> 
+<insert id="replyInsert">
+	INSERT into gboard values((select nvl(max(seq),0)+1 from gboard), 
+	#{title},#{id},#{content},sysdate,0,#{root},#{step})
+</insert>
+
+<!-- ******************************* -->
+<select id="selectList" resultType="vo.BoardVO">
+	 select * from gboard order by root desc, step asc
+</select>
+
+<select id="selectOne" resultType="vo.BoardVO">
+	 select * from gboard where seq=#{seq}
+</select>
+<!-- <select id="selectOne" resultType="vo.BoardVO">
+	 select seq,title,id,replace(content,'-','') content,regdate,count,root,step from gboard where seq=#{seq}
+</select> -->
+
+<!-- selectKey Test 
+=> https://deeplify.dev/back-end/spring/select-key
+=> AutoNumbering 을 편리하게 할 수 있도록 지원
+=> DB작업중 먼저 어떤 키값을 가져와서 증가시켜서 입력하거나 혹은 입력후에 증가된 키값을 가져올 필요가 있을때다.
+   selectKey를 이용하면 별도의 쿼리로직 없이 해당 메소드에서 일괄처리할 수가 있음.
+   keyProperty: selectKey구문의 결과가 셋팅될 대상 프로퍼티.
+   resultType: 결과의 타입.
+   order: BEFORE 또는 AFTER
+          BEFORE로 설정하면 키를 먼저 조회하고 그 값을 keyProperty 에 셋팅한 뒤 insert 구문실행.
+          AFTER로 설정하면 insert 구문을 실행한 뒤 selectKey 구문 실행.
+          오라클에서는 insert구문 내부에서 일관된 호출형태로 처리한다.
+   statementType: STATEMENT, PREPARED 또는 CALLABLE중 하나 선택가능.
+          마이바티스에게 Statement, PreparedStatement 또는 CallableStatement를 사용하게 한다.
+          디폴트는 PREPARED.
+ -->
+ <insert id="insert">
+	<selectKey keyProperty="seq" resultType="int" order="BEFORE">
+		SELECT NVL(MAX(seq),0)+1 FROM gboard
+	</selectKey>
+	INSERT INTO gboard VALUES(
+		#{seq},
+		#{title}, #{id}, #{content}, sysdate, 0,
+		#{seq}, 0)
+</insert>
+
+<!-- 구버전 <insert id="insert">
+	INSERT into gboard values((select nvl(max(seq),0)+1 from gboard),
+	#{title},#{id},#{content},sysdate,0,
+	(select nvl(max(seq),0)+1 from gboard),0)
+</insert>
+-->
+ 
+<update id="update">
+	UPDATE gboard set title=#{title}, content=#{content} WHERE seq=#{seq} 
+</update> 
+
+<delete id="delete">
+	DELETE from gboard
+	<if test="seq==root">where root=#{seq}</if> 
+	<!-- 원글삭제 : 동일한 root를 가진 글들은 모두 삭제 -->
+	<if test="seq!=root">where seq=#{seq}</if> 
+	<!-- 답글삭제 -->
+</delete> 
+<!-- 
+Controller 에서 count 증가후 service 시행 
+	=> UPDATE gboard set count=count+1 WHERE seq=#{seq} 
+ -->
+<update id="countUp">
+	UPDATE gboard set count=#{count} WHERE seq=#{seq} 
+</update>
+ 
+</mapper>  

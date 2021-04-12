@@ -1,0 +1,52 @@
+body { background-color: white; }
+
+/* axTest03.js -> board jsonView Test */
+.content { color : blue; }
+#content {
+	display: none;
+	width : 300px;
+	height : 70px;
+	background: MintCream;
+	z-index: 100;
+	position: absolute;
+}
+
+/* inputTag ErrorMessage */
+.message {
+	color: red;
+	font-style: italic;
+	font-size: x-small;
+}
+
+/*  span Tag Menu */
+.textLink {
+	color: gray;
+}
+/*  Check  List searchBar */
+#searchBar {
+	color:DimGray ; font-family:돋움; font-size:16px;
+	float: left;
+}
+
+a {color:gray; text-decoration:none;}
+a:link {color:gray;}     /* 아직 방문하지 않은경우 */ 
+a:visited {color:gray;}  /* 한번 이상 방문한 링크 처리 */
+a:active {color:yellow;}  /* 마우스로 클릭하는 순간 */
+a:hover {color:Maroon; font-weight:bold;}  /* 마우스 링크 위 올려 놓았을때 */
+
+
+/* Link Button */
+.button {
+	width:150px; height:70px; background-color:aqua;
+	border-radius:20px; border:5px solid lightGray;  
+	text-align: center;
+	}
+a {color:gray; text-decoration:none; }
+.button > a {line-height:70px}
+.button:hover {	
+	box-shadow: 5px 5px 5px #A9A9A9
+	/* 그림자	=> box, Text 
+            => 오른쪽(h 수평거리: +우측/-좌측),
+               아래(v 수직거리: +아래쪽/-위쪽), 
+               흐림도(blur), 색상 */	
+	}
