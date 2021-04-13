@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>** Spring NullPointerException Message **</title>
-<link rel="stylesheet" type="text/css" href="resources/jqLib/myStyle.css">
+<link rel="stylesheet" type="text/css" href="resources/myLib/myStyle.css">
 </head>
 <body>
 <h2>** Spring NullPointerException Message **</h2>

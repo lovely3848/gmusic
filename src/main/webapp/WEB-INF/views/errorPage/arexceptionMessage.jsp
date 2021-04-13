@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <html><head>
 <title>**  [ ArithmeticException ]  **</title>
-<link rel="stylesheet" type="text/css" href="resources/jqLib/myStyle.css">
+<link rel="stylesheet" type="text/css" href="resources/myLib/myStyle.css">
 </head>
 <body>
 	<h1>** Member_Spring ArithmeticException  **</h1> <hr>
