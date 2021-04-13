@@ -66,6 +66,24 @@ public class BoardController {
 		mv.setViewName("notice/noticepage"); // forward
 		return mv;
 	} //notice
+	
+	@RequestMapping(value = "/ndetail")
+	public ModelAndView ndetail(HttpServletRequest request, ModelAndView mv) {
+		
+		List<NoticeVO> list = noticeService.selectList();
+		if ( list != null) {
+			mv.addObject("Banana", list);
+		}else {
+			mv.addObject("message","~~ 출력자료가 1건도 없습니다 ~~");
+		}
+		// redirect 요청시 전달된 message 처리
+		// => from mdetail
+		if (request.getParameter("message") !=null )
+			mv.addObject("message",request.getParameter("message"));
+		
+		mv.setViewName("notice/noticepage"); // forward
+		return mv;
+	} //ndetail
 
 	/** -----------------공지 사항 테이블 끝--------------------- **/
 
