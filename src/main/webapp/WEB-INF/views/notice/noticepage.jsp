@@ -246,7 +246,7 @@ footer {
 				<tr>
 					<td>${row.seq}</td>
 					<td style="text-align: left;">
-						<a href="bdetail?seq=${row.seq}" style="font-weight: bold;">${row.title}</a>
+						<a href="ndetail?seq=${row.seq}" style="font-weight: bold;">${row.title}</a>
 					</td>
 					<td>${row.regdate}</td>
 					<td>${row.count}</td>
@@ -307,9 +307,9 @@ footer {
 			</c:if>
 		</div>
 		<hr>
-		<c:if test="${loginID!=null}">
-			<a href="binsertf">[새글등록]</a>&nbsp;
-</c:if>
+		<c:if test="${loginGRADE=='admin'}">
+			<a href="ninsertf">[새글등록]</a>&nbsp;
+		</c:if>
 
 		<!-- ///////////////////SECTION END////////////////////////////////////////////////////// -->
 	</section>

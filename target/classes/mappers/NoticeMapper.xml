@@ -86,13 +86,6 @@
 ** reply insert
  => 답글 등록과 step증가
  -->
-<update id="stepUpdate">
-	UPDATE notice set step=step+1 WHERE root=#{root} and step >= #{step}
-</update> 
-<insert id="replyInsert">
-	INSERT into notice values((select nvl(max(seq),0)+1 from notice), 
-	#{title},#{id},#{content},sysdate,0,#{root},#{step})
-</insert>
 
 <!-- ******************************* -->
 <select id="selectList" resultType="vo.NoticeVO">
@@ -122,13 +115,11 @@
           디폴트는 PREPARED.
  -->
  <insert id="insert">
-	<selectKey keyProperty="seq" resultType="int" order="BEFORE">
+	<!-- <selectKey keyProperty="seq" resultType="int" order="BEFORE">
 		SELECT NVL(MAX(seq),0)+1 FROM notice
-	</selectKey>
-	INSERT INTO notice VALUES(
-		#{seq},
-		#{title}, #{id}, #{content}, sysdate, 0,
-		#{seq}, 0)
+	</selectKey> -->
+	INSERT INTO notice (title, id, content) VALUES(
+		#{title}, #{id}, #{content})
 </insert>
 
 <!-- 구버전 <insert id="insert">
@@ -143,11 +134,7 @@
 </update> 
 
 <delete id="delete">
-	DELETE from notice
-	<if test="seq==root">where root=#{seq}</if> 
-	<!-- 원글삭제 : 동일한 root를 가진 글들은 모두 삭제 -->
-	<if test="seq!=root">where seq=#{seq}</if> 
-	<!-- 답글삭제 -->
+	DELETE from notice where seq=#{seq}
 </delete> 
 <!-- 
 Controller 에서 count 증가후 service 시행 

@@ -23,15 +23,15 @@ import vo.NoticeVO;
 @Controller
 public class BoardController {
 	@Autowired
-	BoardService service;
-
+	NoticeService noticeService;
+	
 	@Autowired
 	FaqService FAQservice;
 	
 	@Autowired
-	NoticeService noticeService;
+	BoardService service;
 
-	/** -----------------공지 사항 테이블 시작--------------------- **/
+	/** -----------------공지사항 시작--------------------- **/
 	// notice 공지사항
 //	@RequestMapping(value = "/notice")
 //	public ModelAndView notice(ModelAndView mv, HttpServletRequest request, Criteria cri, PageMaker pageMaker) {
@@ -48,44 +48,125 @@ public class BoardController {
 //		mv.setViewName("notice/noticepage");
 //		return mv;
 //	} // notice
-	
+
 	@RequestMapping(value = "/notice")
 	public ModelAndView blist(HttpServletRequest request, ModelAndView mv) {
-		
-		List<NoticeVO> list = noticeService.selectList();
-		if ( list != null) {
-			mv.addObject("Banana", list);
-		}else {
-			mv.addObject("message","~~ 출력자료가 1건도 없습니다 ~~");
-		}
-		// redirect 요청시 전달된 message 처리
-		// => from mdetail
-		if (request.getParameter("message") !=null )
-			mv.addObject("message",request.getParameter("message"));
-			
-		mv.setViewName("notice/noticepage"); // forward
-		return mv;
-	} //notice
-	
-	@RequestMapping(value = "/ndetail")
-	public ModelAndView ndetail(HttpServletRequest request, ModelAndView mv) {
-		
-		List<NoticeVO> list = noticeService.selectList();
-		if ( list != null) {
-			mv.addObject("Banana", list);
-		}else {
-			mv.addObject("message","~~ 출력자료가 1건도 없습니다 ~~");
-		}
-		// redirect 요청시 전달된 message 처리
-		// => from mdetail
-		if (request.getParameter("message") !=null )
-			mv.addObject("message",request.getParameter("message"));
-		
-		mv.setViewName("notice/noticepage"); // forward
-		return mv;
-	} //ndetail
 
-	/** -----------------공지 사항 테이블 끝--------------------- **/
+		List<NoticeVO> list = noticeService.selectList();
+		if (list != null) {
+			mv.addObject("Banana", list);
+		} else {
+			mv.addObject("message", "~~ 출력자료가 1건도 없습니다 ~~");
+		}
+		// redirect 요청시 전달된 message 처리
+		// => from mdetail
+		if (request.getParameter("message") != null)
+			mv.addObject("message", request.getParameter("message"));
+
+		mv.setViewName("notice/noticepage");
+		return mv;
+	} // notice
+
+	@RequestMapping(value = "/ndetail")
+	public ModelAndView ndetail(HttpServletRequest request, ModelAndView mv, NoticeVO vo) {
+		// ** 조회수 증가
+		// => 조건 : 글쓴이의 ID 와 글보는이의 ID (logID) 가 다른 경우
+		// 로그인 하지않은 경우도 포함.
+		// => 처리 순서 : 증가 후 조회
+		// => 증가
+		// controller, Java 구문으로 : getCnt() -> setCnt(++getCnt()) -> board Update
+		// DAO 에서 sql 구문으로 : board update -> cnt=cnt+1
+
+		// 1. 증가조건 확인
+		// => session 에서 logID get
+		HttpSession session = request.getSession(false);
+		String loginID = null; // 로그인 하지 않음
+		if (session != null && session.getAttribute("loginID") != null) {// 로그인 했을시
+			loginID = (String) session.getAttribute("loginID");
+		}
+
+		// => board , selectOne 으로 ID get
+		vo = noticeService.selectOne(vo);
+		if (vo != null) {
+			// 2. 비교 & 증가
+			// => 조건 처리
+			mv.addObject("Apple", vo);
+			if (!vo.getId().equals(loginID)) {
+				vo.setCount(vo.getCount() + 1);
+				noticeService.countUp(vo);
+			}
+			if ("U".equals(request.getParameter("jcode"))) {
+				mv.setViewName("notice/noticeUpdateForm");
+			} else {
+				mv.setViewName("notice/noticeDetail");
+			}
+		} else {
+			mv.addObject("message", "~~ 글번호에 해당하는글이 존재하지 않습니다 ~~");
+			mv.setViewName("redirect:notice");
+			/*
+			 * url 로 전달되는 한글 message 처리 위한 encoding String message =
+			 * URLEncoder.encode("~~ 해당하는 글이 없네용 ~~", "UTF-8");
+			 * mv.setViewName("redirect:blist?message="+message); // sendRedirect => 메서드 헤더에
+			 * throws UnsupportedEncodingException 해야함
+			 */
+		}
+		// redirect 요청시 전달된 message 처리
+		// => from mdetail
+		/*
+		 * if (request.getParameter("message") !=null )
+		 * mv.addObject("message",request.getParameter("message"));
+		 */
+		return mv;
+	} // ndetail
+
+	@RequestMapping(value = "/ninsertf")
+	public ModelAndView ninsertf(ModelAndView mv) {
+		mv.setViewName("notice/noticeInsertForm");
+		return mv;
+	} // ninsertf
+
+	@RequestMapping(value = "/ninsert")
+	public ModelAndView ninsert(ModelAndView mv, NoticeVO vo, RedirectAttributes rttr) {
+
+		if (noticeService.insert(vo) > 0) {
+			// 성공 -> boardList
+			rttr.addFlashAttribute("message", "~~ 글등록 성공 ~~");
+			mv.setViewName("redirect:notice");
+		} else {
+			// 실패 -> insertForm
+			rttr.addFlashAttribute("message", "~~ 글등록 실패 !!! 다시 하세요 ~~");
+			mv.setViewName("notice/noticeInsertForm");
+		}
+		return mv;
+	} // ninsert
+
+	@RequestMapping(value = "/nupdate")
+	public ModelAndView nupdate(ModelAndView mv, NoticeVO vo, RedirectAttributes rttr) {
+		if (noticeService.update(vo) > 0) {
+			rttr.addFlashAttribute("message", "글이 수정되었습니다.");
+			mv.setViewName("redirect:ndetail?seq=" + vo.getSeq());
+		} else {
+			rttr.addFlashAttribute("message", "글 수정에 실패 하셨습니다.");
+			mv.setViewName("redirect:ndetail?seq=" + vo.getSeq() + "&jcode=U"); // 컨트롤러를 통해 수정페이지로 다시가라
+		}
+		return mv;
+	} // nupdate
+
+	@RequestMapping(value = "/ndelete")
+	public ModelAndView ndelete(ModelAndView mv, NoticeVO vo, RedirectAttributes rttr) {
+		if (noticeService.delete(vo) > 0) {
+			rttr.addFlashAttribute("message", "글이 삭제 되었습니다.");
+			mv.setViewName("redirect:notice");
+		} else {
+			rttr.addFlashAttribute("message", "글 삭제가 올바르게 되지 않았습니다.");
+			mv.setViewName("redirect:ndetail?seq=" + vo.getSeq());
+		}
+		return mv;
+	} // ndelete
+
+	/** --------------------공지사항 끝-------------------- **/
+
+	/** --------------------faq 시작-------------------- **/
 
 	@RequestMapping(value = "/faq")
 	public ModelAndView faq(ModelAndView mv, HttpServletRequest request, Criteria cri, PageMaker pageMaker) {
@@ -154,9 +235,9 @@ public class BoardController {
 		return mv;
 	} // fdelete
 
-	/**
-	 * -----------------------------------------------------------------------------
-	 **/
+	/** --------------------faq 끝-------------------- **/
+
+	/** --------------------qna 시작-------------------- **/
 
 	// ** Criteria PageList ver01_Ver02
 	@RequestMapping(value = "/qna")
@@ -313,4 +394,6 @@ public class BoardController {
 		}
 		return mv;
 	} // boarddelete
+
+	/** --------------------qna 끝-------------------- **/
 }
