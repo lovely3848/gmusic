@@ -222,14 +222,13 @@ footer {
 		<!-- /////////////////SECTION START//////////////////////////////////////////////////////// -->
 
 		<div id="searchBar">
-			<%-- 	<select name="searchType" id="searchType">
+			<select name="searchType" id="searchType">
 				<option value="n" <c:out value="${pageMaker.cri.searchType==null ? 'selected' : ''}" />>검색옵션</option>
 				<option value="t" <c:out value="${pageMaker.cri.searchType=='t' ? 'selected' : ''}" />>제목</option>
 				<option value="w" <c:out value="${pageMaker.cri.searchType=='w' ? 'selected' : ''}" />>> 글쓴이</option>
 				<option value="tw" <c:out value="${pageMaker.cri.searchType=='tw' ? 'selected' : ''}" />>> 제목이나 글쓴이</option>
 			</select>
-			<input type="text" name="keyword" id="keyword" value="${pageMaker.cri.keyword}" --%>
-			>
+			<input type="text" name="keyword" id="keyword" value="${pageMaker.cri.keyword}">
 			<button id="searchBtn">Search</button>
 			<input type="reset" value="Reset">
 			<!-- 쓸모없음. 구동안됨 -->
@@ -279,9 +278,9 @@ footer {
 			<!-- ver 02 : pageMaker.searchQuery(?) -->
 			<!-- 1) First << , Prev < : enabeld 여부 -->
 			<c:if test="${pageMaker.prev && pageMaker.sPageNo>1}">
-				<a href="qna${pageMaker.searchQuery(1)}">&#8666;</a>&nbsp; <!-- First -->
+				<a href="notice${pageMaker.searchQuery(1)}">&#8666;</a>&nbsp; <!-- First -->
 				<!-- "qna?currPage=1" -->
-				<a href="qna${pageMaker.searchQuery(pageMaker.sPageNo-1)}">&#8636;</a>
+				<a href="notice${pageMaker.searchQuery(pageMaker.sPageNo-1)}">&#8636;</a>
 				<!-- Prev -->
 			</c:if>
 
@@ -291,8 +290,8 @@ footer {
 					<font style="font-weight: bold;" color="navy">${i}&nbsp;</font>
 				</c:if>
 				<c:if test="${i!=pageMaker.cri.currPage}">
-					<a href="qna${pageMaker.searchQuery(i)}">${i}</a>&nbsp;
-		</c:if>
+					<a href="notice${pageMaker.searchQuery(i)}">${i}</a>&nbsp;
+				</c:if>
 
 				<!-- 삼항식과 비교 
 		<c:out value="${i==pageMaker.cri.currPage ? 'class=active' : ''}"/>
@@ -301,8 +300,8 @@ footer {
 
 			<!-- 3) Next > , Last >> : enabled 여부 -->
 			<c:if test="${pageMaker.next && pageMaker.ePageNo>0}">
-				<a href="qna${pageMaker.searchQuery(pageMaker.ePageNo+1)}">&nbsp;&nbsp;&#8640;</a>&nbsp; <!-- Next -->
-				<a href="qna${pageMaker.searchQuery(pageMaker.lastPageNo)}">&#8667;</a>&nbsp;&nbsp; <!-- Last -->
+				<a href="notice${pageMaker.searchQuery(pageMaker.ePageNo+1)}">&nbsp;&nbsp;&#8640;</a>&nbsp; <!-- Next -->
+				<a href="notice${pageMaker.searchQuery(pageMaker.lastPageNo)}">&#8667;</a>&nbsp;&nbsp; <!-- Last -->
 
 			</c:if>
 		</div>

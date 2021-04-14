@@ -24,45 +24,27 @@ import vo.NoticeVO;
 public class BoardController {
 	@Autowired
 	NoticeService noticeService;
-	
+
 	@Autowired
 	FaqService FAQservice;
-	
+
 	@Autowired
 	BoardService service;
 
 	/** -----------------공지사항 시작--------------------- **/
 	// notice 공지사항
-//	@RequestMapping(value = "/notice")
-//	public ModelAndView notice(ModelAndView mv, HttpServletRequest request, Criteria cri, PageMaker pageMaker) {
-//
-//		cri.setSnoEno();
-//		mv.addObject("Banana", noticeService.searchFList(cri));
-//
-//		// 3) PageMaker 처리
-//		pageMaker.setCri(cri);
-//		// pageMaker.setTotalRow(service.totalRowCount()); //ver01
-//		pageMaker.setTotalRow(noticeService.searchRowCountF(cri)); // ver02
-//
-//		mv.addObject("pageMaker", pageMaker);
-//		mv.setViewName("notice/noticepage");
-//		return mv;
-//	} // notice
-
 	@RequestMapping(value = "/notice")
-	public ModelAndView blist(HttpServletRequest request, ModelAndView mv) {
+	public ModelAndView notice(ModelAndView mv, HttpServletRequest request, Criteria cri, PageMaker pageMaker) {
 
-		List<NoticeVO> list = noticeService.selectList();
-		if (list != null) {
-			mv.addObject("Banana", list);
-		} else {
-			mv.addObject("message", "~~ 출력자료가 1건도 없습니다 ~~");
-		}
-		// redirect 요청시 전달된 message 처리
-		// => from mdetail
-		if (request.getParameter("message") != null)
-			mv.addObject("message", request.getParameter("message"));
+		cri.setSnoEno();
+		mv.addObject("Banana", noticeService.searchNList(cri));
 
+		// 3) PageMaker 처리
+		pageMaker.setCri(cri);
+		// pageMaker.setTotalRow(service.totalRowCount()); //ver01
+		pageMaker.setTotalRow(noticeService.searchRowCountN(cri)); // ver02
+
+		mv.addObject("pageMaker", pageMaker);
 		mv.setViewName("notice/noticepage");
 		return mv;
 	} // notice

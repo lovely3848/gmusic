@@ -22,12 +22,12 @@ public class NoticeServiceImpl implements NoticeService{
 	FaqDAO Fdao;
 	
 	@Override
-	public List<NoticeVO> searchBList(Criteria cri) {
-		return dao.searchBList(cri);
+	public List<NoticeVO> searchNList(Criteria cri) {
+		return dao.searchNList(cri);
 	}//searchBList
 	@Override
-	public int searchRowCount(Criteria cri) {
-		return dao.searchRowCount(cri);
+	public int searchRowCountN(Criteria cri) {
+		return dao.searchRowCountN(cri);
 	}//searchRowCount
 	@Override
 	public List<NoticeVO> selectList() {

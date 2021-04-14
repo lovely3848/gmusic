@@ -18,12 +18,12 @@ public class NoticeDAO {
 	private static final String NS = "com.ncs.NoticeMapper.";
 
 //	** (Search) Criteria PageList
-	public List<NoticeVO> searchBList(Criteria cri) {
-		return sqlSession.selectList(NS + "searchBList", cri);
+	public List<NoticeVO> searchNList(Criteria cri) {
+		return sqlSession.selectList(NS + "searchNList", cri);
 	}
 
-	public int searchRowCount(Criteria cri) {
-		return sqlSession.selectOne(NS + "searchRowCount", cri);
+	public int searchRowCountN(Criteria cri) {
+		return sqlSession.selectOne(NS + "searchRowCountN", cri);
 	}
 
 	public List<NoticeVO> selectList() {

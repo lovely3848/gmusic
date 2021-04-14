@@ -49,15 +49,15 @@
 </sql>
 
 <!-- SearchCriteria PageList -->  <!-- 부등호 기호를 태그가 아닌 기호라고 처리해줌 CDATA -->
-<select id="searchRowCount" resultType="int">
+<select id="searchRowCountN" resultType="int">
 <![CDATA[
 	select count(*) from notice where ( seq > 0 ]]>
 	<!-- 조건 id : search -->
 	<include refid="search"></include>
 </select>
-<select id="searchBList" resultType="vo.NoticeVO">
+<select id="searchNList" resultType="vo.NoticeVO">
 <![CDATA[
-	select seq,title, id,regdate,count rnum from 
+	select seq, title, id, regdate, count, rnum from 
 	(select n.* , ROW_NUMBER() OVER(order by seq desc) rnum from notice n 
 	where seq > 0 ]]><include refid="search"></include>
 	where rnum between #{sno} and #{eno}

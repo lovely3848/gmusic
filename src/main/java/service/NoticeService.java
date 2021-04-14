@@ -10,9 +10,9 @@ import vo.PageVO;
 
 public interface NoticeService {
 	// Criteria
-	public List<NoticeVO> searchBList(Criteria cri);
+	public List<NoticeVO> searchNList(Criteria cri);
 
-	public int searchRowCount(Criteria cri);
+	public int searchRowCountN(Criteria cri);
 
 	public List<NoticeVO> selectList();
 	
