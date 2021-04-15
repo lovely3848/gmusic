@@ -60,6 +60,9 @@ h1 {
 	margin-bottom: 20px;
 	color: #0b3f9a;
 }
+td {
+	text-align: center;
+}
 /* header */
 header {
 	background-color: black;
@@ -96,7 +99,7 @@ body {
 section {
 	margin: 0 auto;
 	width: 75%;
-	height: 450px;
+	height: 600px;
 	padding-top: 20px;
 }
 /* topmenu(nav) */
@@ -210,12 +213,13 @@ footer {
 		<ul>
 			<li><a href="home">메인페이지</a>
 			<li><a href="notice">공지사항</a>
-			<li><a href="javascript:;" onClick="location.reload()">1대1 문의</a>
+			<li><a href="javascript:;" onClick="location.reload()" style="color: #0b3f9a; font-size: 25px;">1대1 문의</a>
 			<li><a href="faq">자주묻는 질문</a>
 		</ul>
 	</nav>
 	<section>
 		<!-- /////////////////SECTION START//////////////////////////////////////////////////////// -->
+		<h3>고객센터</h3>
 
 		<div id="searchBar">
 			<select name="searchType" id="searchType">
@@ -241,7 +245,7 @@ footer {
 			<c:forEach var="row" items="${Banana}">
 				<tr>
 					<td>${row.seq}</td>
-					<td>
+					<td style="text-align: left;">
 						<!-- 답글 구분 -->
 						<c:if test="${row.step != 0}">
 							<span style="color: #0b3f9a; background-color: ghostwhite;">&nbsp;&nbsp;&nbsp;답변&nbsp;&nbsp;</span>

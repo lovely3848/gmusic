@@ -53,9 +53,7 @@ textarea {
 	width: 100%
 }
 
-h1 {
-	text-align: center;
-	font-size: 50px;
+h2 {
 	margin-top: 20px;
 	margin-bottom: 20px;
 	color: #0b3f9a;
@@ -100,7 +98,7 @@ body {
 section {
 	margin: 0 auto;
 	width: 75%;
-	height: 450px;
+	height: 600px;
 	padding-top: 20px;
 }
 /* topmenu(nav) */
@@ -213,27 +211,14 @@ footer {
 	<nav>
 		<ul>
 			<li><a href="home">메인페이지</a>
-			<li><a href="javascript:;" onClick="location.reload()">공지사항</a>
+			<li><a href="javascript:;" onClick="location.reload()" style="color: #0b3f9a; font-size: 25px;">공지사항</a>
 			<li><a href="qna">1대1 문의</a>
 			<li><a href="faq">자주묻는 질문</a>
 		</ul>
 	</nav>
 	<section>
 		<!-- /////////////////SECTION START//////////////////////////////////////////////////////// -->
-
-		<div id="searchBar">
-			<select name="searchType" id="searchType">
-				<option value="n" <c:out value="${pageMaker.cri.searchType==null ? 'selected' : ''}" />>검색옵션</option>
-				<option value="t" <c:out value="${pageMaker.cri.searchType=='t' ? 'selected' : ''}" />>제목</option>
-				<option value="w" <c:out value="${pageMaker.cri.searchType=='w' ? 'selected' : ''}" />>> 글쓴이</option>
-				<option value="tw" <c:out value="${pageMaker.cri.searchType=='tw' ? 'selected' : ''}" />>> 제목이나 글쓴이</option>
-			</select>
-			<input type="text" name="keyword" id="keyword" value="${pageMaker.cri.keyword}">
-			<button id="searchBtn">Search</button>
-			<input type="reset" value="Reset">
-			<!-- 쓸모없음. 구동안됨 -->
-		</div>
-		<br>
+		<h3>고객센터</h3>
 		<table style="width: 100%">
 			<tr align="center" height="30" bgcolor="#0b3f9a">
 				<th>No.</th>

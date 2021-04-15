@@ -153,6 +153,7 @@ public class BoardController {
 	@RequestMapping(value = "/faq")
 	public ModelAndView faq(ModelAndView mv, HttpServletRequest request, Criteria cri, PageMaker pageMaker) {
 
+		cri.setRowPerPage(7);
 		cri.setSnoEno();
 		mv.addObject("Banana", FAQservice.searchFList(cri));
 

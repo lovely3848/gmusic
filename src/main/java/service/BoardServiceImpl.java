@@ -11,6 +11,7 @@ import util.FaqDAO;
 import vo.BoardVO;
 import vo.FaqVO;
 import vo.PageVO;
+
 @Service
 public class BoardServiceImpl implements BoardService{
 	

@@ -1,7 +1,10 @@
 package criteria;
 
+import lombok.Data;
+
 //Criteria :( 판단이나 결정을 위한) 기준.
 //=> 출력할 Row를 select 하기 위한 클래스
+@Data
 public class Criteria {
 	private int currPage;   	// 현재 페이지번호
 	private int rowPerPage;		// 페이지당 보여줄 글 갯수
@@ -10,7 +13,7 @@ public class Criteria {
 	
 	private String searchType;
 	private String keyword;
-	
+	private String genre;
 	// 기본값 생성자로 초기화
 	public Criteria() {
 		this.currPage=1;

@@ -14,6 +14,7 @@
 <script src="resources/myLib/login.js"></script>
 <script src="resources/myLib/mypage.js"></script>
 <script src="resources/myLib/myinfochange.js"></script>
+<script src="resources/myLib/chartcount.js"></script>
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link
 	href="https://fonts.googleapis.com/css2?family=Cute+Font&display=swap"
@@ -276,7 +277,27 @@ a {
 	</div>
 	<div id="section">
 		<div id="sec1">
-			<div>아</div>
+			<div>
+				아
+				<%-- <table width=800 border="1">
+					<tr align="center" height="30" bgcolor="pink">
+						<td>sname</td>
+						<td>stitle</td>
+						<td>downloadfile</td>
+						<td>Image</td>
+					</tr>
+					<c:forEach var="row" items="${Banana}">
+						<tr>
+							<td><a href="mdetail?id=${row.id}">${row.id}</a></td>
+							<td>${row.sname}</td>
+							<td>${row.stitle}</td>
+							<td>${row.downloadfile}</td>
+							<td><img src="${row.image}" width="70" height="70">
+							</td>
+						</tr>
+					</c:forEach>
+				</table> --%>
+			</div>
 			<div>아</div>
 			<div>아</div>
 		</div>
@@ -307,16 +328,16 @@ a {
 			<!-- 일일,주간,월간 차트리스트 -->
 			<div id="chart" role="group">
 				<h3>** G-MUSIC 차트 **</h3>
+				<div>
 				<hr>
-				<!-- <span id="dlist" class="textLink">[일일차트]</span> &nbsp;&nbsp; -->
-				<span id="pmlist" class="textLink">[일일차트]</span> &nbsp;&nbsp; <span
-					id="wlist" class="textLink">[주간차트]</span>&nbsp;&nbsp; <span
-					id="monlist" class="textLink">[월간차트]</span>&nbsp;&nbsp; <a
+				<span id="dailyChart" class="textLink">[일일차트]</span> &nbsp;&nbsp; <span
+					id="weeklist" class="textLink">[주간차트]</span>&nbsp;&nbsp; <span
+					id="monthlist" class="textLink">[월간차트]</span>&nbsp;&nbsp; <a
 					href="home">[Home]</a>&nbsp;&nbsp;
 				<hr>
-				<div id="dlistArea1"></div>
-				<div id="wlistArea2"></div>
-				<div id="monlistArea3"></div>
+				</div>
+				<div id="chartArea"></div>
+				
 			</div>
 		</div>
 	</div>

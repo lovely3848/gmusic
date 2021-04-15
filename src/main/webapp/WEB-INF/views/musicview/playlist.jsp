@@ -12,45 +12,45 @@ tr {
 	text-align: center;
 }
 </style>
-<script>
-	var keydownCtrl = 0;
-	var kedownShift = 0;
+<!-- <script>
+   var keydownCtrl = 0;
+   var kedownShift = 0;
 
-	document.onkeydown = keycheck;
-	document.onkeyup = uncheckCtrlShift;
+   document.onkeydown = keycheck;
+   document.onkeyup = uncheckCtrlShift;
 
-	function keycheck() {
-		switch (event.keyCode) {
-		case 123:
-			event.keyCode = '';
-			return false;
-			break;
-		case 17:
-			event.keyCode = '';
-			keydownCtrl = 1;
-			return false;
-			break;
-		}
-		if (keydownCtrl)
-			return false;
+   function keycheck() {
+      switch (event.keyCode) {
+      case 123:
+         event.keyCode = '';
+         return false;
+         break;
+      case 17:
+         event.keyCode = '';
+         keydownCtrl = 1;
+         return false;
+         break;
+      }
+      if (keydownCtrl)
+         return false;
 
-	}
+   }
 
-	function uncheckCtrlShift() {
-		if (event.keyCode == 17)
-			keydownCtrl = 0;
-		if (event.keyCode == 16)
-			keydownShift = 0;
+   function uncheckCtrlShift() {
+      if (event.keyCode == 17)
+         keydownCtrl = 0;
+      if (event.keyCode == 16)
+         keydownShift = 0;
 
-	}
+   }
 
-	function click() {
-		if ((event.button == 2) || (event.button == 2)) {
-			alert('마우스 오른쪽 / 컨트롤 / F12 금지입니다');
-		}
-	}
-	document.onmousedown = click;
-</script>
+   function click() {
+      if ((event.button == 2) || (event.button == 2)) {
+         alert('마우스 오른쪽 / 컨트롤 / F12 금지입니다');
+      }
+   }
+   document.onmousedown = click;
+</script> -->
 <script>
 	// select box jquery 활용법
 	// https://jaweb.tistory.com/entry/Jquery-Select-Box-활용-노하우 참고
@@ -80,32 +80,30 @@ tr {
 	// <select>의 ondblclick 이벤트로 실행됨
 	// 선택된 select box 값의 밸류를 각 항목에 전달시킴
 	function nowplay() { // 현재 선택곡 재생. 각 div들에 현재 재생할 값들을 넣어서 표현해줌
-		var snumber = $("#playlist option:selected").attr('value6');
 
 		$("#sname").html($("#playlist option:selected").attr('value'));
 		$("#singername").html($("#playlist option:selected").attr('value2'));
-		$("#albumimage").attr("src",
-				$("#playlist option:selected").attr('value3'));
-		$("#audioplay").attr("src",
-				$("#playlist option:selected").attr('value4'));
+		$("#albumimage").attr("src",$("#playlist option:selected").attr('value3'));
+		$("#audioplay").attr("src",$("#playlist option:selected").attr('value4'));
 		$("#lyrics").html($("#playlist option:selected").attr('value5'));
+		var snumber = $("#playlist option:selected").attr('value6');
 		// 볼륨조절
 		// https://webisfree.com/2017-09-07/html5-audio-태그-사용-예제보기 참고
 		document.getElementById("audioplay").volume = 0.5;
 
-		$.ajax({
-			type : 'post',
-			url : 'musicCount',
-			data : {
-				snum : snumber
-			},
-			success : function() {
-				console.log("성공");
-			},
-			error : function() {
-				console.log("실패");
-			}
-		});//count를 위한 값 넘기기
+	 		$.ajax({
+				type : 'post',
+				url : 'musicCount',
+				data : {
+					snum : snumber
+				},
+				success : function() {
+					console.log("성공");
+				},
+				error : function() {
+					console.log("실패");
+				}
+			});//count를 위한 값 넘기기 
 
 	} //nowplay
 
@@ -269,7 +267,7 @@ tr {
 				<td>
 					<select id="playlist" name="playlist" size="20" style="width: 300px;" ondblclick="nowplay()">
 						<c:forEach var="row" items="${Banana}">
-							<option value="${row.sname}" value2="${row.singername}" value3="${row.image}" value4="${row.downloadfile}" value5="${row.lyrics}" value6="${row.snum}">${row.sname}</option>
+							<option value="${row.sname}" value2="${row.singername}" value3="${row.image}" value4="${row.downloadfile}" value5="${row.lyrics}" value6="${row.snum }">${row.sname}</option>
 						</c:forEach>
 
 					</select>

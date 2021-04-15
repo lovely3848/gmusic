@@ -189,7 +189,7 @@ footer {
 	<nav>
 		<ul>
 			<li><a href="home">메인페이지</a>
-			<li><a href="notice">공지사항</a>
+			<li><a href="notice" style="color: #0b3f9a; font-size: 25px;">공지사항</a>
 			<li><a href="qna">1대1 문의</a>
 			<li><a href="faq">자주묻는 질문</a>
 		</ul>
