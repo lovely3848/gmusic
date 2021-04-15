@@ -23,7 +23,8 @@ style>.title {
 }
 
 a {
-	text-decoration: none
+	color: black;
+	text-decoration: none;
 }
 
 .menu a { /* 클릭했을때 리스트 나오게끔 */
@@ -33,13 +34,22 @@ a {
 	padding: 30px 28px 5px 79px;
 }
 
-li {
+toplist {
 	list-style: none; /*  리스트 할때 점을 없애려고 추가 여기 한줄*/
 	display: block;
 	font-size: 50px;
 	color: #000;
-	padding: 35px 53px 9px 0px;
+	padding: 35px 1px 9px 0px; /* 여기수정 */
 	position: relative;
+}
+
+#seqbody {
+	list-style: none;
+	padding: 35px 1px 9px 0px; /* 여기수정 */
+}
+
+.seq {
+	font-size: 50px;
 }
 
 li.menu {
@@ -51,7 +61,7 @@ li.menu2 {
 }
 
 #input {
-	padding: 18px 134px 24px 373px;
+	padding: 3px 133px 21px 294px;
 	font-size: 16px;
 }
 
@@ -78,7 +88,7 @@ header {
 #headermenu {
 	float: right;
 	list-style: none;
-	margin: 8px 8px 8px;
+	margin: 8px 8px 8px 8px;
 }
 
 #headermenu>li {
@@ -92,7 +102,7 @@ nav {
 	border-bottom-style: solid;
 	margin: 0 auto;
 	width: 75%;
-	height: 70px;
+	height: 70px; /* 변경 */
 	padding-top: 1px;
 }
 /* body */
@@ -189,7 +199,6 @@ footer {
 			<!-- 조건주고 로그인 상태면 로그인 없애고 로그아웃으로 -->
 			<!-- <li>로그아웃</li> -->
 
-
 			<li><button>
 					<a href="javascript:;">이용권구매</a>
 				</button></li>
@@ -212,7 +221,7 @@ footer {
 		</ul>
 	</header>
 	<nav>
-		<ul>
+		<ul id="toplist">
 			<li><a href="home">메인페이지</a>
 			<li><a href="notice">공지사항</a>
 			<li><a href="qna">1대1 문의</a>
@@ -221,16 +230,12 @@ footer {
 	</nav>
 	<!-- -------------- -->
 	<section>
-		<div class="title">
-			<h2>
-				<a href="faq" style="color: black;">Update form</a>
-			</h2>
-		</div>
+		<div class="title"></div>
 		<div id="wrap_updatef">
 			<form action="fupdate" method="post">
-				<ul>
+				<ul id="seqbody">
 					<!-- readonly="readonly"  -->
-					<li>SEQ&nbsp;<input type="number" name="seq" id="seq" style="text-align: left; border: 0; width: 70px; height: 60px; font-size: 50px" readonly value="${Apple.seq}">
+					<li class="seq">SEQ&nbsp;<input type="number" name="seq" id="seq" style="text-align: left; border: 0; width: 70px; height: 60px; font-size: 50px" readonly value="${Apple.seq}">
 					</li>
 					<li class="menu"><img src="resources/image/qq.png" width="70px" height="70px" /> <textarea rows="6" cols="70" name="title">${Apple.title}</textarea></li>
 					<li class="menu2"><img src="resources/image/aa.png" width="70px" height="70px" /> <textarea rows="6" cols="70" name="content">${Apple.content}</textarea></li>
@@ -244,8 +249,8 @@ footer {
 			</form>
 		</div>
 		<c:if test="${message != null}">
-  			 => ${message}
-		</c:if>
+            => ${message}
+      </c:if>
 		<!-- ///////////////////SECTION END////////////////////////////////////////////////////// -->
 	</section>
 	<!-- -------------- -->

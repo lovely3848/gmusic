@@ -13,13 +13,20 @@
 <!-- https://stove99.tistory.com/103  여기 사이트 참고해서 클릭시 슬라이드로 내려가게끔 -->
 
 <style>
-#totalList { /* ul 부분 */
-	list-style: none;
-	text-decoration: none /* a태그 눌러도 색깔 안변하게끔 */
+a {
+	color: black;
+	text-decoration: none;
 }
 
-.menu { /* menu li부분 Q쪽 */
+#totalList { /* ul 부분 */
+	list-style: none;
+}
+
+.menu {
 	cursor: pointer;
+}
+
+#Q { /* menu li부분 Q쪽 */
 	font-weight: bold;
 	display: block;
 	font-size: 16px;
@@ -242,7 +249,7 @@ footer {
 		<div>
 			<ul style="padding-left: 0px;" id="totalList">
 				<c:forEach var="Apple" items="${Banana}">
-					<li class="menu"><a>
+					<li class="menu"><a id="Q">
 							<img src="resources/image/qq.png" width="15px" height="15px" /> ${Apple.title}
 							<c:if test="${loginGRADE=='admin'}">
                   &nbsp; <a href="fdetail?seq=${Apple.seq}&jcode=U">FAQ수정</a>
@@ -297,6 +304,7 @@ footer {
 		</div>
 		<!-- ///////////////////SECTION END////////////////////////////////////////////////////// -->
 	</section>
+	<br>
 
 	<!-- -------------- -->
 	<footer>
