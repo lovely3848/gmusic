@@ -536,13 +536,13 @@ div>input, #email2 {
 								<select name="genre1" class="genre" id="genre1" size="1">
 									<option selected="selected" value="N">선택 안함
 									<option value="dance">댄스
+									<option value="ballad">발라드
 									<option value="rap">랩/힙합
-									<option value="r&b">R&B/Soul
-									<option value="indie">인디음악
+									<option value="rnb">R&B/Soul
+									<option value="indie">인디
 									<option value="rock">록/메탈
 									<option value="trot">트로트
 									<option value="jazz">재즈
-									<option value="oldpop">올드팝
 								</select>
 							</div>
 							<span class="font1">선호장르2</span>
@@ -550,13 +550,13 @@ div>input, #email2 {
 								<select name="genre2" class="genre" id="genre2" size="1">
 									<option selected="selected" value="N">선택 안함
 									<option value="dance">댄스
+									<option value="ballad">발라드
 									<option value="rap">랩/힙합
-									<option value="r&b">R&B/Soul
-									<option value="indie">인디음악
+									<option value="rnb">R&B/Soul
+									<option value="indie">인디
 									<option value="rock">록/메탈
 									<option value="trot">트로트
 									<option value="jazz">재즈
-									<option value="oldpop">올드팝
 								</select>
 							</div>
 						</div>

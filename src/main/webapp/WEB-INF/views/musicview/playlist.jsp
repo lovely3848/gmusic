@@ -83,27 +83,31 @@ tr {
 
 		$("#sname").html($("#playlist option:selected").attr('value'));
 		$("#singername").html($("#playlist option:selected").attr('value2'));
-		$("#albumimage").attr("src",$("#playlist option:selected").attr('value3'));
-		$("#audioplay").attr("src",$("#playlist option:selected").attr('value4'));
+		$("#albumimage").attr("src",
+				$("#playlist option:selected").attr('value3'));
+		$("#audioplay").attr("src",
+				$("#playlist option:selected").attr('value4'));
 		$("#lyrics").html($("#playlist option:selected").attr('value5'));
+		$("#albumimageORlyrics").html(
+				$("#playlist option:selected").attr('value5'));
 		var snumber = $("#playlist option:selected").attr('value6');
 		// 볼륨조절
 		// https://webisfree.com/2017-09-07/html5-audio-태그-사용-예제보기 참고
 		document.getElementById("audioplay").volume = 0.5;
 
-	 		$.ajax({
-				type : 'post',
-				url : 'musicCount',
-				data : {
-					snum : snumber
-				},
-				success : function() {
-					console.log("성공");
-				},
-				error : function() {
-					console.log("실패");
-				}
-			});//count를 위한 값 넘기기 
+		$.ajax({
+			type : 'post',
+			url : 'musicCount',
+			data : {
+				snum : snumber
+			},
+			success : function() {
+				console.log("성공");
+			},
+			error : function() {
+				console.log("실패");
+			}
+		});//count를 위한 값 넘기기 
 
 	} //nowplay
 
@@ -171,6 +175,30 @@ tr {
 
 	} //oneplay
 
+	function viewLyrics() { // 가사보기
+
+		if ($("#viewLyrics").html() == "가사") {
+			$('#playlist').css({
+				display : "none"
+			});
+			$('#lyrics').css({
+				display : ""
+			});
+			$("#viewLyrics").html("리스트");
+
+		} else {
+			$('#playlist').css({
+				display : ""
+			});
+			$('#lyrics').css({
+				display : "none"
+			});
+			$("#viewLyrics").html("가사");
+
+		}
+
+	} //viewLyrics
+
 	// selectbox 위아래 이동하게 구현하기
 	// https://zzznara2.tistory.com/457 그대로 가져옴
 	// 테스트
@@ -221,7 +249,7 @@ tr {
 </script>
 </head>
 <body onload="autoplay()">
-	<div style="float: left;">
+	<div style="text-align: center;">
 		<table>
 			<tr>
 				<td>
@@ -256,6 +284,7 @@ tr {
 					<button type="button" onClick="selectbox.remove( playlist );" style="width: 60" onFocus="blur()">-</button>
 					<button type="button" onClick="selectbox.moveUp( playlist );" style="width: 60" onFocus="blur()">▲</button>
 					<button type="button" onClick="selectbox.moveDown( playlist );" style="width: 60" onFocus="blur()">▼</button>
+					<button type="button" id="viewLyrics" onClick="viewLyrics()" style="width: 60" onFocus="blur()">가사</button>
 				</td>
 			</tr>
 			<tr>
@@ -265,21 +294,13 @@ tr {
 			</tr>
 			<tr>
 				<td>
-					<select id="playlist" name="playlist" size="20" style="width: 300px;" ondblclick="nowplay()">
+					<select id="playlist" name="playlist" size="15" style="width: 300px; height: 300px;" ondblclick="nowplay()">
 						<c:forEach var="row" items="${Banana}">
 							<option value="${row.sname}" value2="${row.singername}" value3="${row.image}" value4="${row.downloadfile}" value5="${row.lyrics}" value6="${row.snum }">${row.sname}</option>
 						</c:forEach>
 
 					</select>
-				</td>
-			</tr>
-		</table>
-	</div>
-	<div style="float: left;">
-		<table>
-			<tr>
-				<td>
-					<textarea id="lyrics" rows="48" cols="40" readonly="readonly" style="resize: none;"></textarea>
+					<textarea id="lyrics" readonly="readonly" style="resize: none; width: 300px; height: 300px; display: none;"></textarea>
 				</td>
 			</tr>
 		</table>

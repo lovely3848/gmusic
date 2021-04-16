@@ -100,7 +100,7 @@ public class GmusicController {
 	// ** Image DownLoad
 	@RequestMapping(value = "/dnload")
 	public ModelAndView dnload(ModelAndView mv, @RequestParam("dnfile") String dnfile) {
-		dnfile = "D:/Jeong/gproject/src/main/webapp/" + dnfile;
+		dnfile = "C:/NamCheolWoo/gproject/src/main/webapp/" + dnfile;
 		System.out.println("** dnfile => " + dnfile);
 		File file = new File(dnfile);
 
@@ -126,7 +126,6 @@ public class GmusicController {
 	@RequestMapping(value = "/genrelist")
 	public ModelAndView genrelist(ModelAndView mv, Criteria cri, PageMaker pageMaker , MusicVO vo) {
 		System.out.println("***********Test "+vo.getGenre()); //vo엔 자동으로 장르만 들어와있음.
-		
 		cri.setRowPerPage(10); // 한 페이지당 20곡씩 출력
 		cri.setSnoEno();
 		cri.setGenre(vo.getGenre());

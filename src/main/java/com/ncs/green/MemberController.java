@@ -85,7 +85,7 @@ public class MemberController {
 
 		// 실습2) ver02 (배포환경 or 개발환경)
 		if (realPath.contains(".eclipse.")) {
-			realPath = "D:/Jeong/gproject/src/main/webapp/resources/uploadImage/";
+			realPath = "C:/NamCheolWoo/gproject/src/main/webapp/resources/uploadImage/";
 		} else {
 			realPath += "resources/uploadImage/";
 		}
@@ -308,7 +308,7 @@ public class MemberController {
 		// ** 경로
 		String realPath = request.getRealPath("/");
 		if (realPath.contains(".eclipse.")) {
-			realPath = "D:/Jeong/gproject/src/main/webapp/resources/uploadImage/";
+			realPath = "C:/NamCheolWoo/gproject/src/main/webapp/resources/uploadImage/";
 		} else {
 			realPath += "resources/uploadImage/";
 		}

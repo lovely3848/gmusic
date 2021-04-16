@@ -13,7 +13,7 @@
 <script src="resources/myLib/myinfochange.js"></script>
 <script src="resources/myLib/chartcount.js"></script>
 <script>
-	var keydownCtrl = 0;
+	/* var keydownCtrl = 0;
 	var kedownShift = 0;
 
 	document.onkeydown = keycheck;
@@ -49,7 +49,7 @@
 			alert('마우스 오른쪽 / 컨트롤 / F12 금지입니다');
 		}
 	}
-	document.onmousedown = click;
+	document.onmousedown = click; */
 </script>
 <script>
    $(function() { //ready
@@ -159,6 +159,12 @@ body {
 	margin: 0;
 }
 
+h1 {
+	color: #0b3f9a;
+	text-align: center;
+	font-size: 45px;
+}
+
 hr {
 	margin-top: 0px;
 	margin-bottom: 0px;
@@ -173,7 +179,6 @@ a {
 #header {
 	background-color: silver;
 	height: 40px;
-	width: 100%;
 	margin: 0 auto;
 	width: 75%;
 }
@@ -264,22 +269,29 @@ a {
 /* nav */
 
 /* section */
-#playbutten {
-	background-color: transparent !important;
+.playbutten {
+	background-color: transparent !important; /* 배경 없애기 */
 	border: none; /* 버튼 보더 없애기 */
 	align-self: auto;
+	white-space: nowrap; /* 한라인 쓰기 */
+}
+
+.playbutten:hover {
+	text-decoration: underline; /* hover시 밑줄 */
+	cursor: pointer; /* hover시 마우스 손가락 모양 */
+}
+
+.playbutten:focus {
+	outline: none; /* 클릭후 포커스 없애기 */
 }
 
 #table {
-	width: 150%;
+	width: 100%;
 }
 
-
 #section {
-
 	margin: 0 auto; /* 중앙정렬 */
 	width: 75%;
-	display: grid;
 	grid-template-columns: 2fr 1fr;
 }
 
@@ -416,6 +428,32 @@ a {
 		<!-- topmenu -->
 	</div>
 	<!--//////////////////// section start //////////////////////////// -->
+	<c:choose>
+		<c:when test="${musicGenre=='dance'}">
+			<h1>댄스</h1>
+		</c:when>
+		<c:when test="${musicGenre=='ballad'}">
+			<h1>발라드</h1>
+		</c:when>
+		<c:when test="${musicGenre=='rap'}">
+			<h1>랩/힙합</h1>
+		</c:when>
+		<c:when test="${musicGenre=='rnb'}">
+			<h1>R&B/Soul</h1>
+		</c:when>
+		<c:when test="${musicGenre=='indie'}">
+			<h1>인디</h1>
+		</c:when>
+		<c:when test="${musicGenre=='rock'}">
+			<h1>록/메탈</h1>
+		</c:when>
+		<c:when test="${musicGenre=='trot'}">
+			<h1>트로트</h1>
+		</c:when>
+		<c:otherwise>
+			<h1>재즈</h1>
+		</c:otherwise>
+	</c:choose>
 	<div id="section">
 		<form name="musiclist">
 			<button type="button" onclick="getCheckboxValue()">플레이리스트</button>
@@ -444,13 +482,15 @@ a {
 							<img src="${row.image}" width="70" height="70">
 						</td>
 						<td>
-							<button type="button" name="sname" value="${row.snum}">${row.sname}</button>
+							<button type="button" class="playbutten" name="sname" value="${row.snum}">${row.sname}</button>
 						</td>
 						<td>${row.singername}</td>
 						<td>${row.stitle}</td>
-						<td><button type="button" id="playbutten" name="sname" value="${row.snum}">
+						<td>
+							<button type="button" class="playbutten" name="sname" value="${row.snum}">
 								<img src="resources/image/play.jpg" width="60" height="60">
-						</button></td>
+							</button>
+						</td>
 						<td>
 							<a href="dnload?dnfile=${row.downloadfile}">${row.downloadfile}</a>
 						</td>

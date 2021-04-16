@@ -17,15 +17,14 @@
 			</ul>
 		<li><a href="javascript:;">장르음악</a>
 			<ul>
-				<li><a href="genrelist?genre=ballad">발라드</a>
 				<li><a href="genrelist?genre=dance">댄스</a>
+				<li><a href="genrelist?genre=ballad">발라드</a>
 				<li><a href="genrelist?genre=rap">랩/힙합</a>
-				<li><a href="genrelist?genre=">트로트</a>
-				<li><a href="genrelist?genre=rock">락</a>
+				<li><a href="genrelist?genre=rnb">R&B/Soul</a>
 				<li><a href="genrelist?genre=indie">인디</a>
+				<li><a href="genrelist?genre=rock">록/메탈</a>
+				<li><a href="genrelist?genre=trot">트로트</a>
 				<li><a href="genrelist?genre=jazz">재즈</a>
-				<li><a href="genrelist?genre=">올드팝</a>
-				<li><a href="genrelist?genre=">POP</a>
 			</ul>
 		<li><a href="javascript:;">고객센터</a>
 			<ul>
