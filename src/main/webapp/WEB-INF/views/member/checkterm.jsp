@@ -103,14 +103,14 @@
 
 .layer .content {
 	display: inline-block;
-	vertical-align: middle
+	vertical-align: middle;
 }
 
 .layer .blank {
 	display: inline-block;
 	width: 0;
 	height: 100%;
-	vertical-align: middle
+	vertical-align: middle;
 }
 
 /* 약관 전체 박스 div */

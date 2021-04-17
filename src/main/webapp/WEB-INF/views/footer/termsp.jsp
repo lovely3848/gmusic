@@ -29,14 +29,14 @@
 
 .layer .content {
 	display: inline-block;
-	vertical-align: middle
+	vertical-align: middle;
 }
 
 .layer .blank {
 	display: inline-block;
 	width: 0;
 	height: 100%;
-	vertical-align: middle
+	vertical-align: middle;
 }
 
 /* 약관내용있는곳 */

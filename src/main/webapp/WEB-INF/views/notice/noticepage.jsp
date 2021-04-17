@@ -94,7 +94,7 @@ nav {
 body {
 	margin: 0;
 }
-
+/* section */
 section {
 	margin: 0 auto;
 	width: 75%;

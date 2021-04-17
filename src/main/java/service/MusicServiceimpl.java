@@ -15,12 +15,6 @@ public class MusicServiceimpl implements MusicService {
 	@Autowired
 	MusicDAO dao;
 
-	public int genreRowCount(MusicVO vo) {
-		return dao.genreRowCount(vo);
-	}
-	public List<MusicVO> genreList(Criteria cri) {
-		return dao.genreList(cri);
-	} // genreList
 	public List<MusicVO> selectList() {
 		return dao.selectList();
 	} // selectList
@@ -30,10 +24,23 @@ public class MusicServiceimpl implements MusicService {
 	} // selectOne
 
 	public void musicCount(MusicVO vo) {
-	
 		dao.musicCount(vo);
-
+	}
+	
+	public List<MusicVO> musicList(Criteria cri) {
+		return dao.musicList(cri);
+	}
+	
+	public int totalRowCount() {
+		return dao.totalRowCount();
 	}
 
+	public int genreRowCount(MusicVO vo) {
+		return dao.genreRowCount(vo);
+	}
+	
+	public List<MusicVO> genreList(Criteria cri) {
+		return dao.genreList(cri);
+	} // genreList
 
 }

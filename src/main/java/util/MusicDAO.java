@@ -32,6 +32,15 @@ public class MusicDAO {
 		sqlSession.update(NS + "musicCount", vo);
 	}
 
+	// ** musicList
+	public List<MusicVO> musicList(Criteria cri) {
+		return sqlSession.selectList(NS + "musicList", cri);
+	} // musicList
+	
+	public int totalRowCount() {
+		return sqlSession.selectOne(NS + "totalRowCount");
+	}
+	
 	// ** genreList
 	public List<MusicVO> genreList(Criteria cri) {
 		return sqlSession.selectList(NS + "genreList", cri);

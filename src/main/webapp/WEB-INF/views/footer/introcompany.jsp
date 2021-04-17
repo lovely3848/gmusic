@@ -24,24 +24,22 @@
 
 .layer .content {
 	display: inline-block;
-	vertical-align: middle
+	vertical-align: middle;
 }
 
 .layer .blank {
 	display: inline-block;
 	width: 0;
 	height: 100%;
-	vertical-align: middle
+	vertical-align: middle;
 }
 </style>
 </head>
 <body>
 
 	<div class="layer">
-		<span class="content">
-		<a href="https://www.geniemusic.co.kr/company/overview.html" target="_blenk">소개입니다 클릭하세요</a>
-		</span>
-		<span class="blank"></span>
+		<span class="content"> <a href="https://www.geniemusic.co.kr/company/overview.html" target="_blenk">소개입니다 클릭하세요</a>
+		</span> <span class="blank"></span>
 	</div>
 
 </body>

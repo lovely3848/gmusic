@@ -8,10 +8,129 @@
 <title>뮤직플레이리스트</title>
 <script src="resources/myLib/jquery-3.2.1.min.js"></script>
 <style>
-tr {
+/* 중앙정렬코드 */
+.layer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 	text-align: center;
 }
+
+.layer .content {
+	display: inline-block;
+}
+
+/* 스크롤바 숨김 */
+html {
+	overflow: hidden;
+}
+
+/* 배경색 */
+body {
+	/* 	background-color: #f1f3f4; */
+	background-color: ghostwhite;
+}
+
+/* 플레이 리스트 테이블 css */
+#playlistTable {
+	margin-top: 15px;
+	width: 300px;
+}
+
+/* 곡명 css */
+#sname {
+	font-size: 17px;
+	font-weight: 600;
+	/* 텍스트 넘치면 ... 표시 */
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	width: 300px;
+}
+
+/* 가수명 css */
+#singername {
+	font-size: 12px;
+	/* 텍스트 넘치면 ... 표시 */
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	width: 300px;
+}
+
+/* 가사 textarea css */
+#lyrics {
+	resize: none;
+	width: 293px;
+	height: 294px;
+}
+
+/* 플레이리스트, 가사, 오디오 클릭후 포커스 없애기 */
+#playlist, #lyrics, #audioplay:focus {
+	outline: none;
+}
+
+/* 버튼 라인1 css */
+.buttonLine1 {
+	width: 50px;
+	height: 20px;
+	vertical-align: middle;
+	font-size: 12px;
+	padding: 0;
+	border: 0.5px solid #767676;
+	background-color: white;
+	border-radius: 1px;
+}
+
+/* 버튼 라인2 css */
+.buttonLine2 {
+	width: 40px;
+	height: 20px;
+	vertical-align: middle;
+	font-size: 12px;
+	padding: 0;
+	border: 0.5px solid #767676;
+	background-color: white;
+	border-radius: 1px;
+}
+
+/* 버튼 클릭후 포커스 없애기 */
+.buttonLine1, .buttonLine2:focus {
+	outline: none;
+}
 </style>
+<script>
+	// spacebar 입력시 정지 동작
+	// 상하 방향키 입력시 볼륨 조절
+	// https://webisfree.com/2015-02-04/[jquery]-자바스크립트-키보드-클릭-이벤트-방법-예제-소스
+	// https://velog.io/@1703979/JS-30-11
+	$(document).keydown(function(event) {
+		var audio = document.getElementById("audioplay");
+		// 버튼 클릭시 마지막에 누른 버튼이 같이 수행됨 => 해결방법???
+		//	if (event.keyCode == 32) {
+		//		playpause();
+		//	}
+
+		if (event.keyCode == 38 && audio.volume <= 0.95) {
+			audio.volume = audio.volume + 0.05;
+			console.log(audio.volume);
+		} else if (event.keyCode == 38 && audio.volume > 0.95) {
+			audio.volume = 1;
+			console.log(audio.volume);
+		}
+
+		if (event.keyCode == 40 && audio.volume >= 0.05) {
+			audio.volume = audio.volume - 0.05;
+			console.log(audio.volume);
+		} else if (event.keyCode == 40 && audio.volume < 0.05) {
+			audio.volume = 0;
+			console.log(audio.volume);
+		}
+
+	}); //keydown
+</script>
 <!-- <script>
    var keydownCtrl = 0;
    var kedownShift = 0;
@@ -87,7 +206,13 @@ tr {
 				$("#playlist option:selected").attr('value3'));
 		$("#audioplay").attr("src",
 				$("#playlist option:selected").attr('value4'));
-		$("#lyrics").html($("#playlist option:selected").attr('value5'));
+
+		if ($("#playlist option:selected").attr('value5') != "") {
+			$("#lyrics").html($("#playlist option:selected").attr('value5'));
+		} else {
+			$("#lyrics").html("가사가 없습니다");
+		}
+
 		$("#albumimageORlyrics").html(
 				$("#playlist option:selected").attr('value5'));
 		var snumber = $("#playlist option:selected").attr('value6');
@@ -114,14 +239,16 @@ tr {
 	// 현재 오디오의 재성 및 정지 기능
 	// 정지면 정지 시키고 재생 버튼으로 바꿈
 	// 재생이면 재생 시키고 정지 버튼으로 바꿈
+	// https://unikys.tistory.com/278
 	function playpause() {
 
-		if ($("#playpause").html() == "정지") { // body 시작시 디폴트값은 "정지"이다. 정지버튼에 정지라고 써있는가?를 묻는다.
-			document.getElementById("audioplay").pause(); // 사실이라면 노래(오디오)를 정지시킨다.
-			$("#playpause").html("재생"); // 이후에 다시 눌렀을때 정지가 아닌 재생이 되게 하고 싶으므로 다시 눌렀을 때 아래의 else조건으로 갈 수 있게 "재생"으로 바꿔줌
+		var audio = document.getElementById("audioplay");
+		if (!audio.paused) { // body 시작시 디폴트값은 "정지"이다. 정지버튼에 정지라고 써있는가?를 묻는다.
+			audio.pause(); // 사실이라면 노래(오디오)를 정지시킨다.
+			$("#playpause").html("►"); // 이후에 다시 눌렀을때 정지가 아닌 재생이 되게 하고 싶으므로 다시 눌렀을 때 아래의 else조건으로 갈 수 있게 "재생"으로 바꿔줌
 		} else { // 뜻: 퍼즈 버튼에 정지라고 써져있지않다.
-			document.getElementById("audioplay").play(); // 오디오를 play() 재생한다.
-			$("#playpause").html("정지"); // 퍼즈버튼의 글씨를 "정지"로 만들어준다.
+			audio.play(); // 오디오를 play() 재생한다.
+			$("#playpause").html("❚❚"); // 퍼즈버튼의 글씨를 "정지"로 만들어준다.
 		}
 
 	} //playpause
@@ -154,7 +281,7 @@ tr {
 	function oneplay() { // 반복재생
 
 		var oneplay = false; // 반복재생 버튼 클릭 했을때 onplay변수 false
-		// 참고: 처음 페이지 시작 시 onended는 newxt()다.
+		// 참고: 처음 페이지 시작 시 onended는 next()다.
 		if ($("#audioplay").attr("onended") == "next()") { // 반복재생버튼을 기존에 누르지 않은 상태(노래가 끝나면 다음곡 자동 재생으로 설정된 상태)에서 
 			oneplay = true; // 반복 재생 버튼을 눌렀다면 oneplay = true
 
@@ -169,12 +296,15 @@ tr {
 		} else { // 반복재생 중에 다시 버튼을 눌렀을 경우를 염두에 둔 코드.
 			$("#audioplay").attr("onended", "next()"); // 오디오를 노래가 끝나면 다음곡 재생을 하는 코드로 다시 돌려준다.
 			$('#oneplay').css({ // 상태 확인용 css
-				backgroundColor : "gray",
+				backgroundColor : "white",
+				color : "black"
 			});
 		}
 
 	} //oneplay
 
+	// 플레이 리스트 숨기고 가사 보여주는 기능
+	// https://unabated.tistory.com/entry/displaynone-과-visibilityhidden-의-차이  참고
 	function viewLyrics() { // 가사보기
 
 		if ($("#viewLyrics").html() == "가사") {
@@ -184,7 +314,7 @@ tr {
 			$('#lyrics').css({
 				display : ""
 			});
-			$("#viewLyrics").html("리스트");
+			$("#viewLyrics").html("LIST");
 
 		} else {
 			$('#playlist').css({
@@ -249,61 +379,62 @@ tr {
 </script>
 </head>
 <body onload="autoplay()">
-	<div style="text-align: center;">
-		<table>
-			<tr>
-				<td>
-					<span id="sname"></span>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<span id="singername"></span>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<img src="" id="albumimage" width="200" height="200" />
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<button type="button" id="previous" onclick="previous()">&lt;&lt; 이전곡</button>
-					<button type="button" id="playpause" onclick="playpause()">정지</button>
-					<button type="button" id="next" onclick="next()">다음곡 &gt;&gt;</button>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<button type="button" id="oneplay" onClick="oneplay()" style="width: 60" onFocus="blur()">∞</button>
-					<!-- 버튼 a태그 처럼 이용하기 -->
-					<!-- https://dololak.tistory.com/765 참고 -->
-					<c:if test="${snumValSession!=null}">
-						<button type="button" id="shuffle" onClick="location.href='playlist?snumVal=${snumValSession}&jcode=U'" style="width: 60" onFocus="blur()">셔플</button>
-					</c:if>
-					<button type="button" onClick="selectbox.remove( playlist );" style="width: 60" onFocus="blur()">-</button>
-					<button type="button" onClick="selectbox.moveUp( playlist );" style="width: 60" onFocus="blur()">▲</button>
-					<button type="button" onClick="selectbox.moveDown( playlist );" style="width: 60" onFocus="blur()">▼</button>
-					<button type="button" id="viewLyrics" onClick="viewLyrics()" style="width: 60" onFocus="blur()">가사</button>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<audio src="" id="audioplay" controls="controls" autoplay="autoplay" onended="next()"></audio>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<select id="playlist" name="playlist" size="15" style="width: 300px; height: 300px;" ondblclick="nowplay()">
-						<c:forEach var="row" items="${Banana}">
-							<option value="${row.sname}" value2="${row.singername}" value3="${row.image}" value4="${row.downloadfile}" value5="${row.lyrics}" value6="${row.snum }">${row.sname}</option>
-						</c:forEach>
-
-					</select>
-					<textarea id="lyrics" readonly="readonly" style="resize: none; width: 300px; height: 300px; display: none;"></textarea>
-				</td>
-			</tr>
-		</table>
+	<div class="layer">
+		<span class="content">
+			<table id="playlistTable">
+				<tr>
+					<td>
+						<div id="sname"></div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div id="singername"></div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<img src="" id="albumimage" width="200" height="200" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<button type="button" id="previous" class="buttonLine1" onclick="previous()">|◁</button>
+						<button type="button" id="playpause" class="buttonLine1" onclick="playpause()">❚❚</button>
+						<button type="button" id="next" class="buttonLine1" onclick="next()">▷|</button>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<button type="button" id="oneplay" class="buttonLine2" onClick="oneplay()">↻</button>
+						<!-- 버튼 a태그 처럼 이용하기 -->
+						<!-- https://dololak.tistory.com/765 참고 -->
+						<c:if test="${snumValSession!=null}">
+							<button type="button" id="shuffle" class="buttonLine2" onClick="location.href='playlist?snumVal=${snumValSession}&jcode=U'">⇆</button>
+						</c:if>
+						<button type="button" class="buttonLine2" onClick="selectbox.remove( playlist );">삭제</button>
+						<button type="button" class="buttonLine2" onClick="selectbox.moveUp( playlist );">△</button>
+						<button type="button" class="buttonLine2" onClick="selectbox.moveDown( playlist );">▽</button>
+						<button type="button" id="viewLyrics" class="buttonLine2" onClick="viewLyrics()">가사</button>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<audio src="" id="audioplay" controls="controls" autoplay="autoplay" controlsList="nodownload" onended="next()"></audio>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<select id="playlist" name="playlist" size="15" style="width: 300px; height: 300px;" ondblclick="nowplay()">
+							<c:forEach var="row" items="${Banana}">
+								<option value="${row.sname}" value2="${row.singername}" value3="${row.image}" value4="${row.downloadfile}" value5="${row.lyrics}" value6="${row.snum}">${row.sname}</option>
+							</c:forEach>
+						</select>
+						<textarea id="lyrics" readonly="readonly" style="display: none;"></textarea>
+					</td>
+				</tr>
+			</table>
+		</span>
 	</div>
 </body>
 </html>

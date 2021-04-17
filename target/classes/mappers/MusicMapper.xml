@@ -3,37 +3,50 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ncs.MusicMapper">
 
-<!-- ******************************* -->
-<select id="selectList" resultType="vo.MusicVO">
-	 select * from music order by releasedate desc , sname
-</select>
+	<!-- ******************************* -->
+	<select id="selectList" resultType="vo.MusicVO">
+		select * from music order by releasedate desc , sname
+	</select>
 
-<select id="selectOne" resultType="vo.MusicVO"> <!-- 노래 재생목록을 위한 sql  -->
+	<select id="selectOne" resultType="vo.MusicVO"> <!-- 노래 재생목록을 위한 sql -->
 
-	  select snum, sname, stitle, singername, releasedate, genre, 
-      replace(lyrics,'-','') lyrics, country, musicurl, 
-      downloadfile, image, count from music where snum=#{snum}
-      
-</select>
+		select snum, sname, stitle, singername, releasedate, genre,
+		replace(lyrics,'-','') lyrics, country, musicurl,
+		downloadfile, image, count from music where snum=#{snum}
 
-<select id="genreList" resultType="vo.MusicVO">
-<!-- 	 select * from music where genre=#{genre} order by releasedate desc , sname  -->
-	 select snum, sname, stitle, singername, releasedate, genre, replace(lyrics,'-','') lyrics, 
-	 country, musicurl, downloadfile, image, count, rnum 
-	 from (select m.*, ROW_NUMBER() OVER(order by releasedate desc , sname) rnum 
-	 from (select * from music where genre= #{genre} ) m ) where rnum between #{sno} and #{eno}
-</select>
+	</select>
 
-<select id="genreRowCount" resultType="int">
-	select count(*) from music where genre = #{genre}
-</select>
+	<select id="musicList" resultType="vo.MusicVO">
+		select snum, sname, stitle, singername, releasedate, genre, replace(lyrics,'-','') lyrics,
+		country, musicurl, downloadfile, image, count, rnum
+		from (select m.* , ROW_NUMBER() OVER(order by releasedate desc , sname) rnum from music m )
+		where rnum between #{sno} and #{eno}
+	</select>
+
+	<select id="totalRowCount" resultType="int">
+		select count(*) from music
+	</select>
+
+	<select id="genreList" resultType="vo.MusicVO">
+		<!-- select * from music where genre=#{genre} order by releasedate desc 
+			, sname -->
+		select snum, sname, stitle, singername, releasedate, genre, replace(lyrics,'-','') lyrics,
+		country, musicurl, downloadfile, image, count, rnum
+		from (select m.*, ROW_NUMBER() OVER(order by releasedate desc , sname) rnum
+		from (select * from music where genre= #{genre} ) m ) 
+		where rnum between #{sno} and #{eno}
+	</select>
+
+	<select id="genreRowCount" resultType="int">
+		select count(*) from music where genre = #{genre}
+	</select>
 
 
-<update id="musicCount"> <!-- count를 위한 sql -->
+	<update id="musicCount"> <!-- count를 위한 sql -->
 
-	UPDATE music set count=#{count} WHERE snum=#{snum}
+		UPDATE music set count=#{count} WHERE snum=#{snum}
 
-</update>
+	</update>
 
 
 
