@@ -8,8 +8,14 @@
 <link rel="stylesheet" type="text/css" href="resources/myLib/myStyle.css">
 <script src="resources/myLib/jquery-3.2.1.min.js"></script>
 <style>
+
+#headname {
+	text-transform: uppercase;
+}
 #chart {
 	height: 50px;
+	width: 100%;
+	margin: 0 auto;
 }
 
 #playbutten {
@@ -50,6 +56,9 @@
 </script>
 </head>
 <body>
+	<c:if test="${message != null}">
+			<h1 align="center" id="headname">${message }</h1>
+	</c:if>
 	<div>
 		<form name="musiclist">
 			<input type="hidden" id="snumVal" name="snumVal" value="">
@@ -76,7 +85,7 @@
 				</c:forEach>
 				</div>
 				<div align="right">
-					<a href="dailyChart?part=jsp">더보기</a>
+					<a href="chart?part=${message}">더보기</a>
 				</div>
 			</table>
 		</form>

@@ -37,10 +37,17 @@ public class GmusicController {
 		service.musicCount(vo);
 
 		// 일간 count +
-		cvo = chartService.dailytOne(cvo); // vo값 불러오기
+		cvo = chartService.dailyOne(cvo); // vo값 불러오기
 		cvo.setCount(cvo.getCount() + 1);
 		chartService.dailyMusicCount(cvo);
 
+		cvo = chartService.weeklyOne(cvo); // vo값 불러오기
+		cvo.setCount(cvo.getCount() + 1);
+		chartService.weeklyMusicCount(cvo);
+
+		cvo = chartService.monthlyOne(cvo); // vo값 불러오기
+		cvo.setCount(cvo.getCount() + 1);
+		chartService.monthlyMusicCount(cvo);
 	}
 
 	// musiclist
@@ -97,6 +104,22 @@ public class GmusicController {
 
 		return mv;
 	} // playlist
+
+	// ** 가사 보기
+	@RequestMapping(value = "/lyricsview")
+	public ModelAndView lyricsview(HttpServletRequest request, ModelAndView mv, MusicVO vo) {
+
+		vo = service.selectOne(vo);
+		if (vo != null) {
+			mv.addObject("Apple", vo);
+		} else {
+			mv.addObject("message", "~~ 해당 곡이 존재하지 않습니다 ~~");
+		}
+		mv.setViewName("musicview/lyrics");
+
+		return mv;
+
+	} // lyricsview
 
 	// ** Image DownLoad
 	@RequestMapping(value = "/dnload")

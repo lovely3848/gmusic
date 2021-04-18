@@ -68,7 +68,7 @@ body {
 }
 
 /* 플레이리스트, 가사, 오디오 클릭후 포커스 없애기 */
-#playlist, #lyrics, #audioplay:focus {
+#playlist:focus, #lyrics:focus, #audioplay:focus {
 	outline: none;
 }
 
@@ -97,7 +97,7 @@ body {
 }
 
 /* 버튼 클릭후 포커스 없애기 */
-.buttonLine1, .buttonLine2:focus {
+.buttonLine1:focus, .buttonLine2:focus {
 	outline: none;
 }
 </style>
@@ -200,6 +200,8 @@ body {
 	// 선택된 select box 값의 밸류를 각 항목에 전달시킴
 	function nowplay() { // 현재 선택곡 재생. 각 div들에 현재 재생할 값들을 넣어서 표현해줌
 
+		document.title = $("#playlist option:selected").attr('value') + " - "
+				+ $("#playlist option:selected").attr('value2'); // 현재 곡에 따라 타이틀 변경
 		$("#sname").html($("#playlist option:selected").attr('value'));
 		$("#singername").html($("#playlist option:selected").attr('value2'));
 		$("#albumimage").attr("src",

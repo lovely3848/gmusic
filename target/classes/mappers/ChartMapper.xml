@@ -15,8 +15,30 @@
 
 
 	</select>
+	<select id="selectweeklyRank" resultType="vo.MusicVO"><!-- dailyChart FK키를 이용한 
+			Music Table 조인 -->
 
-	<select id="dailytOne" resultType="vo.ChartVO"> <!-- 노래 재생목록을 위한 sql -->
+		select snum , count, sname , singername , stitle , releasedate ,image , downloadfile
+		,rnum from (select m.*, ROW_NUMBER() OVER(order by count desc) rnum
+		 from (select w.snum , m.sname , m.singername , m.stitle , m.releasedate
+		,w.count , m.downloadfile ,m.image , m.musicurl  from weeklyChart w, music m where w.snum= m.snum )	m ) where
+		rnum between #{sno} and #{eno}
+
+
+	</select>
+	<select id="selectmonthlyRank" resultType="vo.MusicVO"><!-- dailyChart FK키를 이용한 
+			Music Table 조인 -->
+
+		select snum , count, sname , singername , stitle , releasedate ,image , downloadfile
+		,rnum from (select m.*, ROW_NUMBER() OVER(order by count desc) rnum
+		 from (select d.snum , m.sname , m.singername , m.stitle , m.releasedate
+		,d.count , m.downloadfile ,m.image , m.musicurl  from monthlyChart d, music m where d.snum= m.snum )	m ) where
+		rnum between #{sno} and #{eno}
+
+
+	</select>
+
+	<select id="dailyOne" resultType="vo.ChartVO"> <!-- 노래 재생목록을 위한 sql -->
 
 		select snum , count from dailyChart where snum=#{snum}
 
@@ -25,6 +47,30 @@
 	<update id="dailyMusicCount"> <!-- count를 위한 sql -->
 
 		UPDATE dailyChart set count=#{count} WHERE snum=#{snum}
+
+	</update>
+	
+	<select id="weeklyOne" resultType="vo.ChartVO"> <!-- 노래 재생목록을 위한 sql -->
+
+		select snum , count from weeklyChart where snum=#{snum}
+
+	</select>
+
+	<update id="weeklyMusicCount"> <!-- count를 위한 sql -->
+
+		UPDATE weeklyChart set count=#{count} WHERE snum=#{snum}
+
+	</update>
+	
+	<select id="monthlyOne" resultType="vo.ChartVO"> <!-- 노래 재생목록을 위한 sql -->
+
+		select snum , count from monthlyChart where snum=#{snum}
+
+	</select>
+
+	<update id="monthlyMusicCount"> <!-- count를 위한 sql -->
+
+		UPDATE monthlyChart set count=#{count} WHERE snum=#{snum}
 
 	</update>
 

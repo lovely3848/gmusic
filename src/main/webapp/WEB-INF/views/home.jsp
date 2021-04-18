@@ -330,9 +330,9 @@ a {
 				<h3>** G-MUSIC 차트 **</h3>
 				<div>
 				<hr>
-				<span id="dailyChart" class="textLink">[일일차트]</span> &nbsp;&nbsp; <span
-					id="weeklist" class="textLink">[주간차트]</span>&nbsp;&nbsp; <span
-					id="monthlist" class="textLink">[월간차트]</span>&nbsp;&nbsp; <a
+				<button id="dailyChart" class="textLink" onclick="dailyChart">[일일차트]</button> &nbsp;&nbsp; <button
+					id="weeklyChart" class="textLink" onclick="weeklyChart">[주간차트]</button>&nbsp;&nbsp; <button
+					id="monthlyChart" class="textLink" onclick="monthChart">[월간차트]</button>&nbsp;&nbsp; <a
 					href="home">[Home]</a>&nbsp;&nbsp;
 				<hr>
 				</div>

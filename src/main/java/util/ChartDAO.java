@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import criteria.Criteria;
 import vo.ChartVO;
 import vo.MusicVO;
-import vo.PageVO;
 
 @Repository
 public class ChartDAO {
@@ -23,8 +22,8 @@ public class ChartDAO {
 		return sqlSession.selectList(NS + "selectdailyRank", cri);
 	}
 
-	public ChartVO dailytOne(ChartVO cvo) {
-		return sqlSession.selectOne(NS + "dailytOne", cvo);
+	public ChartVO dailyOne(ChartVO cvo) {
+		return sqlSession.selectOne(NS + "dailyOne", cvo);
 	}
 
 	public void dailyMusicCount(ChartVO cvo) {
@@ -33,6 +32,34 @@ public class ChartDAO {
 
 	public int rowCount(Criteria cri) {
 		return sqlSession.selectOne(NS + "rowCount", cri);
+	}
+
+	public Object selectweeklyRank(Criteria cri) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList(NS + "selectweeklyRank", cri);
+	}
+
+	public Object selectmonthlyRank(Criteria cri) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList(NS + "selectmonthlyRank", cri);
+	}
+
+	public ChartVO weeklyOne(ChartVO cvo) {
+		return sqlSession.selectOne(NS + "weeklyOne", cvo);
+	}
+
+	public void weeklyMusicCount(ChartVO cvo) {
+		sqlSession.update(NS + "weeklyMusicCount", cvo);
+		
+	}
+
+	public ChartVO monthlyOne(ChartVO cvo) {
+		return sqlSession.selectOne(NS + "monthlyOne", cvo);
+	}
+
+	public void monthlyMusicCount(ChartVO cvo) {
+		sqlSession.update(NS + "monthlyMusicCount", cvo);
+		
 	}
 
 }

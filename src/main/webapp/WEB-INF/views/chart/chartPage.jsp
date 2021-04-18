@@ -119,6 +119,10 @@ a {
 /* nav */
 
 /* section */
+#headname {
+	text-transform: uppercase;
+}
+
 #chart {
 	width: 75%;
 	text-align: center;
@@ -134,11 +138,11 @@ a {
 	white-space: nowrap; /* 제목을 1렬로 정렬 */
 	text-overflow: ellipsis; /* 정렬시 제목이 일정칸 이상이라면 ...으로 표시 */
 	text-align: left;
-
 }
-#line{
-margin-top: 4px;
-margin-bottom: 4px;
+
+#line {
+	margin-top: 4px;
+	margin-bottom: 4px;
 }
 /* section  */
 
@@ -197,6 +201,7 @@ margin-bottom: 4px;
 </script>
 </head>
 <body>
+
 	<div id="header">
 		<ul id="headermenu">
 			<!-- 조건주고 로그인 상태면 로그인 없애고 로그아웃으로 -->
@@ -235,6 +240,9 @@ margin-bottom: 4px;
 		<!-- topmenu -->
 	</div>
 	<div id=section>
+		<c:if test="${part != null}">
+			<h1 align="center" id="headname">${part}</h1>
+		</c:if>
 		<form name="musiclist">
 			<input type="hidden" id="snumVal" name="snumVal" value="">
 			<table border="1" id="chart">
@@ -251,7 +259,7 @@ margin-bottom: 4px;
 							<img src="${row.image}" width="60" height="60">
 						</td>
 						<td id=textoverflow>${row.sname}
-						<hr id = "line">${row.singername }
+							<hr id="line">${row.singername }
 						</td>
 						<td>
 							<button type="button" id="playbutten" name="sname" value="${row.snum}">

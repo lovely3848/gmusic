@@ -10,7 +10,6 @@ public class ChartVO {
 	private int snum;
 	private int count;
 	
-	
 	@Autowired
 	private MusicVO musicVO;
 	

@@ -17,7 +17,7 @@
 <script src="resources/myLib/myinfochange.js"></script>
 <script src="resources/myLib/chartcount.js"></script>
 <script>
-	var keydownCtrl = 0;
+/* 	var keydownCtrl = 0;
 	var kedownShift = 0;
 
 	document.onkeydown = keycheck;
@@ -53,7 +53,7 @@
 			alert('마우스 오른쪽 / 컨트롤 / F12 금지입니다');
 		}
 	}
-	document.onmousedown = click;
+	document.onmousedown = click; */
 </script>
 <script>
 	$(function() { //ready
@@ -92,7 +92,16 @@
 			}
 		});
       
-      
+		// 가사 버튼 눌렀을때 실행 
+		$("button[name=lyrics]").click(function() {
+
+			var buttonSnumVal = $(this).val();
+
+			url = "lyricsview?snum="+buttonSnumVal;
+			window.open(url, "lyricsView","toolbar=no,location=no,status=no,scrollbars=no,resizable=no,width=420,height=520");
+       
+		});
+		
 		// 곡명 버튼 눌렀을때 실행 
 		// 플레이 리스트에 단일로 실행됨
 		$("button[name=sname]").click(function() {
@@ -100,15 +109,24 @@
 			var buttonSnumVal = $(this).val();
 
 			url = "playlist";
-			window.open(url, "myview","toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
+			window.open(url, "playlistView","toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
        
 			document.musiclist.action =url;
 			document.musiclist.method="post";
-			document.musiclist.target="myview";
+			document.musiclist.target="playlistView";
          
 			$('input[name=snumVal]').attr('value',buttonSnumVal);
       
 			document.musiclist.submit();
+		});
+		
+		// 뮤직비디오 버튼 눌렀을때 실행 
+		$("button[name=musicurl]").click(function() {
+
+			var musicurlVal = $(this).val();
+
+			url = musicurlVal+"?amp;autoplay=1";
+			window.open(url, "videoView","toolbar=no,location=no,status=no,scrollbars=no,resizable=no,width=600,height=400");
 		});
       
 	});//ready *
@@ -135,11 +153,11 @@
 		= result;
 	     
 		url = "playlist";
-		window.open(url, "myview","toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
+		window.open(url, "playlistView","toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
 	   
 		document.musiclist.action =url;
 		document.musiclist.method="post";
-		document.musiclist.target="myview";
+		document.musiclist.target="playlistView";
 	     
 		// 항목 추가 실험중 넣으면 항목 추가됨
 		//var addsnumVal = $('input[name=snumVal]').val();
@@ -152,7 +170,7 @@
 		document.musiclist.submit();
 	  
 	} //getCheckboxValue
-
+	
 </script>
 <style>
 body {
@@ -269,26 +287,6 @@ a {
 /* nav */
 
 /* section */
-.playbutten {
-	background-color: transparent !important; /* 배경 없애기 */
-	border: none; /* 버튼 보더 없애기 */
-	align-self: auto;
-	white-space: nowrap; /* 한라인 쓰기 */
-}
-
-.playbutten:hover {
-	text-decoration: underline; /* hover시 밑줄 */
-	cursor: pointer; /* hover시 마우스 손가락 모양 */
-}
-
-.playbutten:focus {
-	outline: none; /* 클릭후 포커스 없애기 */
-}
-
-#table {
-	width: 100%;
-}
-
 #section {
 	margin: 0 auto; /* 중앙정렬 */
 	width: 75%;
@@ -303,6 +301,70 @@ a {
 	border-bottom: solid green;
 	height: 295px;
 }
+
+#table {
+	width: 100%;
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+	border-spacing: 0px;
+}
+
+#table td {
+	border-bottom: 1px solid;
+	border-collapse: collapse;
+	border-color: #EEEEEF;
+	padding: 5px;
+}
+
+.category {
+	font-family: 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif;
+	font-size: 14px;
+}
+
+.rnum {
+	font-size: 18px;
+}
+
+.albumimage {
+	width: 70px;
+	height: 70px;
+	padding: 6px;
+	vertical-align: middle;
+}
+
+.playbutten, .icon {
+	background-color: transparent !important; /* 배경 없애기 */
+	border: none; /* 버튼 보더 없애기 */
+	padding: 0;
+	align-self: auto;
+	white-space: nowrap; /* 한라인 쓰기 */
+	font-family: 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	color: #333333;
+}
+
+.playbutten:hover, .icon:hover {
+	text-decoration: underline; /* hover시 밑줄 */
+	cursor: pointer; /* hover시 마우스 손가락 모양 */
+}
+
+.playbutten:focus, .icon:focus {
+	outline: none; /* 클릭후 포커스 없애기 */
+}
+
+.singername {
+	font-family: 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif;
+	font-size: 12px;
+	color: #8b8b8b;
+}
+
+.stitle {
+	font-family: 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif;
+	font-size: 14px;
+	color: #8b8b8b;
+}
+
 /* section */
 
 /* 로그인 파트부분 */
@@ -434,40 +496,61 @@ a {
 			<button type="button" onclick="getCheckboxValue()">플레이리스트</button>
 			<div id='result'></div>
 			<input type="hidden" id="snumVal" name="snumVal" value="">
-			<table border="1" id="table">
-				<tr align="center" height="2" bgcolor="pink">
+			<table id="table">
+				<tr class="category" align="center" height="2" bgcolor="ghostwhite">
 					<td width="50">
 						<input type="checkbox" id="check_all" name="check_all">
 					</td>
 					<td width="40">번 호</td>
-					<td>Image</td>
-					<td>곡 명</td>
-					<td>가 수</td>
-					<td>앨범명</td>
-					<td>재 생</td>
-					<td>downloadfile</td>
+					<td colspan="3">곡정보</td>
+					<td align="left">앨 범</td>
+					<td width="40">듣 기</td>
+					<td width="40">다 운</td>
+					<td width="40">뮤 비</td>
+					<td width="40">수 정</td>
+					<td width="40">삭 제</td>
 				</tr>
 				<c:forEach var="row" items="${Banana}" varStatus="vs">
 					<tr>
 						<td align="center">
-							<input type="checkbox" class="normalCheck" id="snum${row.snum}" name="snum" value="${row.snum}">
+							<input type="checkbox" class="normalCheck" name="snum" value="${row.snum}">
 						</td>
-						<td align="center">${row.rnum}</td>
+						<td class="rnum" align="center">${row.rnum}</td>
 						<td>
-							<img src="${row.image}" width="70" height="70">
+							<img class="albumimage" src="${row.image}">
 						</td>
-						<td>
-							<button type="button" class="playbutten" name="sname" value="${row.snum}">${row.sname}</button>
-						</td>
-						<td>${row.singername}</td>
-						<td>${row.stitle}</td>
-						<td>
-							<button type="button" class="playbutten" name="sname" value="${row.snum}">
-								<img src="resources/image/play.jpg" width="60" height="60">
+						<td width="40">
+							<button type="button" class="icon" name="lyrics" value="${row.snum}">
+								<img src="resources/image/lyrics_icon.png" width="30" height="30">
 							</button>
 						</td>
 						<td>
-							<a href="dnload?dnfile=${row.downloadfile}">${row.downloadfile}</a>
+							<div>
+								<button type="button" class="playbutten" name="sname" value="${row.snum}">${row.sname}</button>
+							</div>
+							<div class="singername">${row.singername}</div>
+						</td>
+						<td class="stitle">${row.stitle}</td>
+						<td align="center">
+							<button type="button" class="playbutten" name="sname" value="${row.snum}">
+								<img src="resources/image/play_icon.png" width="30" height="30">
+							</button>
+						</td>
+						<td align="center">
+							<a href="dnload?dnfile=${row.downloadfile}">
+								<img src="resources/image/download_icon.png" width="30" height="30">
+							</a>
+						</td>
+						<td align="center">
+							<button type="button" class="icon" name="musicurl" value="${row.musicurl}">
+								<img src="resources/image/videos_icon.png" width="30" height="30">
+							</button>
+						</td>
+						<td align="center">
+							<span>수정</span>
+						</td>
+						<td align="center">
+							<span>삭제</span>
 						</td>
 					</tr>
 				</c:forEach>
