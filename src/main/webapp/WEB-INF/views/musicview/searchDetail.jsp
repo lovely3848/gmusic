@@ -210,9 +210,9 @@ footer {
    // https://darkhorizon.tistory.com/284 참고
    // 체크박스(checkbox)에 선택 된 값 출력하기
    // https://hianna.tistory.com/430 참고
-   function getCheckboxValue()  {
+    function getCheckboxValue()  {
       // 선택된 목록 가져오기
-      const query = 'input[name="snum"]:checked'; //snum_1  ,snumVal_1 로 바꾸고 해도 안되네;;
+      const query = 'input[name="snum"]:checked';
       const selectedEls = document.querySelectorAll(query);
    
       // 선택된 목록에서 value 찾기
@@ -220,10 +220,6 @@ footer {
       selectedEls.forEach((el) => {
       result += el.value + ',';
       });
-      
-      // div에 출력 하기
-      document.getElementById('result').innerText
-      = result;
       
       url = "playlist";
       window.open(url, "myview",
@@ -241,7 +237,7 @@ footer {
          $('input[name=snumVal]').attr('value',result);
       //}
       document.musicSearch.submit();
-   }
+   } 
 </script>
 
 <script type="text/javascript">
@@ -350,7 +346,7 @@ $(function(){
 				<h1>가사 검색 결과 (${Apple2})</h1>
 			</c:otherwise>
 		</c:choose>
-		<button type="button" onclick="getCheckboxValue()">플레이리스트</button>
+		<button type="button" id="ppp" name="ppp" onclick="getCheckboxValue()">플레이리스트</button>
 		<input type="hidden" id="snumVal" name="snumVal" value="">
 		<table style="width: 100%;" border="1">
 			<tr align="center" height="2" bgcolor="ghostwhite">

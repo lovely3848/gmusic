@@ -285,7 +285,7 @@ footer {
    // https://hianna.tistory.com/430 참고
    function getCheckboxValue()  {
       // 선택된 목록 가져오기
-      const query = 'input[name="snum"]:checked'; //snum_1  ,snumVal_1 로 바꾸고 해도 안되네;;
+      const query = 'input[name="snum"]:checked';
       const selectedEls = document.querySelectorAll(query);
    
       // 선택된 목록에서 value 찾기
@@ -293,10 +293,6 @@ footer {
       selectedEls.forEach((el) => {
       result += el.value + ',';
       });
-      
-      // div에 출력 하기
-      document.getElementById('result').innerText
-      = result;
       
       url = "playlist";
       window.open(url, "myview",
@@ -441,7 +437,6 @@ $(function(){
       <!-- 아티스트명 검색 -->
       <h1>아티스트 검색 결과 (${Banana2})</h1>
       <button type="button" onclick="getCheckboxValue()">플레이리스트</button>
-      <div id='result'></div>
       <input type="hidden" id="snumVal" name="snumVal" value="">
       <table style="width: 100%;" border="1">
          <tr align="center" height="2" bgcolor="ghostwhite">
@@ -487,7 +482,6 @@ $(function(){
       <div id="lyricsSearchAjax">
       <h1>가사 검색 결과 (${Canana2})</h1>
       <button type="button" onclick="getCheckboxValue()">플레이리스트</button>
-      <div id='result'></div>
       <input type="hidden" id="snumVal" name="snumVal" value="">
       <table style="width: 100%;" border="1">
          <tr align="center" height="2" bgcolor="ghostwhite">
