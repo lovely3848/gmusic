@@ -158,15 +158,10 @@ div>input, #email2 {
 				</div>
 				<br>
 				<div style="text-align: left;" class="box1">
-					<span class="font1">선호장르1</span>
+					<span class="font1">선호장르</span>
 					<div class="box2">
 						<input type="text" name="genre1" class="genre" id="genre1" value="${vo.genre1}"
 							size="1" placeholder="${vo.genre1 }" readonly="readonly">
-					</div>
-					<span class="font1">선호장르2</span>
-					<div>
-						<input type="text" name="genre2" class="genre" id="genre2" value="${vo.genre2}"
-							size="1" placeholder="${vo.genre2 }" readonly="readonly">
 					</div>
 					<div id="img">
 						<img src="${vo.uploadfile}" id ="profile" class="select_img" width="300" height="300"/>

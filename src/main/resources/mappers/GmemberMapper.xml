@@ -7,7 +7,7 @@
 		insert into gmember values(
 		#{id},#{password},#{sex},#{email},
 		#{phone},#{birthday},#{rid},#{genre1},
-		#{genre2},default,default,#{uploadfile},
+		default,default,#{uploadfile},
 		default
 		)
 	</insert>
@@ -17,7 +17,7 @@
 	</select>
 <!-- 내정보 수정  -->
 	<update id="update">
-		update gmember set password = #{password} ,genre1 = #{genre1}, genre2 =	#{genre2} where id = #{id}
+		update gmember set password = #{password} ,genre1 = #{genre1} where id = #{id}
 	</update>
 <!-- 내정보 수정  -->
 <!-- 프로필 수정  -->	

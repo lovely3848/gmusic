@@ -50,22 +50,63 @@ public class GmusicController {
 		chartService.monthlyMusicCount(cvo);
 	}
 
-	// musiclist
+	// ** 최신음악
 	@RequestMapping(value = "/musiclist")
-	public ModelAndView musiclist(ModelAndView mv, Criteria cri, PageMaker pageMaker) {
-
-		cri.setRowPerPage(20); // 한 페이지당 20곡씩 출력
+	public ModelAndView musiclist(HttpServletRequest request, ModelAndView mv, Criteria cri, PageMaker pageMaker) {
+		if ("section1_2".equals(request.getParameter("pagingCode"))) {
+			cri.setRowPerPage(4);
+		} else {
+			cri.setRowPerPage(20);
+		}
 		cri.setSnoEno();
 
-		mv.addObject("Banana", service.musicList(cri));
-
+		List<MusicVO> list = service.releasedateList(cri);
+		if (list != null) {
+			mv.addObject("Banana", list);
+		}
 		pageMaker.setCri(cri); // 계산된 cri를 페이지 메이커의 필드변수에 담아줌
-		pageMaker.setTotalRow(service.totalRowCount()); // 전체 곡목록의 수
+		pageMaker.setTotalRow(service.releasedateRowCount()); // 장르 곡목록의 수
 
 		mv.addObject("pageMaker", pageMaker);
-		mv.setViewName("musicview/musiclist");
+		if ("section1_2".equals(request.getParameter("pagingCode"))) {
+			mv.setViewName("musicview/ajaxMusicList");
+		} else {
+			mv.setViewName("musicview/musiclist");
+		}
+
 		return mv;
-	}
+	}// musiclist
+
+	// ** 장르음악
+	@RequestMapping(value = "/genrelist")
+	public ModelAndView genrelist(HttpServletRequest request, ModelAndView mv, Criteria cri, PageMaker pageMaker,
+			MusicVO vo) {
+		System.out.println("***********Test " + vo.getGenre()); // vo엔 자동으로 장르만 들어와있음.
+
+		if ("section1_1".equals(request.getParameter("pagingCode"))) {
+			cri.setRowPerPage(4);
+		} else {
+			cri.setRowPerPage(10); // 한 페이지당 20곡씩 출력
+		}
+		cri.setSnoEno();
+		cri.setGenre(vo.getGenre());
+
+		List<MusicVO> list = service.genreList(cri); // 장르에 해당하는 곡목록이 들어옴
+		if (list != null) {
+			mv.addObject("Banana", list);
+		}
+		pageMaker.setCri(cri); // 계산된 cri를 페이지 메이커의 필드변수에 담아줌
+		pageMaker.setTotalRow(service.genreRowCount(vo)); // 장르 곡목록의 수
+
+		mv.addObject("pageMaker", pageMaker);
+		mv.addObject("musicGenre", vo.getGenre());
+		if ("section1_1".equals(request.getParameter("pagingCode"))) {
+			mv.setViewName("musicview/ajaxGenreList");
+		} else {
+			mv.setViewName("musicview/genrelist");
+		}
+		return mv;
+	}// genrelist
 
 	// playlist
 	@RequestMapping(value = "/playlist")
@@ -147,24 +188,53 @@ public class GmusicController {
 		 */
 	} // dnload
 
-	@RequestMapping(value = "/genrelist")
-	public ModelAndView genrelist(ModelAndView mv, Criteria cri, PageMaker pageMaker, MusicVO vo) {
-		System.out.println("***********Test " + vo.getGenre()); // vo엔 자동으로 장르만 들어와있음.
-		cri.setRowPerPage(10); // 한 페이지당 20곡씩 출력
+	/*--------------------------------------------------검색--------------------------------------------*/
+	@RequestMapping(value = "/mSearch") // 통합검색
+	public ModelAndView mSearch(ModelAndView mv, Criteria cri, PageMaker pageMaker) {
+		System.out.println("들어오는 서치타입은? ********* >>>" + cri.getSearchType());
+		System.out.println("들어오는 키워드은? ********* >>>" + cri.getKeyword());
 		cri.setSnoEno();
-		cri.setGenre(vo.getGenre());
 
-		List<MusicVO> list = service.genreList(cri); // 장르에 해당하는 곡목록이 들어옴
-		if (list != null) {
-			mv.addObject("Banana", list);
+		mv.addObject("searchType", cri.getSearchType());
+		mv.addObject("UserKeyword", cri.getKeyword());
+		cri.setKeyword(cri.getKeyword().replace(" ", ""));
+
+		if ("all".equals(cri.getSearchType())) {
+
+			cri.setSearchType("sname");
+			List<MusicVO> list1 = service.searchSnameList(cri);
+			mv.addObject("Aanana", list1);
+			mv.addObject("Aanana2", service.searchRowCountSname(cri));
+
+			cri.setSearchType("singername");
+			List<MusicVO> list2 = service.searchSnameList(cri);
+			mv.addObject("Banana", list2);
+			mv.addObject("Banana2", service.searchRowCountSname(cri));
+
+			cri.setSearchType("lyrics");
+			List<MusicVO> list3 = service.searchSnameList(cri);
+			mv.addObject("Canana", list3);
+			mv.addObject("Canana2", service.searchRowCountSname(cri));
+			cri.setSearchType("all");
 		}
-		pageMaker.setCri(cri); // 계산된 cri를 페이지 메이커의 필드변수에 담아줌
-		pageMaker.setTotalRow(service.genreRowCount(vo)); // 장르 곡목록의 수
+
+		mv.addObject("Apple", service.searchSnameList(cri));
+		mv.addObject("Apple2", service.searchRowCountSname(cri));
+
+		pageMaker.setCri(cri);
+		pageMaker.setTotalRow(service.searchRowCountSname(cri));
 
 		mv.addObject("pageMaker", pageMaker);
-		mv.addObject("musicGenre", vo.getGenre());
-		mv.setViewName("musicview/genrelist");
+
+		if ("all".equals(cri.getSearchType())) {
+			mv.setViewName("musicview/musicSearch");
+		} else {
+			mv.setViewName("musicview/searchDetail");
+		}
+
 		return mv;
-	}
+	} // mSearch
+
+	/*------------------------------------------------------------------------------------------*/
 
 }

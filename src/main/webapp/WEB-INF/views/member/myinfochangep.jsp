@@ -1,6 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -218,40 +217,35 @@ div>input, #email2 {
 					<div style="text-align: left;" class="box1">
 						<span class="font1">아이디</span>
 						<div>
-							<input type="text" name="id" id="id" size="50" value="${vo.id }"
-								placeholder="${vo.id}" readonly="readonly">
+							<input type="text" name="id" id="id" size="50" value="${vo.id }" placeholder="${vo.id}" readonly="readonly">
 						</div>
 					</div>
 					<br>
 					<div style="text-align: left;" class="box1">
 						<span class="font1">비밀번호</span>
 						<div class="box2">
-							<input type="password" name="password" id="password" size="50"
-								placeholder="비밀번호"><br> <span id="pMessage" class="message"> <br></span>
+							<input type="password" name="password" id="password" size="50" placeholder="비밀번호">
+							<br> <span id="pMessage" class="message"> <br></span>
 						</div>
 						<br>
 						<div>
-							<input type="password" name="password2" id="password2" size="50"
-								placeholder="비밀번호 확인"> <br> <span id="p2Message"
-								class="message"></span>
+							<input type="password" name="password2" id="password2" size="50" placeholder="비밀번호 확인">
+							<br> <span id="p2Message" class="message"></span>
 						</div>
 					</div>
 					<br>
 					<div style="text-align: left;" class="box1">
 						<span class="font1">생년월일</span>
 						<div>
-							<input type="text" name="birthday" id="birthday"
-								value="${vo.birthday }" placeholder="${vo.birthday}" size="50"
-								readonly="readonly"> <br> <span id="bMessage"
-								class="message"></span>
+							<input type="text" name="birthday" id="birthday" value="${vo.birthday }" placeholder="${vo.birthday}" size="50" readonly="readonly">
+							<br> <span id="bMessage" class="message"></span>
 						</div>
 					</div>
 					<br>
 					<div style="text-align: left;" class="box1">
 						<span class="font1">성별</span>
 						<div>
-							<input type="text" name="sex" id="sex" placeholder="${vo.sex }"
-								value="${vo.sex }" readonly="readonly" size="50">
+							<input type="text" name="sex" id="sex" placeholder="${vo.sex }" value="${vo.sex }" readonly="readonly" size="50">
 						</div>
 					</div>
 
@@ -263,55 +257,36 @@ div>input, #email2 {
 				<div style="text-align: left;" class="box1">
 					<span class="font1">이메일</span>
 					<div>
-						<input type="text" name="email" id="email" size="50"
-							value="${vo.email }" placeholder="${vo.email }"
-							readonly="readonly"> <br> <span id=iMessage
-							class="message"></span>
+						<input type="text" name="email" id="email" size="50" value="${vo.email }" placeholder="${vo.email }" readonly="readonly">
+						<br> <span id=iMessage class="message"></span>
 					</div>
 				</div>
 				<br>
 				<div style="text-align: left;" class="box1">
 					<span class="font1">휴대폰 번호</span>
 					<div>
-						<input type="text" name="phone1" id="phone1" size="50"
-							value="${vo.phone }" placeholder="${vo.phone }"
-							readonly="readonly">
+						<input type="text" name="phone1" id="phone1" size="50" value="${vo.phone }" placeholder="${vo.phone }" readonly="readonly">
 					</div>
 					<br>
 					<div style="text-align: left;" class="box1">
-						<span class="font1">선호장르1</span>
+						<span class="font1">선호장르</span>
 						<div class="box2">
 							<select name="genre1" class="genre" id="genre1" size="1">
 								<option selected="selected" value="${vo.genre1}">${vo.genre1}
+								<option value="N">선택 안함
 								<option value="dance">댄스
+								<option value="ballad">발라드
 								<option value="rap">랩/힙합
-								<option value="R&B">R&B/Soul
-								<option value="indie">인디음악
+								<option value="rnb">R&B/Soul
+								<option value="indie">인디
 								<option value="rock">록/메탈
 								<option value="trot">트로트
 								<option value="jazz">재즈
-								<option value="oldPop">올드팝
-							</select>
-						</div>
-						<br>
-						<span class="font1">선호장르2</span>
-						<div>
-							<select name="genre2" class="genre" id="genre2" size="1">
-								<option selected="selected" value="${vo.genre2 }">${vo.genre2}
-								<option value="dance">댄스
-								<option value="rap">랩/힙합
-								<option value="R&B">R&B/Soul
-								<option value="indie">인디음악
-								<option value="rock">록/메탈
-								<option value="trot">트로트
-								<option value="jazz">재즈
-								<option value="oldPop">올드팝
 							</select>
 						</div>
 					</div>
 					<br>
-					<button type="submit" value="수정하기" id="submit" size="10"
-						onclick="return inCheck()">수정하기</button>
+					<button type="submit" value="수정하기" id="submit" size="10" onclick="return inCheck()">수정하기</button>
 					<input type="reset" value="취소하기" id="reset" size="10">
 				</div>
 			</div>

@@ -109,13 +109,13 @@
 			url = "playlist";
 			window.open(url, "playlistView","toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
        
-			document.musiclist.action =url;
-			document.musiclist.method="post";
-			document.musiclist.target="playlistView";
+			document.musiclistForm.action =url;
+			document.musiclistForm.method="post";
+			document.musiclistForm.target="playlistView";
          
 			$('input[name=snumVal]').attr('value',buttonSnumVal);
       
-			document.musiclist.submit();
+			document.musiclistForm.submit();
 		});
 		
 		// 뮤직비디오 버튼 눌렀을때 실행 
@@ -153,9 +153,9 @@
 		url = "playlist";
 		window.open(url, "playlistView","toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
 	   
-		document.musiclist.action =url;
-		document.musiclist.method="post";
-		document.musiclist.target="playlistView";
+		document.musiclistForm.action =url;
+		document.musiclistForm.method="post";
+		document.musiclistForm.target="playlistView";
 	     
 		// 항목 추가 실험중 넣으면 항목 추가됨
 		//var addsnumVal = $('input[name=snumVal]').val();
@@ -165,7 +165,7 @@
 			$('input[name=snumVal]').attr('value',result);
 		//}
 	  
-		document.musiclist.submit();
+		document.musiclistForm.submit();
 	  
 	} //getCheckboxValue
 
@@ -515,7 +515,7 @@ a {
 		</c:otherwise>
 	</c:choose>
 	<div id="section">
-		<form name="musiclist">
+		<form name="musiclistForm">
 			<button type="button" onclick="getCheckboxValue()">플레이리스트</button>
 			<div id='result'></div>
 			<input type="hidden" id="snumVal" name="snumVal" value="">

@@ -216,7 +216,6 @@ public class MemberController {
 		return mv;
 	}
 
-	
 	// *** Id, Email, phone ajax 중복확인
 	@RequestMapping(value = "/userCheck")
 	@ResponseBody
@@ -224,7 +223,6 @@ public class MemberController {
 
 		return service.userDuplicationCheck(vo);
 	}
-
 
 // login 부분---------------------------------------------------------
 	@RequestMapping(value = "/loginp")
@@ -246,6 +244,8 @@ public class MemberController {
 					request.getSession().setAttribute("loginID", vo.getId());
 					request.getSession().setAttribute("loginGRADE", vo.getGrade());
 					request.getSession().setAttribute("loginPW", password);
+					request.getSession().setAttribute("userPickGenre1", vo.getGenre1()); // 섹션 1_1부분을 위해 추가
+					System.out.println("마이장르 확인용 => "+vo.getGenre1());
 //					mv.addObject("message", "로그인 성공!");
 					rttr.addFlashAttribute("message", "로그인 성공!");
 					mv.setViewName("redirect:home");
@@ -353,6 +353,7 @@ public class MemberController {
 		if (service.update(vo) > 0) {
 			rttr.addFlashAttribute("message", "업데이트 성공");
 			mv.setViewName("member/mypage");
+			request.getSession().setAttribute("userPickGenre1", vo.getGenre1()); // 섹션 1_1부분을 위해 추가
 		} else {
 			rttr.addFlashAttribute("message", "업데이트 실패");
 			mv.setViewName("member/myinfochangp");

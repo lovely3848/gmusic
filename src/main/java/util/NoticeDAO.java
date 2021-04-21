@@ -28,8 +28,7 @@ public class NoticeDAO {
 
 	public List<NoticeVO> selectList() {
 		return sqlSession.selectList(NS + "selectList");
-	} // selctOne
-		// ** selectOne detail
+	}
 
 	public NoticeVO selectOne(NoticeVO vo) {
 		return sqlSession.selectOne(NS + "selectOne", vo);
@@ -44,15 +43,6 @@ public class NoticeDAO {
 	public int insert(NoticeVO vo) {
 		return sqlSession.insert(NS + "insert", vo);
 	} // insert
-
-	// ** reply insert
-	// => 답글 등록과 step증가
-	public int replyInsert(NoticeVO vo) {
-		// step증가 후 입력
-		// 조건 => root 동일하고 step 이 vo 의 step 과 같거나 큰경우
-		System.out.println("** stepUpdate 결과 => " + sqlSession.update(NS + "stepUpdate", vo));
-		return sqlSession.insert(NS + "replyInsert", vo);
-	} // replyInsert
 
 	// ** update
 	public int update(NoticeVO vo) {

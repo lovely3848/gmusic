@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import criteria.Criteria;
 import vo.FaqVO;
-import vo.PageVO;
 
 @Repository
 public class FaqDAO {
@@ -21,14 +20,14 @@ public class FaqDAO {
 
 	//SearchCriteria PageList
 	public int searchRowCountF(Criteria cri) {
-		return sqlSession.selectOne(NS+"searchRowCount");
+		return sqlSession.selectOne(NS+"searchRowCountF",cri);
 	}  
 	public List<FaqVO> searchFList(Criteria cri) {
 		return sqlSession.selectList(NS+"searchFList",cri);
 	}
 
 	// ** Criteria PageList	
-	public List<FaqVO> criBList(Criteria cri) {
+	public List<FaqVO> criFList(Criteria cri) {
 		return sqlSession.selectList(NS+"pageList",cri);
 	}
 
@@ -36,9 +35,6 @@ public class FaqDAO {
 	public int totalRowCount() {
 		return sqlSession.selectOne(NS+"totalRowCount");
 	}  
-	public List<FaqVO> pageList(PageVO<FaqVO> vo) {
-		return sqlSession.selectList(NS+"pageList",vo);
-	}
 
 	// ** Check BoardList
 	public List<FaqVO> checkselectList(FaqVO vo) {

@@ -1,13 +1,13 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
 <title>Gmusic</title>
 <link rel="preconnect" href="https://fonts.gstatic.com">
-<link
-	href="https://fonts.googleapis.com/css2?family=Chela+One&display=swap"
-	rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Chela+One&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Cute+Font&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="resources/myLib/imageHoverBoxCss.css">
 <script src="resources/myLib/jquery-3.2.1.min.js"></script>
 <script src="resources/myLib/topmenu.js"></script>
 <script src="resources/myLib/footer.js"></script>
@@ -15,10 +15,20 @@
 <script src="resources/myLib/mypage.js"></script>
 <script src="resources/myLib/myinfochange.js"></script>
 <script src="resources/myLib/chartcount.js"></script>
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link
-	href="https://fonts.googleapis.com/css2?family=Cute+Font&display=swap"
-	rel="stylesheet">
+<script src="resources/myLib/userPickGenre.js"></script>
+<script>
+	$(function() {
+		$('#searchBtn').on(
+				"click",
+				function() {
+					self.location = "mSearch" + "?currPage=1"
+					/* +"${pageMaker.makeQuery(1)}" */
+					+ "&searchType=" + $('#searchType').val() + "&keyword="
+							+ $('#keyword').val();
+					// => ?currPage=7&rowPerPage=10&searchType=tc&keyword=java
+				}); //click
+	});//ready
+</script>
 <style>
 body {
 	margin: 0;
@@ -65,6 +75,11 @@ a {
 	border-bottom-style: solid;
 }
 
+#searchdiv {
+	height: 80px;
+	padding: 0px 10px 0px 124px;
+}
+
 #keyword {
 	margin-bottom: 25px;
 }
@@ -75,10 +90,6 @@ a {
 
 #logofont {
 	font-family: 'Chela One', cursive;
-}
-
-#searchdiv {
-	height: 80px;
 }
 
 #topmenu {
@@ -98,7 +109,7 @@ a {
 }
 
 #topmenu ul li a:hover {
-	color: hotpink;
+	color: #0b3f9a;
 }
 
 #topmenu ul li:hover ul {
@@ -138,16 +149,44 @@ a {
 }
 
 #section>#sec1 {
-	border-right: solid green;
+	border-right: solid ghostwhite;
+	padding-right: 20px;
+}
+
+#section>#sec2 {
+	padding-left: 20px;
 }
 
 #sec1>div {
-	border-bottom: solid green;
+	border-bottom: solid ghostwhite;
 	height: 295px;
 }
+
+/* section > sec1_1, sec1_2, sec1_3 */
+#sec1_1, #sec1_2, #sec1_3 {
+	padding-top: 15px;
+}
+
+.subheading {
+	font-size: 18px;
+	color: #0b3f9a;
+	font-weight: bold;
+	vertical-align: middle;
+}
+
+.subheadingTitle {
+	font-size: 12px;
+	color: #808080;
+	vertical-align: middle;
+}
+
+.musiclistForm {
+	margin-bottom: 0px;
+}
+
 /* 로그인 파트부분 */
 #login {
-	border-bottom: solid green;
+	border-bottom: solid ghostwhite;
 	height: 265px;
 	padding: 16px 16px 12px 17px;
 	border: 1px solid #dae1e6;
@@ -266,10 +305,15 @@ a {
 
 	<div id="nav">
 		<div id="searchdiv">
-			<a href="home" id="logofont">GMUSIC</a> <input type="text"
-				name="keyword" id="keyword" maxlength="10" size="50"
-				style="vertical-align: middle;">
-			<button id="searchBtn" style="vertical-align: middle;">Search</button>
+			<a href="home" id="logofont">GMUSIC</a>
+			<form action="mSearch" id="search" name="search" class="search">
+
+				<select name="searchType" id="searchType" style="display: none">
+					<option value="all" selected>All</option>
+				</select>
+				<input type="text" name="keyword" id="keyword" maxlength="35" size="50" style="vertical-align: middle;" value="${pageMaker.cri.keyword}">
+				<button type="button" id="searchBtn" style="vertical-align: middle;">Search</button>
+			</form>
 		</div>
 		<hr>
 		<div id="topmenu"></div>
@@ -277,29 +321,9 @@ a {
 	</div>
 	<div id="section">
 		<div id="sec1">
-			<div>
-				아
-				<%-- <table width=800 border="1">
-					<tr align="center" height="30" bgcolor="pink">
-						<td>sname</td>
-						<td>stitle</td>
-						<td>downloadfile</td>
-						<td>Image</td>
-					</tr>
-					<c:forEach var="row" items="${Banana}">
-						<tr>
-							<td><a href="mdetail?id=${row.id}">${row.id}</a></td>
-							<td>${row.sname}</td>
-							<td>${row.stitle}</td>
-							<td>${row.downloadfile}</td>
-							<td><img src="${row.image}" width="70" height="70">
-							</td>
-						</tr>
-					</c:forEach>
-				</table> --%>
-			</div>
-			<div>아</div>
-			<div>아</div>
+			<div id="sec1_1"></div>
+			<div id="sec1_2"></div>
+			<div id="sec1_3"></div>
 		</div>
 
 		<div id="sec2">
@@ -310,15 +334,17 @@ a {
 					</c:if>
 					<!-- ----------------------------------로그인 후 페이지-------------------------- div로 해볼까 생각중;;-->
 					<c:if test="${loginID!=null}">
-						<div id="loginsuccess">
+						<div id="loginsuccess" value1="${userPickGenre1}">
+							<!-- 로그인한 유저의 선호장르 -->
 							<div id="welcome" style="font-size: 23px">
-								<img src="resources/uploadImage/basicman1.jpg" width="40"
-									height="40">${loginID}님 환영합니다!!<br>
-								<br> <a href="mlogout"><button type="button"
-										id=logout_btn>로그아웃</button></a>
+								<img src="resources/uploadImage/basicman1.jpg" width="40" height="40">${loginID}님 환영합니다!!<br> <br>
+								<a href="mlogout">
+									<button type="button" id=logout_btn>로그아웃</button>
+								</a>
 								<!-- &nbsp;  -->
-								<a href="mypage?id=${loginID}"><button type="button"
-										id=logout_btn>내정보</button></a>
+								<a href="mypage?id=${loginID}">
+									<button type="button" id=logout_btn>내정보</button>
+								</a>
 							</div>
 						</div>
 					</c:if>
@@ -329,36 +355,35 @@ a {
 			<div id="chart" role="group">
 				<h3>** G-MUSIC 차트 **</h3>
 				<div>
-				<hr>
-				<button id="dailyChart" class="textLink" onclick="dailyChart">[일일차트]</button> &nbsp;&nbsp; <button
-					id="weeklyChart" class="textLink" onclick="weeklyChart">[주간차트]</button>&nbsp;&nbsp; <button
-					id="monthlyChart" class="textLink" onclick="monthChart">[월간차트]</button>&nbsp;&nbsp; <a
-					href="home">[Home]</a>&nbsp;&nbsp;
-				<hr>
+					<hr>
+					<button id="dailyChart" class="textLink" onclick="dailyChart">[일일차트]</button>
+					&nbsp;&nbsp;
+					<button id="weeklyChart" class="textLink" onclick="weeklyChart">[주간차트]</button>
+					&nbsp;&nbsp;
+					<button id="monthlyChart" class="textLink" onclick="monthChart">[월간차트]</button>
+					&nbsp;&nbsp;
+					<a href="home">[Home]</a>
+					&nbsp;&nbsp;
+					<hr>
 				</div>
 				<div id="chartArea"></div>
-				
+
 			</div>
 		</div>
 	</div>
 
 	<div id="footer">
 		<div id="footerinfo">
-			<a href="javascript:;" class="footergroup" id="introcompany">회사
-				소개</a>&nbsp;&nbsp; <font class="footerbar">|</font> &nbsp;&nbsp; <a
-				href="javascript:;" class="footergroup" id="termsp">이용약관</a>&nbsp;&nbsp;
-			<font class="footerbar">|</font> &nbsp;&nbsp; <a href="javascript:;"
-				class="footergroup" id="privacy">개인정보처리방침</a>&nbsp;&nbsp; <font
-				class="footerbar">|</font> &nbsp;&nbsp; <a href="javascript:;"
-				class="footergroup" id="youth">청소년보호정책</a>
+			<a href="javascript:;" class="footergroup" id="introcompany">회사 소개</a>
+			&nbsp;&nbsp; <font class="footerbar">|</font> &nbsp;&nbsp;
+			<a href="javascript:;" class="footergroup" id="termsp">이용약관</a>
+			&nbsp;&nbsp; <font class="footerbar">|</font> &nbsp;&nbsp;
+			<a href="javascript:;" class="footergroup" id="privacy">개인정보처리방침</a>
+			&nbsp;&nbsp; <font class="footerbar">|</font> &nbsp;&nbsp;
+			<a href="javascript:;" class="footergroup" id="youth">청소년보호정책</a>
 		</div>
 		<div id="footerlist">
-			<font>G-MUSIC</font> &nbsp;&nbsp; <font class="footerbar">|</font>
-			&nbsp;&nbsp; 그린 컴퓨터 아카데미 &nbsp;&nbsp; <font class="footerbar">|</font>
-			&nbsp;&nbsp; 공동작업 : 김지수, 남철우, 정재필, 정현근 &nbsp;&nbsp; <font
-				class="footerbar">|</font> &nbsp;&nbsp; 사업자등록번호 : ???-??-????? <br>
-			문의전화 : 0000-0000 (평일 09:00 ~ 05:00) &nbsp;&nbsp; <font
-				class="footerbar">|</font> &nbsp;&nbsp; 이메일 : gproject @ naver.com
+			<font>G-MUSIC</font> &nbsp;&nbsp; <font class="footerbar">|</font> &nbsp;&nbsp; 그린 컴퓨터 아카데미 &nbsp;&nbsp; <font class="footerbar">|</font> &nbsp;&nbsp; 공동작업 : 김지수, 남철우, 정재필, 정현근 &nbsp;&nbsp; <font class="footerbar">|</font> &nbsp;&nbsp; 사업자등록번호 : ???-??-????? <br> 문의전화 : 0000-0000 (평일 09:00 ~ 05:00) &nbsp;&nbsp; <font class="footerbar">|</font> &nbsp;&nbsp; 이메일 : gproject @ naver.com
 		</div>
 	</div>
 </body>

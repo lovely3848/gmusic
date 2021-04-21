@@ -15,7 +15,6 @@ public class GmemberVO {
 	private String birthday;
 	private String rid;
 	private String genre1;
-	private String genre2;
 	private String grade;
 	private int autopay;
 	private String uploadfile;

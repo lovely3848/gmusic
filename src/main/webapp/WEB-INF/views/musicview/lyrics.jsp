@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>${Apple.sname}-${Apple.singername}</title>
+<title>${Apple.sname} - ${Apple.singername}</title>
 <script src="resources/myLib/jquery-3.2.1.min.js"></script>
 <style>
 /* 중앙정렬코드 */
