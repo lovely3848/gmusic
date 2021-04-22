@@ -209,8 +209,8 @@ body {
 		$("#audioplay").attr("src",
 				$("#playlist option:selected").attr('value4'));
 
-		if ($('.hiddenLyrics').val() != "") {
-			$("#lyrics").html($('.hiddenLyrics').val());
+		if ($("#playlist option:selected").attr('value5') != "") {
+			$("#lyrics").html($("#playlist option:selected").attr('value5'));
 		} else {
 			$("#lyrics").html("가사가 없습니다");
 		}
@@ -428,18 +428,10 @@ body {
 				<tr>
 					<td>
 						<select id="playlist" name="playlist" size="15" style="width: 300px; height: 300px;" ondblclick="nowplay()">
-							<c:forEach var="row" items="${Banana}">
+							<c:forEach var="row" items="${Banana}" varStatus="vs">
 								<option value="${row.sname}" value2="${row.singername}" value3="${row.image}" value4="${row.downloadfile}" value5="${row.lyrics}" value6="${row.snum}">${row.sname}</option>
 							</c:forEach>
 						</select>
-							<c:forEach var="row" items="${Banana}">
-							<textarea class="hiddenLyrics" style="display: none;">${row.lyrics}</textarea>
-							</c:forEach>
-						<%-- <div id="playlist" name="playlist" style="width: 300px; height: 300px;" ondblclick="nowplay()">
-						<c:forEach var="row" items="${Banana}">
-						<input type="checkbox" value="${row.sname}" value2="${row.singername}" value3="${row.image}" value4="${row.downloadfile}" value5="${row.lyrics}" value6="${row.snum}">
-						</c:forEach>
-						</div> --%>
 						<textarea id="lyrics" readonly="readonly" style="display: none;"></textarea>
 					</td>
 				</tr>

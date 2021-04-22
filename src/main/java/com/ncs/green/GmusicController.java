@@ -130,7 +130,9 @@ public class GmusicController {
 		List<MusicVO> list = new ArrayList<MusicVO>();
 		for (int i = 0; i < intsnumVal.length; i++) {
 			vo.setSnum(intsnumVal[i]);
-			list.add(service.selectOne(vo));
+			vo = service.selectOne(vo);
+			vo.setLyrics(vo.getLyrics().replace("\"", "&quot;"));
+			list.add(vo);
 
 		}
 		if (list != null) {
@@ -196,7 +198,7 @@ public class GmusicController {
 		cri.setSnoEno();
 
 		mv.addObject("searchType", cri.getSearchType());
-		mv.addObject("UserKeyword", cri.getKeyword());
+		mv.addObject("UserKeyword", cri.getKeyword().replace("\"", "&quot;"));
 		cri.setKeyword(cri.getKeyword().replace(" ", ""));
 
 		if ("all".equals(cri.getSearchType())) {
@@ -216,10 +218,10 @@ public class GmusicController {
 			mv.addObject("Canana", list3);
 			mv.addObject("Canana2", service.searchRowCountSname(cri));
 			cri.setSearchType("all");
+		} else {
+			mv.addObject("Apple", service.searchSnameList(cri));
+			mv.addObject("Apple2", service.searchRowCountSname(cri));
 		}
-
-		mv.addObject("Apple", service.searchSnameList(cri));
-		mv.addObject("Apple2", service.searchRowCountSname(cri));
 
 		pageMaker.setCri(cri);
 		pageMaker.setTotalRow(service.searchRowCountSname(cri));
