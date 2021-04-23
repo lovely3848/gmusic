@@ -106,7 +106,7 @@
 		// 플레이 리스트에 단일로 실행됨
 		$("button[name=sname]").click(function() {
 
-			var buttonSnumVal = $(this).val();
+			var buttonSnumVal = $(this).val()+',';
 
 			url = "playlist";
 			window.open(url, "playlistView","toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
@@ -115,7 +115,14 @@
 			document.musiclistForm.method="post";
 			document.musiclistForm.target="playlistView";
          
-			$('input[name=snumVal]').attr('value',buttonSnumVal);
+			// 항목 추가 실험중 넣으면 항목 추가됨
+			var addsnumVal = $('input[name=snumVal]').val();
+			console.log('addsnumVal => ' + addsnumVal);
+			if (addsnumVal != null) {
+			   $('input[name=snumVal]').attr('value',addsnumVal+buttonSnumVal);
+			}else{
+				$('input[name=snumVal]').attr('value',buttonSnumVal);
+			}
       
 			document.musiclistForm.submit();
 		});
@@ -147,28 +154,32 @@
 		selectedEls.forEach((el) => {
 			result += el.value + ',';
 		});
-	     
+	    
 		// div에 출력 하기
 		document.getElementById('result').innerText
 		= result;
-	     
-		url = "playlist";
-		window.open(url, "playlistView","toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
-	   
-		document.musiclistForm.action =url;
-		document.musiclistForm.method="post";
-		document.musiclistForm.target="playlistView";
-	     
-		// 항목 추가 실험중 넣으면 항목 추가됨
-		//var addsnumVal = $('input[name=snumVal]').val();
-		//if (addsnumVal != null) {
-		//   $('input[name=snumVal]').attr('value',addsnumVal+result);
-		//}else{
-			$('input[name=snumVal]').attr('value',result);
-		//}
-	  
-		document.musiclistForm.submit();
-	  
+	    
+		if(result != null && result.length > 0){
+			url = "playlist";
+			window.open(url, "playlistView","toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
+		   
+			document.musiclistForm.action =url;
+			document.musiclistForm.method="post";
+			document.musiclistForm.target="playlistView";
+		    
+			// 항목 추가 실험중 넣으면 항목 추가됨
+			var addsnumVal = $('input[name=snumVal]').val();
+			console.log('addsnumVal => ' + addsnumVal);
+			if (addsnumVal != null) {
+			   $('input[name=snumVal]').attr('value',addsnumVal+result);
+			}else{
+				$('input[name=snumVal]').attr('value',result);
+			}
+		 	
+			document.musiclistForm.submit();
+		} else {
+			alert("선택된 곡이 없습니다.");
+		}
 	} //getCheckboxValue
 	
 </script>
@@ -447,7 +458,6 @@ a {
 		alert('${message}');
 	</script>
 </c:if>
-
 </head>
 <body>
 	<div id="header">
