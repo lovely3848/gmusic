@@ -113,7 +113,8 @@ public class GmusicController {
 	public ModelAndView playlist(HttpServletRequest request, ModelAndView mv) {
 		// 파라미터로 값을 받음
 		String snumVal = request.getParameter("snumVal");
-		mv.addObject("snumValSession", snumVal);
+		request.getSession().setAttribute("snumValSession", snumVal);
+		// mv.addObject("snumValSession", snumVal);
 
 		MusicVO vo = new MusicVO();
 
@@ -133,7 +134,7 @@ public class GmusicController {
 			for (int i = 0; i < intsnumVal.length; i++) {
 				vo.setSnum(intsnumVal[i]);
 				vo = service.selectOne(vo);
-				if (vo.getLyrics() != null) {
+				if (vo.getLyrics() != null && vo.getLyrics().length() > 0) {
 					vo.setLyrics(vo.getLyrics().replace("\"", "&quot;"));
 				}
 				list.add(vo);
@@ -144,14 +145,11 @@ public class GmusicController {
 					// 셔플 함수 참고
 					// https://zetawiki.com/wiki/%ED%95%A8%EC%88%98_shuffle()
 					Collections.shuffle(list);
-				} else if ("R".equals(request.getParameter("jcode"))) {
-					int index = Integer.parseInt(request.getParameter("indexR"));
-					list.remove(index);
 				}
 				mv.addObject("Banana", list);
 			}
 			mv.setViewName("musicview/playlist");
-		}else {
+		} else {
 			mv.setViewName("musicview/playlist");
 		}
 		return mv;

@@ -18,9 +18,7 @@
 <script src="resources/myLib/userPickGenre.js"></script>
 <script>
 	$(function() {
-		$('#searchBtn').on(
-				"click",
-				function() {
+		$('#searchBtn').on("click",function() {
 					self.location = "mSearch" + "?currPage=1"
 					/* +"${pageMaker.makeQuery(1)}" */
 					+ "&searchType=" + $('#searchType').val() + "&keyword="
@@ -361,8 +359,6 @@ a {
 					<button id="weeklyChart" class="textLink" onclick="weeklyChart">[주간차트]</button>
 					&nbsp;&nbsp;
 					<button id="monthlyChart" class="textLink" onclick="monthChart">[월간차트]</button>
-					&nbsp;&nbsp;
-					<a href="home">[Home]</a>
 					&nbsp;&nbsp;
 					<hr>
 				</div>

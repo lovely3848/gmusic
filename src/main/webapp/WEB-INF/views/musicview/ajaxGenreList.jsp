@@ -4,6 +4,32 @@
 <head>
 <title>Gmusic</title>
 <script src="resources/myLib/pagingSec1_1.js"></script>
+<script>
+$(function() {//ready
+	$(".albumimageButton2").click(function() {
+		
+		var buttonSnumVal = $(this).attr('value')+',';
+
+		url = "playlist";
+		window.open(url, "playlistView","toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
+		$('.musiclistForm').attr('action',url);
+		$('.musiclistForm').attr('method',"post");
+		$('.musiclistForm').attr('target',"playlistView");
+
+		// 항목 추가
+		var addsnumVal = $('input[name=snumVal]').val();
+		console.log('addsnumVal => ' + addsnumVal);
+		if (addsnumVal != null) {
+		   $('input[name=snumVal]').attr('value',addsnumVal+buttonSnumVal);
+		}else{
+			$('input[name=snumVal]').attr('value',buttonSnumVal);
+		}
+		
+		$('.musiclistForm').submit(); 
+		
+	});
+});//ready
+</script>
 </head>
 <body>
 	<div id="section1_1">
@@ -13,12 +39,12 @@
 			</a>
 		</div>
 		<form class="musiclistForm" name="musiclistForm">
-			<input type="hidden" id="snumVal" name="snumVal" value="">
+			<input type="hidden" id="snumVal" name="snumVal" value="${snumValSession}">
 		</form>
 		<div class="gallerylist">
 			<ul>
 				<c:forEach var="row" items="${Banana}" varStatus="vs">
-					<li><a href="javascript:;" class="albumimageButton" value="${row.snum}">
+					<li><a href="javascript:;" class="albumimageButton2" value="${row.snum}">
 							<div class="screen">
 								<div class="top">${row.sname}</div>
 								<div class="bottom">${row.singername}</div>

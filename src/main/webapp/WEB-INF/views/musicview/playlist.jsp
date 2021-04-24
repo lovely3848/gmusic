@@ -332,7 +332,7 @@ body {
 
 	} //viewLyrics
 
-	function removeAjax() { // Ajax삭제
+	function removeAjax() { // new삭제
 
 		var index = $("#playlist option").index($("#playlist option:selected"));
 		console.log('index 확인 => ' + index);
@@ -461,6 +461,7 @@ body {
 						<button type="button" id="previous" class="buttonLine1" onclick="previous()">|◁</button>
 						<button type="button" id="playpause" class="buttonLine1" onclick="playpause()">❚❚</button>
 						<button type="button" id="next" class="buttonLine1" onclick="next()">▷|</button>
+						<button type="button" class="buttonLine2" onClick="removeAjax()">삭제2</button>
 					</td>
 				</tr>
 				<tr>
@@ -472,7 +473,6 @@ body {
 							<button type="button" id="shuffle" class="buttonLine2" onClick="location.href='playlist?snumVal=${snumValSession}&jcode=U'">⇆</button>
 						</c:if>
 						<button type="button" class="buttonLine2" onClick="selectbox.remove( playlist );">삭제</button>
-						<button type="button" class="buttonLine2" onClick="removeAjax()">삭제ajax</button>
 						<button type="button" class="buttonLine2" onClick="selectbox.moveUp( playlist );">△</button>
 						<button type="button" class="buttonLine2" onClick="selectbox.moveDown( playlist );">▽</button>
 						<button type="button" id="viewLyrics" class="buttonLine2" onClick="viewLyrics()">가사</button>

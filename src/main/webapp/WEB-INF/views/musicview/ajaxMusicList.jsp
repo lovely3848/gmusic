@@ -7,18 +7,24 @@
 <script>
 $(function() {//ready
 	$(".albumimageButton").click(function() {
-	
-		var buttonSnumVal = $(this).attr('value');
+		
+		var buttonSnumVal = $(this).attr('value')+',';
+
 		url = "playlist";
-		
-		window.open(url, "playlistView",
-						"toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
-		
+		window.open(url, "playlistView","toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
 		$('.musiclistForm').attr('action',url);
 		$('.musiclistForm').attr('method',"post");
 		$('.musiclistForm').attr('target',"playlistView");
-		$('input[name=snumVal]').attr('value',buttonSnumVal);
 
+		// 항목 추가
+		var addsnumVal = $('input[name=snumVal]').val();
+		console.log('addsnumVal => ' + addsnumVal);
+		if (addsnumVal != null) {
+		   $('input[name=snumVal]').attr('value',addsnumVal+buttonSnumVal);
+		}else{
+			$('input[name=snumVal]').attr('value',buttonSnumVal);
+		}
+		
 		$('.musiclistForm').submit(); 
 		
 	});
@@ -33,7 +39,7 @@ $(function() {//ready
 			</a>
 		</div>
 		<form class="musiclistForm" name="musiclistForm">
-			<input type="hidden" id="snumVal" name="snumVal" value="">
+			<input type="hidden" id="snumVal" name="snumVal" value="${snumValSession}">
 		</form>
 		<div class="gallerylist">
 			<ul>

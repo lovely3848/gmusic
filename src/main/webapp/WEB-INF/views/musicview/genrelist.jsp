@@ -54,6 +54,17 @@
 	document.onmousedown = click; */
 </script>
 <script>
+	$(function() {
+		$('#searchBtn').on("click",function() {
+					self.location = "mSearch" + "?currPage=1"
+					/* +"${pageMaker.makeQuery(1)}" */
+					+ "&searchType=" + $('#searchType').val() + "&keyword="
+							+ $('#keyword').val();
+					// => ?currPage=7&rowPerPage=10&searchType=tc&keyword=java
+				}); //click
+	});//ready
+</script>
+<script>
 	$(function() { //ready
 		
 		// input checkbox
@@ -104,7 +115,7 @@
 		// 플레이 리스트에 단일로 실행됨
 		$("button[name=sname]").click(function() {
 
-			var buttonSnumVal = $(this).val();
+			var buttonSnumVal = $(this).val()+',';
 
 			url = "playlist";
 			window.open(url, "playlistView","toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
@@ -113,7 +124,14 @@
 			document.musiclistForm.method="post";
 			document.musiclistForm.target="playlistView";
          
-			$('input[name=snumVal]').attr('value',buttonSnumVal);
+			// 항목 추가
+			var addsnumVal = $('input[name=snumVal]').val();
+			console.log('addsnumVal => ' + addsnumVal);
+			if (addsnumVal != null) {
+			   $('input[name=snumVal]').attr('value',addsnumVal+buttonSnumVal);
+			}else{
+				$('input[name=snumVal]').attr('value',buttonSnumVal);
+			}
       
 			document.musiclistForm.submit();
 		});
@@ -145,28 +163,32 @@
 		selectedEls.forEach((el) => {
 			result += el.value + ',';
 		});
-	     
+	    
 		// div에 출력 하기
 		document.getElementById('result').innerText
 		= result;
-	     
-		url = "playlist";
-		window.open(url, "playlistView","toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
-	   
-		document.musiclistForm.action =url;
-		document.musiclistForm.method="post";
-		document.musiclistForm.target="playlistView";
-	     
-		// 항목 추가 실험중 넣으면 항목 추가됨
-		//var addsnumVal = $('input[name=snumVal]').val();
-		//if (addsnumVal != null) {
-		//   $('input[name=snumVal]').attr('value',addsnumVal+result);
-		//}else{
-			$('input[name=snumVal]').attr('value',result);
-		//}
-	  
-		document.musiclistForm.submit();
-	  
+	    
+		if(result != null && result.length > 0){
+			url = "playlist";
+			window.open(url, "playlistView","toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
+		   
+			document.musiclistForm.action =url;
+			document.musiclistForm.method="post";
+			document.musiclistForm.target="playlistView";
+		    
+			// 항목 추가
+			var addsnumVal = $('input[name=snumVal]').val();
+			console.log('addsnumVal => ' + addsnumVal);
+			if (addsnumVal != null) {
+			   $('input[name=snumVal]').attr('value',addsnumVal+result);
+			}else{
+				$('input[name=snumVal]').attr('value',result);
+			}
+		 	
+			document.musiclistForm.submit();
+		} else {
+			alert("선택된 곡이 없습니다.");
+		}
 	} //getCheckboxValue
 
 </script>
@@ -480,8 +502,14 @@ a {
 	<div id="nav">
 		<div id="searchdiv">
 			<a href="home" id="logofont">GMUSIC</a>
-			<input type="text" name="keyword" id="keyword" maxlength="10" size="50" style="vertical-align: middle;">
-			<button id="searchBtn" style="vertical-align: middle;">Search</button>
+			<form action="mSearch" id="search" name="search" class="search">
+
+				<select name="searchType" id="searchType" style="display: none">
+					<option value="all" selected>All</option>
+				</select>
+				<input type="text" name="keyword" id="keyword" maxlength="35" size="50" style="vertical-align: middle;" value="${pageMaker.cri.keyword}">
+				<button type="button" id="searchBtn" style="vertical-align: middle;">Search</button>
+			</form>
 		</div>
 		<hr>
 		<div id="topmenu"></div>
@@ -518,7 +546,7 @@ a {
 		<form name="musiclistForm">
 			<button type="button" onclick="getCheckboxValue()">플레이리스트</button>
 			<div id='result'></div>
-			<input type="hidden" id="snumVal" name="snumVal" value="">
+			<input type="hidden" id="snumVal" name="snumVal" value="${snumValSession}">
 			<table id="table">
 				<tr class="category" align="center" height="2" bgcolor="ghostwhite">
 					<td width="50">

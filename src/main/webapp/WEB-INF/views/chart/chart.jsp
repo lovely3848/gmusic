@@ -12,43 +12,100 @@
 	text-transform: uppercase;
 }
 
-#chart {
-	height: 50px;
+#table {
 	width: 100%;
-	margin: 0 auto;
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+	border-spacing: 0px;
 }
 
-#playbutten {
-	background-color: transparent !important;
-	border: none;
+#table td {
+	border-bottom: 1px solid;
+	border-collapse: collapse;
+	border-color: #EEEEEF;
+	padding: 5px;
 }
 
-#textoverflow {
-	width: 50px;
-	white-space: nowrap;
+.category {
+	font-family: 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif;
+	font-size: 14px;
+}
+
+.rnum {
+	font-size: 18px;
+}
+
+.albumimage {
+	width: 40px;
+	height: 40px;
+	padding: 6px;
+	vertical-align: middle;
+}
+
+.playbutten, .icon {
+	background-color: transparent !important; /* 배경 없애기 */
+	border: none; /* 버튼 보더 없애기 */
+	padding: 0;
+	align-self: auto;
+	white-space: nowrap; /* 한라인 쓰기 */
+	font-family: 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	color: #333333;
+}
+
+.playbutten:hover, .icon:hover {
+	text-decoration: underline; /* hover시 밑줄 */
+	cursor: pointer; /* hover시 마우스 손가락 모양 */
+}
+
+.playbutten:focus, .icon:focus {
+	outline: none; /* 클릭후 포커스 없애기 */
+}
+
+.singername {
+	font-family: 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif;
+	font-size: 12px;
+	color: #8b8b8b;
+}
+
+.textoverflow {
+	/* 텍스트 넘치면 ... 표시 */
 	text-overflow: ellipsis;
+	white-space: nowrap;
 	overflow: hidden;
+	width: 200px;
 }
+
+
 </style>
 
 <script>
 	$(function() { //ready
-		$("button[name=sname]").click(function() {
+		$(".playbutten").click(function() {
 
-			var buttonSnumVal = $(this).val();
-			console.log(buttonSnumVal)
+			var buttonSnumVal = $(this).attr('value')+',';
+
 			url = "playlist";
-			window.open(url, "myview",
-							"toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=700,height=800");
+			window.open(url, "playlistView",
+							"toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
+			$('.musiclistForm').attr('action', url);
+			$('.musiclistForm').attr('method', "post");
+			$('.musiclistForm').attr('target', "playlistView");
 
-			document.musiclist.action = url;
-			document.musiclist.method = "post";
-			document.musiclist.target = "myview";
+			// 항목 추가
+			var addsnumVal = $('input[name=snumVal]').val();
+			console.log('addsnumVal => ' + addsnumVal);
+			if (addsnumVal != null) {
+				$('input[name=snumVal]').attr('value',
+						addsnumVal + buttonSnumVal);
+			} else {
+				$('input[name=snumVal]').attr('value',
+						buttonSnumVal);
+			}
 
-			$('input[name=snumVal]').attr('value',
-					buttonSnumVal);
-			document.musiclist.submit();
-		}); // playlist
+			$('.musiclistForm').submit();
+		});
 	});//click
 </script>
 </head>
@@ -57,29 +114,31 @@
 		<h3 align="center" id="headname">${message}</h3>
 	</c:if>
 	<div>
-		<form name="musiclist">
-			<input type="hidden" id="snumVal" name="snumVal" value="">
+		<form name="musiclistForm">
+			<input type="hidden" id="snumVal" name="snumVal" value="${snumValSession}">
 		</form>
 		<div align="right">
 			<a href="chart?part=${message}">더보기</a>
 		</div>
-		<table border="1" id="chart">
-			<tr align="center" height="2" bgcolor="pink">
+		<table id="table">
+			<tr class="category" align="center" height="2" bgcolor="ghostwhite">
 				<td width="40">순 위</td>
-				<td>앨 범</td>
-				<td>곡 명</td>
-				<td>재 생</td>
+				<td colspan="2">곡정보</td>
+				<td width="40">듣 기</td>
 			</tr>
 			<c:forEach var="row" items="${Banana}" varStatus="vs" step="1">
 				<tr>
-					<td>${row.rnum}</td>
+					<td class="rnum" align="center">${row.rnum}</td>
 					<td>
-						<img src="${row.image}" width="40" height="30">
+						<img class="albumimage" src="${row.image}">
 					</td>
-					<td id=textoverflow>${row.sname}</td>
 					<td>
-						<button type="button" id="playbutten" name="sname" value="${row.snum}">
-							<img src="resources/image/play.jpg" width="30" height="30">
+						<div class="playbutten textoverflow" value="${row.snum}">${row.sname}</div>
+						<div class="singername textoverflow">${row.singername}</div>
+					</td>
+					<td align="center">
+						<button type="button" class="playbutten" name="sname" value="${row.snum}">
+							<img src="resources/image/play_icon.png" width="30" height="30">
 						</button>
 					</td>
 				</tr>
