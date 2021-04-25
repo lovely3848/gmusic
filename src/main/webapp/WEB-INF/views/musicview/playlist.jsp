@@ -338,11 +338,9 @@ body {
 		console.log('index 확인 => ' + index);
 		var snumValSession = '${snumValSession}';
 		var snumValsplit = snumValSession.split(',');
-		//var selectedSnum = $("#playlist option:eq(" + index + ")").attr('value6');
-		var selectedSnum = $("#playlist option:selected").attr('value6');
+		
 		var snumVal = '';
 		console.log('snumValSession 확인 => ' + snumValSession);
-		console.log('selectedSnum 확인 => ' + selectedSnum);
 		console.log('snumValsplit.length 확인 => ' + snumValsplit.length);
 
 		console.log('snumValsplit[index] 확인 => ' + snumValsplit[index]);
@@ -350,9 +348,6 @@ body {
 
 		for (var i = 0; i < snumValsplit.length - 1; i++) {
 			console.log('snumValsplit' + i + ' 확인 => ' + snumValsplit[i]);
-			//if (snumValsplit[i] == selectedSnum) {
-			//	snumValsplit[i] = '';
-			//}
 			console.log('snumValsplit' + i + ' 변환후 확인 => ' + snumValsplit[i]);
 			if (snumValsplit[i] != '') {
 				snumVal += snumValsplit[i] + ',';
