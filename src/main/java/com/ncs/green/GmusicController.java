@@ -4,9 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -118,7 +116,6 @@ public class GmusicController {
 		String snumVal = request.getParameter("snumVal");
 
 		System.out.println("************** getParameter snumVal => " + snumVal);
-		MusicVO vo = new MusicVO();
 
 		// 스트링 배열 "," 기준으로 쪼개 담음
 		if (snumVal != null && snumVal.length() > 0) {
@@ -148,6 +145,7 @@ public class GmusicController {
 
 			List<MusicVO> list = new ArrayList<MusicVO>();
 			for (int i = 0; i < intsnumVal.length; i++) {
+				MusicVO vo = new MusicVO();
 				vo.setSnum(intsnumVal[i]);
 				vo = service.selectOne(vo);
 				if (vo.getLyrics() != null && vo.getLyrics().length() > 0) {
@@ -158,8 +156,13 @@ public class GmusicController {
 				System.out.println("********* list 담은후 snum " + vo.getSnum());
 				System.out.println("********* list 담은후 listsnum " + list.get(i).getSnum());
 				System.out.println("********* list 담은후 list " + list.get(i));
-
 			}
+			
+			for (int i = 0; i < list.size(); i++) {
+				System.out.println("********* list 담은후2 listsnum " + list.get(i).getSnum());
+				System.out.println("********* list 담은후2 list " + list.get(i));
+			}
+			
 			System.out.println("********* 세션 담기직전 snumVal " + snumVal);
 
 			request.getSession().setAttribute("snumValSession", snumVal);

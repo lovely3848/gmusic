@@ -1,12 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page trimDirectiveWhitespaces="true"%>
+<%
+ response.setHeader("Cache-Control","no-cache");
+ response.setHeader("Pragma","no-cache");
+ response.setDateHeader("Expires",0);
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>뮤직플레이리스트</title>
 <script src="resources/myLib/jquery-3.2.1.min.js"></script>
+<meta http-equiv="Cache-Control" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<meta http-equiv="Pragma" content="no-cache"/>
 <style>
 /* 중앙정렬코드 */
 .layer {
@@ -101,6 +109,7 @@ body {
 	outline: none;
 }
 </style>
+
 <script>
 	// spacebar 입력시 정지 동작
 	// 상하 방향키 입력시 볼륨 조절
@@ -219,6 +228,7 @@ body {
 		$("#albumimageORlyrics").html(
 				$("#playlist option:selected").attr('value5'));
 		var snumber = $("#playlist option:selected").attr('value6');
+		console.log(snumber);
 		// 볼륨조절
 		// https://webisfree.com/2017-09-07/html5-audio-태그-사용-예제보기 참고
 		document.getElementById("audioplay").volume = 0.5;
@@ -386,6 +396,35 @@ body {
 
 		/* 삭제 버튼 */// 참고: 옵션 인덱스는 0부터 시작.
 		remove : function(obj) { // playlist.   obj는 playlist(선택한 노래 목록)이다.
+			var index = $("#playlist option").index($("#playlist option:selected"));
+			var snumValSession = $('#snumValss').val();
+			var snumValsplit = snumValSession.split(',');
+			
+			var snumVal = '';
+
+			snumValsplit[index] = '';
+
+			for (var i = 0; i < snumValsplit.length - 1; i++) {
+				if (snumValsplit[i] != '') {
+					snumVal += snumValsplit[i] + ',';
+				}
+			}
+
+			//삭제를 위한 값 넘기기 
+			$.ajax({
+				type : 'post',
+				url : 'playlist?snumVal=' + snumVal,
+				success : function() {
+					console.log("삭제 성공");
+					//window.onload = autoplay(); 
+				},
+				error : function() {
+					console.log("삭제 실패");
+				}
+			});
+			$('#snumValss').val(snumVal);
+			opener.document.getElementById("snumVal").value = snumVal;
+			
 			for (var k = obj.options.length - 1; k >= 0; k--) { // playlist의 마지막인덱스 부터 0번쨰 인덱스 까지. 역순인 이유는 중간에 노래가 삭제되면 마지막 인덱스 k에 해당하는 옵션이 없어지므로 조건절의 오류가 나기 떄문이다.
 				if (obj.options[k].selected) { // playlist의 k번째 옵션이 selected(==true)라면
 					obj.options[k] = null; // 선택되어있는 곡을 playlist에서 지운다.
@@ -426,6 +465,15 @@ body {
 		}
 	}
 </script>
+<script>
+
+	window.onkeydown = function() {
+		var kcode = event.keyCode;
+		if (kcode == 116) {
+			history.replaceState({}, null, '/green/playlist?snumVal='+$('#snumValss').val());
+		}
+	}
+</script>
 <c:if test="${message!=null}">
 	<script>
 		alert('${message}');
@@ -433,6 +481,7 @@ body {
 </c:if>
 </head>
 <body onload="autoplay()">
+<input type="hidden" id="snumValss" name="snumValss" value="${snumValSession}">
 	<div class="layer">
 		<span class="content">
 			<table id="playlistTable">
