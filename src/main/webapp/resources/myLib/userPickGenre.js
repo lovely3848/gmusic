@@ -54,5 +54,17 @@ $(function(){
 				$('#sec1_2').html("~~ 오류발생 ~~");
 			}
 	});//ajax
-	
+	$.ajax({ // nav topmenu
+			type:'Get',
+			url:'musiclist?pagingCode=section1_3',
+			success:function(resultPage){
+				$('#sec1_3').html('');
+				$('#sec1_3').html(resultPage);
+				/*alert(userPickGenre1);
+				alert(userPickGenre2);*/
+				},
+			error:function(){
+				$('#sec1_3').html("~~ 오류발생 ~~");
+			}
+	});//ajax
 });//ready

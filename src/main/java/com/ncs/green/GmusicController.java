@@ -54,7 +54,8 @@ public class GmusicController {
 	// ** 최신음악
 	@RequestMapping(value = "/musiclist")
 	public ModelAndView musiclist(HttpServletRequest request, ModelAndView mv, Criteria cri, PageMaker pageMaker) {
-		if ("section1_2".equals(request.getParameter("pagingCode"))) {
+		if ("section1_2".equals(request.getParameter("pagingCode"))
+				|| "section1_3".equals(request.getParameter("pagingCode"))) {
 			cri.setRowPerPage(4);
 		} else {
 			cri.setRowPerPage(20);
@@ -71,6 +72,8 @@ public class GmusicController {
 		mv.addObject("pageMaker", pageMaker);
 		if ("section1_2".equals(request.getParameter("pagingCode"))) {
 			mv.setViewName("musicview/ajaxMusicList");
+		} else if ("section1_3".equals(request.getParameter("pagingCode"))) {
+			mv.setViewName("musicview/ajaxMusicVideo");
 		} else {
 			mv.setViewName("musicview/musiclist");
 		}
@@ -119,7 +122,6 @@ public class GmusicController {
 
 		// 스트링 배열 "," 기준으로 쪼개 담음
 		if (snumVal != null && snumVal.length() > 0) {
-
 			String splitsnumVal[] = snumVal.split(",");
 
 			if ("U".equals(request.getParameter("jcode"))) {
@@ -132,7 +134,7 @@ public class GmusicController {
 					System.out.println(list.get(i));
 					splitsnumVal[i] = list.get(i);
 
-					snumVal += list.get(i)+",";
+					snumVal += list.get(i) + ",";
 				}
 			}
 
@@ -151,27 +153,13 @@ public class GmusicController {
 				if (vo.getLyrics() != null && vo.getLyrics().length() > 0) {
 					vo.setLyrics(vo.getLyrics().replace("\"", "&quot;"));
 				}
-				System.out.println("********* list 담기전 snum " + vo.getSnum());
 				list.add(vo);
-				System.out.println("********* list 담은후 snum " + vo.getSnum());
-				System.out.println("********* list 담은후 listsnum " + list.get(i).getSnum());
-				System.out.println("********* list 담은후 list " + list.get(i));
 			}
-			
-			for (int i = 0; i < list.size(); i++) {
-				System.out.println("********* list 담은후2 listsnum " + list.get(i).getSnum());
-				System.out.println("********* list 담은후2 list " + list.get(i));
-			}
-			
-			System.out.println("********* 세션 담기직전 snumVal " + snumVal);
-
-			request.getSession().setAttribute("snumValSession", snumVal);
 
 			mv.addObject("Banana", list);
-			mv.setViewName("musicview/playlist");
-		} else {
-			mv.setViewName("musicview/playlist");
-		}
+		} 
+		request.getSession().setAttribute("snumValSession", snumVal);
+		mv.setViewName("musicview/playlist");
 		return mv;
 	} // playlist
 
