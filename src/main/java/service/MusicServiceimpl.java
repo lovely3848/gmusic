@@ -35,6 +35,18 @@ public class MusicServiceimpl implements MusicService {
 		return dao.totalRowCount();
 	}
 
+	public int insert(MusicVO vo) {
+		return dao.insert(vo);
+	} // insert
+
+	public int update(MusicVO vo) {
+		return dao.update(vo);
+	} // update
+
+	public int delete(MusicVO vo) {
+		return dao.delete(vo);
+	} // delete
+
 	public List<MusicVO> releasedateList(Criteria cri) {
 		return dao.releasedateList(cri);
 	}
@@ -58,12 +70,9 @@ public class MusicServiceimpl implements MusicService {
 		return dao.searchRowCountSname(cri);
 	}
 
-
-
 	public List<MusicVO> searchSnameList(Criteria cri) {
 		return dao.searchSnameList(cri);
 	}
-
 
 //	public List<MusicVO> criSnameList(Criteria cri) {
 //		return dao.criSnameList(cri);

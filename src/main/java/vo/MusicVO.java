@@ -1,5 +1,7 @@
 package vo;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 
 @Data
@@ -14,7 +16,9 @@ public class MusicVO {
 	private int country;
 	private String musicurl;
 	private String downloadfile;
+	private MultipartFile downloadfilef;
 	private String image;
+	private MultipartFile imagefilef;
 	private int count;
 	private String rnum; // 음악 차트 page에 따른 numbering을 1~10반복하지 않게 하기위한 rnum (sql 참조)
 }

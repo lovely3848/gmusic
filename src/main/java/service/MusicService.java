@@ -16,6 +16,12 @@ public interface MusicService {
 	public List<MusicVO> musicList(Criteria cri);
 
 	public int totalRowCount();
+	
+	public int insert(MusicVO vo);
+	
+	public int update(MusicVO vo);
+
+	public int delete(MusicVO vo);
 
 	public List<MusicVO> releasedateList(Criteria cri);
 

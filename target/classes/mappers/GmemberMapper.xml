@@ -8,7 +8,7 @@
 		#{id},#{password},#{sex},#{email},
 		#{phone},#{birthday},#{rid},#{genre1},
 		default,default,#{uploadfile},
-		default
+		default,default
 		)
 	</insert>
 	<!-- 회원 정보조회  -->

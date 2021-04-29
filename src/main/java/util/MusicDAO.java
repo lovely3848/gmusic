@@ -41,6 +41,18 @@ public class MusicDAO {
 		return sqlSession.selectOne(NS + "totalRowCount");
 	}
 
+	public int insert(MusicVO vo) {
+		return sqlSession.insert(NS + "insert", vo);
+	} // insert
+
+	public int update(MusicVO vo) {
+		return sqlSession.update(NS + "update", vo);
+	} // update
+
+	public int delete(MusicVO vo) {
+		return sqlSession.delete(NS + "delete", vo);
+	} // delete
+
 	public List<MusicVO> releasedateList(Criteria cri) {
 		return sqlSession.selectList(NS + "releasedateList", cri);
 	} // genreList
@@ -63,7 +75,6 @@ public class MusicDAO {
 	public int searchRowCountSname(Criteria cri) {
 		return sqlSession.selectOne(NS + "searchRowCountSname", cri);
 	}
-
 
 	public List<MusicVO> searchSnameList(Criteria cri) {
 		return sqlSession.selectList(NS + "searchSnameList", cri);

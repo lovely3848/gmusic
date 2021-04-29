@@ -26,7 +26,29 @@
 	<select id="totalRowCount" resultType="int">
 		select count(*) from music
 	</select>
+	
+	<insert id="insert">
+		<selectKey keyProperty="snum" resultType="int" order="BEFORE">
+			SELECT NVL(MAX(snum),0)+1 FROM music
+		</selectKey>
+			INSERT INTO music VALUES(
+			#{snum},
+			#{sname}, #{stitle}, #{singername}, #{releasedate}, #{genre}, #{lyrics},
+			#{country}, #{musicurl}, #{downloadfile}, #{image}, default)
+	</insert>
 
+	<update id="update">
+		UPDATE music set 
+		sname=#{sname}, stitle=#{stitle}, singername=#{singername}, 
+		releasedate=#{releasedate}, genre=#{genre}, lyrics=#{lyrics}, country=#{country}, 
+		musicurl=#{musicurl}, downloadfile=#{downloadfile}, image=#{image} 
+		WHERE snum=#{snum} 
+	</update> 
+	
+	<delete id="delete">
+		DELETE from music where snum=#{snum}
+	</delete> 
+	
 	<!-- ********section1_2번. 4개 최신곡 이미지 표현하는 섹션 -->
 	<select id="releasedateList" resultType="vo.MusicVO">
 		 select snum, sname, stitle, singername, releasedate, genre, replace(lyrics,'-','') lyrics, 

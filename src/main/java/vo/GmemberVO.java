@@ -20,5 +20,6 @@ public class GmemberVO {
 	private String uploadfile;
 	private MultipartFile uploadfilef;
 	private String authkey;
+	private int point;
 	
 }

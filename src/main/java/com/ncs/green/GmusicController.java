@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import criteria.Criteria;
 import criteria.PageMaker;
@@ -20,6 +21,7 @@ import service.ChartService;
 import service.MusicService;
 import vo.ChartVO;
 import vo.MusicVO;
+import vo.NoticeVO;
 
 @Controller
 public class GmusicController {
@@ -81,6 +83,54 @@ public class GmusicController {
 		return mv;
 	}// musiclist
 
+	/*-------------------------음악 추가 업데이트 삭제-------------------------*/
+	
+	// ** 음악추가
+	@RequestMapping(value = "/musicinsertf")
+	public ModelAndView musicinsertf(ModelAndView mv) {
+		mv.setViewName("musicview/musicInsertForm");
+		return mv;
+	}// musicinsertf
+
+	@RequestMapping(value = "/musicinsert")
+	public ModelAndView musicinsert(HttpServletRequest request, ModelAndView mv, MusicVO vo, RedirectAttributes rttr) {
+		if (service.insert(vo) > 0) {
+			rttr.addFlashAttribute("message", "~~ 음악등록 성공 ~~");
+			mv.setViewName("musicview/musiclist");
+		} else {
+			rttr.addFlashAttribute("message", "~~ 음악등록 실패 !!! 다시 하세요 ~~");
+			mv.setViewName("musicview/musicInsertForm");
+		}
+		mv.setViewName("musicview/musicInsertForm");
+		return mv;
+	}// musicinsert
+	
+	@RequestMapping(value = "/musicupdate")
+	public ModelAndView musicupdate(ModelAndView mv, MusicVO vo, RedirectAttributes rttr) {
+		if (service.update(vo) > 0) {
+			rttr.addFlashAttribute("message", "수정되었습니다.");
+			mv.setViewName("redirect:musicdetail?snum=" + vo.getSnum());
+		} else {
+			rttr.addFlashAttribute("message", "수정에 실패 하셨습니다.");
+			mv.setViewName("redirect:musicdetail?snum=" + vo.getSnum() + "&jcode=U"); // 컨트롤러를 통해 수정페이지로 다시가라
+		}
+		return mv;
+	} // musicupdate
+
+	@RequestMapping(value = "/musicdelete")
+	public ModelAndView musicdelete(ModelAndView mv, MusicVO vo, RedirectAttributes rttr) {
+		if (service.delete(vo) > 0) {
+			rttr.addFlashAttribute("message", "삭제 되었습니다.");
+			mv.setViewName("redirect:musiclist");
+		} else {
+			rttr.addFlashAttribute("message", "삭제가 올바르게 되지 않았습니다.");
+			mv.setViewName("redirect:musicdetail?snum=" + vo.getSnum());
+		}
+		return mv;
+	} // musicdelete
+
+	/*-------------------------음악 추가 업데이트 삭제-------------------------*/
+	
 	// ** 장르음악
 	@RequestMapping(value = "/genrelist")
 	public ModelAndView genrelist(HttpServletRequest request, ModelAndView mv, Criteria cri, PageMaker pageMaker,
@@ -157,7 +207,7 @@ public class GmusicController {
 			}
 
 			mv.addObject("Banana", list);
-		} 
+		}
 		request.getSession().setAttribute("snumValSession", snumVal);
 		mv.setViewName("musicview/playlist");
 		return mv;

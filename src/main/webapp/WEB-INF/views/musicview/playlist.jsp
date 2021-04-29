@@ -201,10 +201,12 @@ body {
 	// 선택된 select box 값의 밸류를 각 항목에 전달시킴
 	function nowplay() { // 현재 선택곡 재생. 각 div들에 현재 재생할 값들을 넣어서 표현해줌
 
-		if ($("#playlist option:selected").attr('value') != null
-				&& $("#playlist option:selected").attr('value') > 0) {
+		$('#nowCheck').val($("#playlist option:selected").attr('id'));
+	
 			document.title = $("#playlist option:selected").attr('value')
 					+ " - " + $("#playlist option:selected").attr('value2'); // 현재 곡에 따라 타이틀 변경
+		if ($("#playlist option:selected").attr('value') != null
+				&& $("#playlist option:selected").attr('value') > 0) {
 		}
 
 		$("#sname").html($("#playlist option:selected").attr('value'));
@@ -223,7 +225,6 @@ body {
 		$("#albumimageORlyrics").html(
 				$("#playlist option:selected").attr('value5'));
 		var snumber = $("#playlist option:selected").attr('value6');
-		console.log(snumber);
 		// 볼륨조절
 		// https://webisfree.com/2017-09-07/html5-audio-태그-사용-예제보기 참고
 		document.getElementById("audioplay").volume = 0.5;
@@ -323,19 +324,14 @@ body {
 	// https://jsfiddle.net/zzznara/L0jkq7fb/4/?utm_source=website&utm_medium=embed&utm_campaign=L0jkq7fb 참고
 	var selectbox = {
 
-		nowCheck : function() {
-			var index = $("#playlist option").index(
-					$("#playlist option:selected"));
-			var snumValSession = $('#snumValss').val();
-			if (snumValSession == '') {
-				location.reload();
-			}
-		},
-
 		noneCheck : function() {
 			var snumValSession = $('#snumValss').val();
 			if (snumValSession == '') {
-				location.reload();
+				$("#sname").html("재생 목록이 없습니다");
+				$("#singername").html("듣고 싶은 곡을 선택해 보세요!");
+				$("#albumimage").attr("src","resources/image/f1f3f4.png");
+				$("#audioplay").attr("src","");
+				$("#lyrics").html("");
 			}
 		},
 
@@ -346,6 +342,8 @@ body {
 			var snumValSession = $('#snumValss').val();
 			var snumValsplit = snumValSession.split(',');
 			var snumVal = '';
+			var nowplayId = $('#nowCheck').val();
+			var selectedId = $("#playlist option:selected").attr('id');
 
 			snumValsplit[index] = '';
 
@@ -357,6 +355,13 @@ body {
 				}
 			}
 
+			if (nowplayId == selectedId) {
+				$("#sname").html("재생 중인 곡이 없습니다");
+				$("#singername").html("듣고 싶은 곡을 선택해 보세요!");
+				$("#albumimage").attr("src","resources/image/f1f3f4.png");
+				$("#audioplay").attr("src","");
+				$("#lyrics").html("");
+			}
 			this.noneCheck();
 		},
 
@@ -441,7 +446,6 @@ body {
 					console.log("ajax 실패");
 				}
 			});
-			console.log("2222222"+$('#snumValss').val());
 			$('#snumValss').val(snumVal);
 			opener.document.getElementById("snumVal").value = snumVal;
 			var url = '/green/playlist?snumVal=' + $('#snumValss').val();
@@ -483,6 +487,7 @@ body {
 </head>
 <body onload="autoplay()">
 	<input type="hidden" id="snumValss" name="snumValss" value="${snumValSession}">
+	<input type="hidden" id="nowCheck" name="nowCheck" value="">
 	<div class="layer">
 		<span class="content">
 			<table id="playlistTable">
@@ -531,7 +536,7 @@ body {
 					<td>
 						<select id="playlist" name="playlist" size="15" style="width: 300px; height: 300px;" ondblclick="nowplay()">
 							<c:forEach var="row" items="${Banana}" varStatus="vs">
-								<option value="${row.sname}" value2="${row.singername}" value3="${row.image}" value4="${row.downloadfile}" value5="${row.lyrics}" value6="${row.snum}">${row.sname}</option>
+								<option id="${vs.index}" value="${row.sname}" value2="${row.singername}" value3="${row.image}" value4="${row.downloadfile}" value5="${row.lyrics}" value6="${row.snum}">${row.sname}</option>
 							</c:forEach>
 						</select>
 						<textarea id="lyrics" readonly="readonly" style="display: none;"></textarea>
