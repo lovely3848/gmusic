@@ -86,7 +86,7 @@ h2 {
 				<tr height="40">
 					<td class="leftbar">장 르</td>
 					<td>
-						<select name="genre1" id="genre1" size="1">
+						<select name="genre" id="genre" size="1">
 							<option selected="selected" value="dance">댄스
 							<option value="ballad">발라드
 							<option value="rap">랩/힙합

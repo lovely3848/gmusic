@@ -1,6 +1,7 @@
 package com.ncs.green;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -84,7 +86,7 @@ public class GmusicController {
 	}// musiclist
 
 	/*-------------------------음악 추가 업데이트 삭제-------------------------*/
-	
+
 	// ** 음악추가
 	@RequestMapping(value = "/musicinsertf")
 	public ModelAndView musicinsertf(ModelAndView mv) {
@@ -93,18 +95,116 @@ public class GmusicController {
 	}// musicinsertf
 
 	@RequestMapping(value = "/musicinsert")
-	public ModelAndView musicinsert(HttpServletRequest request, ModelAndView mv, MusicVO vo, RedirectAttributes rttr) {
-		if (service.insert(vo) > 0) {
+	public ModelAndView musicinsert(HttpServletRequest request, ModelAndView mv, MusicVO vo, RedirectAttributes rttr)
+			throws IOException {
+		// ** Uploadfile (Image) 처리
+		// => MultipartFile 타입의 uploadfilef 의 정보에서 화일명을 get,
+		// => upload된 image 를 서버의 정해진 폴더 (물리적위치)에 저장 하고, -> file1
+		// => 이 위치에 대한 정보를 table에 저장 (vo에 set) -> file2
+
+		// ** 실제화일을 보관할 물리적 위치 찾기
+		// 1) 현재 작업중인 이클립스 기준 (배포전, ver01)
+		// => D:/jaepil/MyWork/Spring02/src/main/webapp/resources/uploadImage
+		// 2) 배포후에는 서버 내에서의 위치가 됨.
+		// => getRealPath: D:\jaepil\IDESet\apache-tomcat-9.0.41\webapps\Spring03\
+		// 필요한 위치:
+		// D:/jaepil/IDESet/apache-tomcat-9.0.41/webapps/Spring03/resources/uploadImage
+
+		// ** 경로
+		String downloadPath = request.getRealPath("/");
+		String imagePath = request.getRealPath("/");
+		System.out.println("realPath_ver01 :" + downloadPath);
+		// realPath_ver01->
+		// D:\jaepil\MyWork\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\gproject\
+		// 실습1) ver01
+		// realPath =
+		// "D:/jaepil/MyWork/gproject/src/main/webapp/resources/albumimage/";
+
+		// 실습2) ver02 (배포환경 or 개발환경)
+		if (downloadPath.contains(".eclipse.")) {
+			downloadPath = "D:/jaepil/MyWork/gproject/src/main/webapp/resources/music/" + vo.getGenre() + "/";
+		} else {
+			downloadPath += "resources/music/" + vo.getGenre() + "/";
+		}
+		System.out.println("downloadPath :" + downloadPath);
+
+		if (imagePath.contains(".eclipse.")) {
+			imagePath = "D:/jaepil/MyWork/gproject/src/main/webapp/resources/albumimage/" + vo.getGenre() + "/";
+		} else {
+			imagePath += "resources/albumimage/" + vo.getGenre() + "/";
+		}
+		System.out.println("imagePath :" + imagePath);
+
+		// ** 폴더 만들기 (File 클래스활용)
+		// => 저장 경로에 폴더가 없는 경우 만들어 준다
+		File f1 = new File(downloadPath); // 매개변수로 지정된 정보에 대한 File 객체 생성
+		System.out.println(" 생성직후 f1=> " + f1);
+		if (!f1.exists())
+			f1.mkdir();
+
+		File f2 = new File(imagePath); // 매개변수로 지정된 정보에 대한 File 객체 생성
+		System.out.println(" 생성직후 f2=> " + f2);
+		if (!f2.exists())
+			f2.mkdir();
+		// realPath 디렉터리가 존재하는지 검사 (uploadImage 폴더 존재 확인)
+		// => 존재하지 않으면 디렉토리 생성
+
+		// ** MultipartFile
+		// => 업로드한 파일에 대한 모든 정보를 가지고 있으며 이의 처리를 위한 메서드를 제공한다.
+		// String getOriginalFilename(), void transferTo(File destFile),
+		// boolean isEmpty()
+		MultipartFile downloadfilef = null;
+		MultipartFile imagefilef = null;
+		// => 기본 Image 설정
+		String musicfile1, musicfile2 = "";
+		String imagefile1, imagefile2 = "";
+
+		// 전송된 음악 파일이 있는지 확인
+		downloadfilef = vo.getDownloadfilef();
+		System.out.println("vo.getDownloadfilef() => " + vo.getDownloadfilef());
+		if (downloadfilef != null && !downloadfilef.isEmpty()) {
+			musicfile1 = downloadPath + downloadfilef.getOriginalFilename();
+			// 드라이브에 저장되는 실제 경로와 화일명
+			downloadfilef.transferTo(new File(musicfile1)); // file 붙여넣기
+			musicfile2 = "resources/music/" + vo.getGenre() + "/" + downloadfilef.getOriginalFilename();
+		}
+		vo.setDownloadfile(musicfile2);
+		System.out.println("vo.getDownloadfile() => " + vo.getDownloadfile());
+
+		// 전송된 사진 파일이 있는지 확인
+		imagefilef = vo.getImagefilef();
+		System.out.println("vo.getImagefilef() => " + vo.getImagefilef());
+		if (imagefilef != null && !imagefilef.isEmpty()) {
+			imagefile1 = imagePath + imagefilef.getOriginalFilename();
+			// 드라이브에 저장되는 실제 경로와 화일명
+			imagefilef.transferTo(new File(imagefile1)); // file 붙여넣기
+			imagefile2 = "resources/albumimage/" + vo.getGenre() + "/" + imagefilef.getOriginalFilename();
+		}
+		vo.setImage(imagefile2);
+		System.out.println("vo.getImage() => " + vo.getImage());
+
+		// ** 발매일 처리
+		String releasedate =  vo.getReleasedate().replace("-", ".");
+		System.out.println("releasedate => " + releasedate);
+		vo.setReleasedate(releasedate);
+		
+		// ** 유튜브링크 처리
+		String musicurl = "https://www.youtube.com/embed/" + vo.getMusicurl();
+		System.out.println("musicurl => " + musicurl);
+		vo.setMusicurl(musicurl);
+
+		int cnt = service.insert(vo);
+		if (cnt > 0) {
+
 			rttr.addFlashAttribute("message", "~~ 음악등록 성공 ~~");
-			mv.setViewName("musicview/musiclist");
+			mv.setViewName("redirect:musiclist");
 		} else {
 			rttr.addFlashAttribute("message", "~~ 음악등록 실패 !!! 다시 하세요 ~~");
 			mv.setViewName("musicview/musicInsertForm");
 		}
-		mv.setViewName("musicview/musicInsertForm");
 		return mv;
 	}// musicinsert
-	
+
 	@RequestMapping(value = "/musicupdate")
 	public ModelAndView musicupdate(ModelAndView mv, MusicVO vo, RedirectAttributes rttr) {
 		if (service.update(vo) > 0) {
@@ -130,7 +230,7 @@ public class GmusicController {
 	} // musicdelete
 
 	/*-------------------------음악 추가 업데이트 삭제-------------------------*/
-	
+
 	// ** 장르음악
 	@RequestMapping(value = "/genrelist")
 	public ModelAndView genrelist(HttpServletRequest request, ModelAndView mv, Criteria cri, PageMaker pageMaker,
@@ -232,7 +332,7 @@ public class GmusicController {
 	// ** Image DownLoad
 	@RequestMapping(value = "/dnload")
 	public ModelAndView dnload(ModelAndView mv, @RequestParam("dnfile") String dnfile) {
-		dnfile = "C:/NamCheolWoo/gproject/src/main/webapp/" + dnfile;
+		dnfile = "D:/jaepil/MyWork/gproject/src/main/webapp/" + dnfile;
 		System.out.println("** dnfile => " + dnfile);
 		File file = new File(dnfile);
 

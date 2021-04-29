@@ -33,7 +33,9 @@
 		</selectKey>
 			INSERT INTO music VALUES(
 			#{snum},
-			#{sname}, #{stitle}, #{singername}, #{releasedate}, #{genre}, #{lyrics},
+			#{sname}, #{stitle}, #{singername}, #{releasedate}, #{genre}, 
+			<if test="lyrics != null">#{lyrics},</if>
+			<if test="lyrics == null">default,</if>
 			#{country}, #{musicurl}, #{downloadfile}, #{image}, default)
 	</insert>
 
