@@ -8,7 +8,10 @@
 <script src="resources/myLib/jquery-3.2.1.min.js"></script>
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Cute+Font&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Cute+Font&display=swap" rel="stylesheet">
 <script src="resources/myLib/footer.js"></script>
+
 <style>
 #logo {
 	font-size: 20;
@@ -117,6 +120,86 @@ nav ul a {
 	padding: 5px;
 }
 
+
+#section {
+	margin: 0 auto; /* 중앙정렬 */
+	width: 75%;
+	grid-template-columns: 2fr 1fr;
+}
+
+#section>#sec1 {
+	border-right: solid green;
+}
+
+#sec1>div {
+	border-bottom: solid green;
+	height: 295px;
+}
+
+#table {
+	width: 100%;
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+	border-spacing: 0px;
+}
+
+#table td {
+	border-bottom: 1px solid;
+	border-collapse: collapse;
+	border-color: #EEEEEF;
+	padding: 5px;
+	text-align: left;
+}
+
+.category {
+	font-family: 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif;
+	font-size: 14px;
+}
+
+.rnum {
+	font-size: 18px;
+}
+
+.albumimage {
+	width: 70px;
+	height: 70px;
+	padding: 6px;
+	vertical-align: middle;
+}
+
+.playbutten, .icon {
+	background-color: transparent !important; /* 배경 없애기 */
+	border: none; /* 버튼 보더 없애기 */
+	padding: 0;
+	align-self: auto;
+	white-space: nowrap; /* 한라인 쓰기 */
+	font-family: 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	color: #333333;
+}
+
+.playbutten:hover, .icon:hover {
+	text-decoration: underline; /* hover시 밑줄 */
+	cursor: pointer; /* hover시 마우스 손가락 모양 */
+}
+
+.playbutten:focus, .icon:focus {
+	outline: none; /* 클릭후 포커스 없애기 */
+}
+
+.singername {
+	font-family: 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif;
+	font-size: 12px;
+	color: #8b8b8b;
+}
+
+.stitle {
+	font-family: 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif;
+	font-size: 14px;
+	color: #8b8b8b;
+}
+
 footer {
 	border-top-style: solid;
 	border-top-color: navy;
@@ -126,7 +209,7 @@ footer {
 footer {
 	height: 100px;
 	margin: 0 auto; /* 중앙정렬 */
-	width: 100%;
+	width: 75%;
 }
 
 #footerinfo {
@@ -144,7 +227,6 @@ footer {
 	font-size: 15px;
 	padding-bottom: 10px;
 }
-
 #footerbar {
 	font-size: 5px;
 }
@@ -153,6 +235,7 @@ footer {
 @media ( max-width :650px) {
 }
 </style>
+
 <script>
    $(function() { //ready
 
@@ -331,34 +414,35 @@ $(function(){
 		</div>
 	</div>
 
-	<form id="musicSearch" name="musicSearch" align="center">
+	<form id="musicSearch" name="musicSearch" >
 		<h3 align="left">'${UserKeyword}'에 대한 검색 결과입니다.</h3>
 
 		<!-- 곡검색 -->
 		<c:choose>
 			<c:when test="${searchType eq 'sname'}">
-				<h1>곡 검색 결과 (${Apple2})</h1>
+				<h1 align="center">곡 검색 결과 (${Apple2})</h1>
 			</c:when>
 			<c:when test="${searchType eq 'singername'}">
-				<h1>아티스트 검색 결과 (${Apple2})</h1>
+				<h1 align="center">아티스트 검색 결과 (${Apple2})</h1>
 			</c:when>
 			<c:otherwise>
-				<h1>가사 검색 결과 (${Apple2})</h1>
+				<h1 align="center">가사 검색 결과 (${Apple2})</h1>
 			</c:otherwise>
 		</c:choose>
 		<button type="button" id="ppp" name="ppp" onclick="getCheckboxValue()">플레이리스트</button>
 		<input type="hidden" id="snumVal" name="snumVal" value="">
-		<table style="width: 100%;" border="1">
-			<tr align="center" height="2" bgcolor="ghostwhite">
-				<td width="50">
-					<input type="checkbox" id="check_all" name="check_all">
-				</td>
-				<td width="40">번 호</td>
-				<td>Image</td>
-				<td>곡 명</td>
-				<td>가 수</td>
-				<td>앨범명</td>
-				<td>downloadfile</td>
+		<table id="table">
+			<tr class="category" align="center" height="2" bgcolor="ghostwhite">
+					<td width="50">
+						<input type="checkbox" id="check_all" name="check_all">
+					</td>
+					
+					<td width="40">번 호</td>
+					<td colspan="3">곡정보</td>
+					<td align="left">앨 범</td>
+					<td width="40">듣 기</td>
+					<td width="40">다 운</td>
+					<td width="40">뮤 비</td>
 			</tr>
 			<c:forEach var="row" items="${Apple}" varStatus="vs">
 				<tr>
@@ -366,30 +450,47 @@ $(function(){
 						<input type="checkbox" class="normalCheck" id="snum${row.snum}" name="snum" value="${row.snum}">
 					</td>
 					<td align="center">${row.rnum}</td>
+						<td><img class="albumimage" src="${row.image}"></td>
+						<td width="40">
+							<button type="button" class="icon" name="lyrics" value="${row.snum}">
+								<img src="resources/image/lyrics_icon.png" width="30" height="30">
+							</button>
+						</td>
 					<td>
-						<img src="${row.image}" width="70" height="70">
+							<div>
+								<button type="button" class="playbutten" name="sname" value="${row.snum}">${row.sname}</button>
+							</div>
+							<div class="singername">${row.singername}</div>
 					</td>
-					<td>
-						<button type="button" name="sname" value="${row.snum}">${row.sname}</button>
+						<td class="stitle">${row.stitle}</td>
+						<td align="center">
+							<button type="button" class="playbutten" name="sname" value="${row.snum}">
+								<img src="resources/image/play_icon.png" width="30" height="30">
+							</button>
 					</td>
-					<td>${row.singername}</td>
-					<td>${row.stitle}</td>
-					<td>
-						<a href="dnload?dnfile=${row.downloadfile}">${row.downloadfile}</a>
+					<td align="center"><a href="dnload?dnfile=${row.downloadfile}"> 
+							<img src="resources/image/download_icon.png" width="30" height="30">
+							</a>
 					</td>
-				</tr>
-			</c:forEach>
-		</table>
+						<td align="center">
+							<button type="button" class="icon" name="musicurl" value="${row.musicurl}">
+								<img src="resources/image/videos_icon.png" width="30" height="30">
+							</button>
+						</td>
+					</tr>
+				</c:forEach>
+			</table>
+			
 		<c:if test="${empty Apple}">
 			<c:choose>
 				<c:when test="${searchType eq 'sname'}">
-					<h2>곡으로 검색한 결과가 없습니다.</h2>
+					<h2 align="center">곡으로 검색한 결과가 없습니다.</h2>
 				</c:when>
 				<c:when test="${searchType eq 'singername'}">
-					<h2>아티스트로 검색한 결과가 없습니다.</h2>
+					<h2 align="center">아티스트로 검색한 결과가 없습니다.</h2>
 				</c:when>
 				<c:otherwise>
-					<h2>가사로 검색한 결과가 없습니다.</h2>
+					<h2 align="center">가사로 검색한 결과가 없습니다.</h2>
 				</c:otherwise>
 			</c:choose>
 		</c:if>

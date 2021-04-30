@@ -574,10 +574,23 @@ a {
 							</button>
 						</td>
 						<td align="center">
-							<span>수정</span>
+							<a href="musicupdatef?snum=${row.snum}">
+								<span>수정</span>
+							</a>
 						</td>
 						<td align="center">
-							<span>삭제</span>
+							<button type="button" class="icon" onclick="deletesong(${row.snum})">삭제</button>
+							<script>
+								 function deletesong(snum) {
+									var answer = confirm("~~ 삭제하시겠습니까?");
+		
+									if (answer){    //확인
+										location.href = "musicdelete?snum="+snum;
+									}else{   //취소
+									   return false;
+									}
+								}
+							</script>
 						</td>
 					</tr>
 				</c:forEach>

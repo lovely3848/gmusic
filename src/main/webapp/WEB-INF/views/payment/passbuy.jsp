@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html>
 <html>
 <head>
-<title>Gmusic</title>
+<meta charset="UTF-8">
+<title>이용권 구매</title>
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Chela+One&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Cute+Font&display=swap" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="resources/myLib/imageHoverBoxCss.css">
 <script src="resources/myLib/jquery-3.2.1.min.js"></script>
 <script src="resources/myLib/topmenu.js"></script>
 <script src="resources/myLib/footer.js"></script>
@@ -15,21 +16,15 @@
 <script src="resources/myLib/mypage.js"></script>
 <script src="resources/myLib/myinfochange.js"></script>
 <script src="resources/myLib/chartcount.js"></script>
-<script src="resources/myLib/userPickGenre.js"></script>
-<script>
-	$(function() {
-		$('#searchBtn').on("click",function() {
-					self.location = "mSearch" + "?currPage=1"
-					/* +"${pageMaker.makeQuery(1)}" */
-					+ "&searchType=" + $('#searchType').val() + "&keyword="
-							+ $('#keyword').val();
-					// => ?currPage=7&rowPerPage=10&searchType=tc&keyword=java
-				}); //click
-	});//ready
-</script>
 <style>
 body {
 	margin: 0;
+}
+
+h1 {
+	color: #0b3f9a;
+	text-align: center;
+	font-size: 25px;
 }
 
 hr {
@@ -46,7 +41,6 @@ a {
 #header {
 	background-color: silver;
 	height: 40px;
-	width: 100%;
 	margin: 0 auto;
 	width: 75%;
 }
@@ -73,11 +67,6 @@ a {
 	border-bottom-style: solid;
 }
 
-#searchdiv {
-	height: 80px;
-	padding: 0px 10px 0px 124px;
-}
-
 #keyword {
 	margin-bottom: 25px;
 }
@@ -88,6 +77,10 @@ a {
 
 #logofont {
 	font-family: 'Chela One', cursive;
+}
+
+#searchdiv {
+	height: 80px;
 }
 
 #topmenu {
@@ -107,7 +100,7 @@ a {
 }
 
 #topmenu ul li a:hover {
-	color: #0b3f9a;
+	color: hotpink;
 }
 
 #topmenu ul li:hover ul {
@@ -139,52 +132,79 @@ a {
 
 /* section */
 #section {
-	height: 900px;
 	margin: 0 auto; /* 중앙정렬 */
 	width: 75%;
-	display: grid;
-	grid-template-columns: 2fr 1fr;
+	height: 600px;
 }
 
-#section>#sec1 {
-	border-right: solid ghostwhite;
-	padding-right: 20px;
+.box1 {
+	float: left;
+	height: 200px;
+	text-align: center;
+	margin-bottom: 20px;
 }
 
-#section>#sec2 {
-	padding-left: 20px;
+.div1 {
+	width: 25%;
+	background-color: #0b3f9a;
+	border: solid #bcbcbc;
+	border-width: 1px 0 1px 1px;
+	border-radius: 15px 0 0 15px;
+	display: table;
 }
 
-#sec1>div {
-	border-bottom: solid ghostwhite;
-	height: 295px;
+.div2 {
+	width: 25%;
+	background-color: #fafafa;
+	border: solid #bcbcbc;
+	border-width: 1px 0 1px 0;
+	display: table;
 }
 
-/* section > sec1_1, sec1_2, sec1_3 */
-#sec1_1, #sec1_2, #sec1_3 {
-	padding-top: 15px;
+.div3 {
+	width: 49%;
+	border: solid #bcbcbc;
+	border-width: 1px 1px 1px 0;
+	border-radius: 0 15px 15px 0;
+	display: table;
 }
 
-.subheading {
-	font-size: 18px;
-	color: #0b3f9a;
+.fontdiv1 {
+	color: #fff;
+	font-size: 40px;
 	font-weight: bold;
+	display: table-cell;
 	vertical-align: middle;
 }
 
-.subheadingTitle {
-	font-size: 12px;
-	color: #808080;
+.fontdiv2 {
+	font-size: 25px;
+	font-weight: bold;
+	display: table-cell;
 	vertical-align: middle;
 }
 
-.musiclistForm {
-	margin-bottom: 0px;
+.fontdiv3 {
+	font-size: 18px;
+	font-weight: bold;
+	display: table-cell;
+	vertical-align: middle;
+	color: #979bb1;
 }
+
+.fontdiv4 {
+	font-size: 25px;
+	font-weight: bold;
+	display: table-cell;
+	vertical-align: middle;
+	color: #00314a;
+}
+
+/* section */
 
 /* 로그인 파트부분 */
 #login {
-	border-bottom: solid ghostwhite;
+	border-bottom: solid green;
 	height: 265px;
 	padding: 16px 16px 12px 17px;
 	border: 1px solid #dae1e6;
@@ -226,14 +246,7 @@ a {
 	color: #fff;
 }
 
-#chart {
-	height: 580px;
-	list-style: none;
-	font-weight: normal;
-}
 /* ----------- login 부분--------- */
-
-/* section */
 
 /*footer---------------------------- */
 #footer {
@@ -269,7 +282,6 @@ a {
 		alert('${message}');
 	</script>
 </c:if>
-
 </head>
 <body>
 	<div id="header">
@@ -278,7 +290,7 @@ a {
 			<!-- <li>로그아웃</li> -->
 
 			<li><button>
-					<a href="passbuy">이용권구매</a>
+					<a href="javascript:;" onClick="location.reload()">이용권구매</a>
 				</button></li>
 			<c:if test="${loginID == null}">
 				<li><button>
@@ -317,57 +329,45 @@ a {
 		<div id="topmenu"></div>
 		<!-- topmenu -->
 	</div>
+	<!--//////////////////// section start //////////////////////////// -->
+	<h1>이용권 구매</h1>
 	<div id="section">
-		<div id="sec1">
-			<div id="sec1_1"></div>
-			<div id="sec1_2"></div>
-			<div id="sec1_3"></div>
+
+		<div class="box1 div1">
+			<div class="fontdiv1">VVIP PASS</div>
 		</div>
-
-		<div id="sec2">
-			<div id="login">
-				<div id="login_location">
-					<c:if test="${empty loginID}">
-						<button type="button" id="login_button">로그인</button>
-					</c:if>
-					<!-- ----------------------------------로그인 후 페이지-------------------------- div로 해볼까 생각중;;-->
-					<c:if test="${loginID!=null}">
-						<div id="loginsuccess" value1="${userPickGenre1}">
-							<!-- 로그인한 유저의 선호장르 -->
-							<div id="welcome" style="font-size: 23px">
-								<img src="resources/uploadImage/basicman1.jpg" width="40" height="40">${loginID}님 환영합니다!!<br> <br>
-								<a href="mlogout">
-									<button type="button" id=logout_btn>로그아웃</button>
-								</a>
-								<!-- &nbsp;  -->
-								<a href="mypage?id=${loginID}">
-									<button type="button" id=logout_btn>내정보</button>
-								</a>
-							</div>
-						</div>
-					</c:if>
-				</div>
+		<div class="box1 div2">
+			<div class="fontdiv2">
+				GMUSiC의 모든것을<br> 무제한 이용!
 			</div>
-
-			<!-- 일일,주간,월간 차트리스트 -->
-			<div id="chart" role="group">
-				<h3>** G-MUSIC 차트 **</h3>
-				<div>
-					<hr>
-					<button id="dailyChart" class="textLink" onclick="dailyChart">[일일차트]</button>
-					&nbsp;&nbsp;
-					<button id="weeklyChart" class="textLink" onclick="weeklyChart">[주간차트]</button>
-					&nbsp;&nbsp;
-					<button id="monthlyChart" class="textLink" onclick="monthChart">[월간차트]</button>
-					&nbsp;&nbsp;
-					<hr>
-				</div>
-				<div id="chartArea"></div>
-
+		</div>
+		<div class="box1 div3">
+			<div class="fontdiv3">
+				무제한 음악감상<br> 무제한 뮤직비디오 감상<br> 무제한 다운로드<br>
+			</div>
+			<div class="fontdiv4">
+				10000원
+				<button type="button">구매하기</button>
+			</div>
+		</div>
+		<div class="box1 div1">
+			<div class="fontdiv1"">VIP PASS</div>
+		</div>
+		<div class="box1 div2">
+			<div class="fontdiv2">스트리밍 이용권</div>
+		</div>
+		<div class="box1 div3">
+			<div class="fontdiv3">
+				무제한 음악감상<br> 무제한 뮤직비디오 감상
+			</div>
+			<div class="fontdiv4">
+				5000원
+				<button type="button">구매하기</button>
 			</div>
 		</div>
 	</div>
 
+	<!--//////////////////// section end //////////////////////////// -->
 	<div id="footer">
 		<div id="footerinfo">
 			<a href="javascript:;" class="footergroup" id="introcompany">회사 소개</a>

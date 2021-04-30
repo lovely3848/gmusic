@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -8,153 +9,234 @@
 <script src="resources/myLib/jquery-3.2.1.min.js"></script>
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Cute+Font&display=swap" rel="stylesheet">
-<script src="resources/myLib/footer.js"></script>
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Cute+Font&display=swap" rel="stylesheet">
+<script src="resources/myLib/footer.js"></script>
 <style>
 #logo {
-   font-size: 20;
-   color: #0b3f9a;
-   font-family: 'Chela One', cursive;
+	font-size: 20;
+	color: #0b3f9a;
+	font-family: 'Chela One', cursive;
 }
 
 #searchBtn {
-   margin-bottom: 3px;
+	margin-bottom: 3px;
 }
 
 #logofont {
-   font-family: 'Chela One', cursive;
+	font-family: 'Chela One', cursive;
 }
 
 #searchdiv {
-   height: 80px;
-   padding: 22px 262px 10px 262px;
-   /* height: 50px; */
+	height: 80px;
+	padding: 22px 262px 10px 262px;
+	/* height: 50px; */
 }
 
 #musicSearch {
-   margin: 64px 262px -8px;
+	margin: 64px 262px -8px;
 }
 
 #totalSearch {
-   text-align: right;
+	text-align: right;
 }
 
 h1 {
-   color: #0b3f9a;
+	color: #0b3f9a;
 }
 
 a {
-   color: black;
-   text-decoration: none;
+	color: black;
+	text-decoration: none;
 }
 
 header {
-   background-color: black;
-   height: 40px;
-   margin: 0 auto;
-   width: 75%;
+	background-color: black;
+	height: 40px;
+	margin: 0 auto;
+	width: 75%;
 }
 
 #headermenu {
-   float: right;
-   list-style: none;
-   margin: 8px 8px 8px;
+	float: right;
+	list-style: none;
+	margin: 8px 8px 8px;
 }
 
 #headermenu>li {
-   display: inline;
+	display: inline;
 }
 /* nav */
 nav {
-   background-color: ghostwhite;
-   border-bottom-width: 3px;
-   border-bottom-color: navy;
-   border-bottom-style: solid;
-   margin: 0 auto;
-   width: 75%;
-   height: 70px;
-   padding-top: 1px;
+	background-color: ghostwhite;
+	border-bottom-width: 3px;
+	border-bottom-color: navy;
+	border-bottom-style: solid;
+	margin: 0 auto;
+	width: 75%;
+	height: 70px;
+	padding-top: 1px;
 }
 /* body */
 body {
-   margin: 0;
+	margin: 0;
 }
 
 section {
-   margin: 0 auto;
-   width: 75%;
-   height: 100%;
-   padding-top: 20px;
+	margin: 0 auto;
+	width: 75%;
+	height: 100%;
+	padding-top: 20px;
 }
 /* topmenu(nav) */
 nav ul {
-   list-style: none;
+	list-style: none;
 }
 
 nav ul ul {
-   display: none;
+	display: none;
 }
 
 nav ul li a:hover {
-   color: #0b3f9a;
+	color: #0b3f9a;
 }
 
 nav ul li:hover ul {
-   display: table-row-group;
-   background-color: ghostwhite;
+	display: table-row-group;
+	background-color: ghostwhite;
 }
 
 nav>ul>li {
-   float: left;
-   margin-left: 30px;
+	float: left;
+	margin-left: 30px;
 }
 
 nav ul a {
-   line-height: 30px;
-   text-decoration: none;
-   font-size: 20px;
-   font-weight: bold;
-   color: gray;
-   padding: 5px;
+	line-height: 30px;
+	text-decoration: none;
+	font-size: 20px;
+	font-weight: bold;
+	color: gray;
+	padding: 5px;
+}
+
+
+#section {
+	margin: 0 auto; /* 중앙정렬 */
+	width: 75%;
+	grid-template-columns: 2fr 1fr;
+}
+
+#section>#sec1 {
+	border-right: solid green;
+}
+
+#sec1>div {
+	border-bottom: solid green;
+	height: 295px;
+}
+
+#table {
+	width: 100%;
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+	border-spacing: 0px;
+}
+
+#table td {
+	border-bottom: 1px solid;
+	border-collapse: collapse;
+	border-color: #EEEEEF;
+	padding: 5px;
+	text-align: left;
+}
+
+.category {
+	font-family: 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif;
+	font-size: 14px;
+}
+
+.rnum {
+	font-size: 18px;
+}
+
+.albumimage {
+	width: 70px;
+	height: 70px;
+	padding: 6px;
+	vertical-align: middle;
+}
+
+.playbutten, .icon {
+	background-color: transparent !important; /* 배경 없애기 */
+	border: none; /* 버튼 보더 없애기 */
+	padding: 0;
+	align-self: auto;
+	white-space: nowrap; /* 한라인 쓰기 */
+	font-family: 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	color: #333333;
+}
+
+.playbutten:hover, .icon:hover {
+	text-decoration: underline; /* hover시 밑줄 */
+	cursor: pointer; /* hover시 마우스 손가락 모양 */
+}
+
+.playbutten:focus, .icon:focus {
+	outline: none; /* 클릭후 포커스 없애기 */
+}
+
+.singername {
+	font-family: 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif;
+	font-size: 12px;
+	color: #8b8b8b;
+}
+
+.stitle {
+	font-family: 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif;
+	font-size: 14px;
+	color: #8b8b8b;
 }
 
 footer {
-   border-top-style: solid;
-   border-top-color: navy;
-   border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: navy;
+	border-top-width: 1px;
 }
 /*footer---------------------------- */
 footer {
-   height: 100px;
-   margin: 0 auto; /* 중앙정렬 */
-   width: 75%;
+	height: 100px;
+	margin: 0 auto; /* 중앙정렬 */
+	width: 75%;
 }
 
 #footerinfo {
-   text-align: center;
-   padding-top: 15px;
-   margin-bottom: 10px;
-   font-size: 20px;
-   font-family: "Cute Font", sans-serif;
+	text-align: center;
+	padding-top: 15px;
+	margin-bottom: 10px;
+	font-size: 20px;
+	font-family: "Cute Font", sans-serif;
 }
 
 #footerlist {
-   text-align: center;
-   padding-bottom: 10px;
-   font-family: "Cute Font", sans-serif;
-   font-size: 15px;
-   padding-bottom: 10px;
+	text-align: center;
+	padding-bottom: 10px;
+	font-family: "Cute Font", sans-serif;
+	font-size: 15px;
+	padding-bottom: 10px;
 }
 
 #footerbar {
-   font-size: 5px;
+	font-size: 5px;
 }
 /*footer---------------------------- */
 /* 반응형 미디어 쿼리 */
 @media ( max-width :650px) {
 }
 </style>
+
 <script>
    $(function() { //ready
 
@@ -194,16 +276,6 @@ footer {
           }
        });
       
-      $("#check_all_4").click(function() {
-
-          var checked = $(this).is(":checked");
-
-          if (checked) {
-             $(".normalCheck_4").prop('checked', true);
-          } else {
-             $(".normalCheck_4").prop('checked', false);
-          }
-       });
 /* -------------------------------------------전체선택 end---------------------------------------------------------- */
       // 2. 전체선택 후 하나만 해제했을 때, 전체선택도 해체
       // 3. 개별 선택으로 전체 다 선택되었을 때, 전체선택에도 체크
@@ -246,18 +318,6 @@ footer {
           }
        });//3
       
-      $(".normalCheck_4").click(function() {
-          var checked = $(this).is(":checked");
-          if (!checked) {
-             $("#check_all_4").prop('checked', false);
-          } else {
-             var is_checked = true;
-             $(".normalCheck_4").each(function() {
-                is_checked = is_checked && $(this).is(":checked");
-             });
-             $("#check_all_4").prop("checked", is_checked);
-          }
-       });
       
      /* -----------------------------------단일선택 end------------------------------------- */
       // 곡명 버튼 눌렀을때 실행 
@@ -326,218 +386,258 @@ $(function(){
       // => ?currPage=7&rowPerPage=10&searchType=tc&keyword=java
    }); //click
 });//ready
-
 </script>
-
 
 </head>
 <body>
+	<header>
+		<a href="home"> <img src="resources/uploadImage/gm.png"
+			width="40px" height="40px">
+		</a>
+		<ul id="headermenu">
+			<!-- 조건주고 로그인 상태면 로그인 없애고 로그아웃으로 -->
+			<!-- <li>로그아웃</li> -->
+			<li><button>
+					<a href="javascript:;">이용권구매</a>
+				</button></li>
+			<c:if test="${loginID == null}">
+				<li><button>
+						<a href="memberloginpage?jcode=Q">로그인</a>
+					</button></li>
+				<li><button>
+						<a href="checkterm?jcode=Q">회원가입</a>
+					</button></li>
+			</c:if>
+			<c:if test="${loginID != null}">
+				<li><button>
+						<a href="mlogout?jcode=Q">로그아웃</a>
+					</button></li>
+				<li><button id="mypage">
+						<a href="mypage?id=${loginID}"> 마이페이지</a>
+					</button></li>
+			</c:if>
+		</ul>
+	</header>
+	<nav>
+		<ul>
+			<li><a href="home">메인 페이지</a>
+			<li><a href="javascript:;" onClick="location.reload()" style="color: #0b3f9a; font-size: 25px;">통합 검색</a>
+			<li><a href="mSearch?keyword=${UserKeyword}&searchType=sname">곡 검색</a>
+			<li><a href="mSearch?keyword=${UserKeyword}&searchType=singername">아티스트 검색</a>
+			<li><a href="mSearch?keyword=${UserKeyword}&searchType=lyrics">가사검색</a>
+		</ul>
+	</nav>
+	<br>
 
-   <header>
-      <a href="home">
-         <img src="resources/uploadImage/gm.png" width="40px" height="40px">
-      </a>
-      <ul id="headermenu">
-         <!-- 조건주고 로그인 상태면 로그인 없애고 로그아웃으로 -->
-         <!-- <li>로그아웃</li> -->
-         <li><button>
-               <a href="javascript:;">이용권구매</a>
-            </button></li>
-         <c:if test="${loginID == null}">
-            <li><button>
-                  <a href="memberloginpage?jcode=Q">로그인</a>
-               </button></li>
-            <li><button>
-                  <a href="checkterm?jcode=Q">회원가입</a>
-               </button></li>
-         </c:if>
-         <c:if test="${loginID != null}">
-            <li><button>
-                  <a href="mlogout?jcode=Q">로그아웃</a>
-               </button></li>
-            <li><button id="mypage">
-                  <a href="mypage?id=${loginID}"> 마이페이지</a>
-               </button></li>
-         </c:if>
-      </ul>
-   </header>
-   <nav>
-      <ul>
-         <li><a href="home">메인 페이지</a>
-         <li><a href="javascript:;" onClick="location.reload()" style="color: #0b3f9a; font-size: 25px;">통합 검색</a>
-         <li ><a href="mSearch?keyword=${UserKeyword}&searchType=sname">곡 검색</a>
-         <li><a href="mSearch?keyword=${UserKeyword}&searchType=singername">아티스트 검색</a>
-         <li><a href="mSearch?keyword=${UserKeyword}&searchType=lyrics">가사 검색</a>
-      </ul>
-   </nav>
-   <br>
+	<div id="searchdiv">
+		<div id="logo">
+			<h1>GMUSIC</h1>
+			<form action="mSearch" id="search" name="search" class="search">
+				<select name="searchType" id="searchType" style="display: none">
+					<option value="all" selected>All</option>
+				</select> 
+				<input type="text" name="keyword" id="keyword" maxlength="35" size="50" style="vertical-align: middle;" value="${UserKeyword}">
+				<button type="button" id="searchBtn" style="vertical-align: middle;">Search</button>
+			</form>
+		</div>
+	</div>
 
-   <div id="searchdiv">
-      <div id="logo">
-         <h1>GMUSIC</h1>
-         <form action="mSearch" id="search" name="search" class="search">
-
-            <select name="searchType" id="searchType" style="display: none">
-               <option value="all" selected>All</option>
-            </select>
-            <input type="text" name="keyword" id="keyword" maxlength="35" size="50" style="vertical-align: middle;" value="${UserKeyword}">
-            <button type="button" id="searchBtn" style="vertical-align: middle;">Search</button>
-         </form>
-      </div>
-   </div>
-
-   <form id="musicSearch" name="musicSearch" align="center">
-      <h3 align="left">'${UserKeyword}'에 대한 검색 결과입니다.</h3>
+	<form id="musicSearch" name="musicSearch" >
+		<h3 align="left">'${UserKeyword}'에 대한 검색 결과입니다.</h3>
 		<div id="snameSearchAjax">
-      <!-- 곡검색 -->
-      <h1>곡 검색 결과 (${Aanana2})</h1>
-      <button type="button" onclick="getCheckboxValue()">플레이리스트</button>
-      <input type="hidden" id="snumVal" name="snumVal" value="">
-      <table style="width: 100%;" border="1">
-         <tr align="center" height="2" bgcolor="ghostwhite">
-            <td width="50">
-               <input type="checkbox" id="check_all_2" name="check_all_2">
-            </td>
-            <td width="40">번 호</td>
-            <td>Image</td>
-            <td>곡 명</td>
-            <td>가 수</td>
-            <td>앨범명</td>
-            <td>downloadfile</td>
-         </tr>
-         <c:forEach var="row" items="${Aanana}" varStatus="vs">
-            <tr>
-               <td align="center">
-                  <input type="checkbox" class="normalCheck_2" id="snum${row.snum}" name="snum" value="${row.snum}">
-               </td>
-               <td align="center">${vs.count}</td>
-               <td>
-                  <img src="${row.image}" width="70" height="70">
-               </td>
-               <td>
-                  <button type="button" name="sname" value="${row.snum}">${row.sname}</button>
-               </td>
-               <td>${row.singername}</td>
-               <td>${row.stitle}</td>
-               <td>
-                  <a href="dnload?dnfile=${row.downloadfile}">${row.downloadfile}</a>
-               </td>
-            </tr>
-         </c:forEach>
-      </table>
-      <c:if test="${empty Aanana}">
-         <h2>곡으로 검색한 결과가 없습니다.</h2>
-      </c:if>
-      <div id="totalSearch">
-         <a href="mSearch?keyword=${UserKeyword}&searchType=sname">곡 검색 전체보기></a>
-      </div>
+			<!-- 곡검색 -->
+			<h1 align="center">곡 검색 결과 (${Aanana2})</h1>
+			<button type="button" onclick="getCheckboxValue()">플레이리스트</button>
+			<input type="hidden" id="snumVal" name="snumVal" value="">
+			<table id="table">
+				<tr class="category" align="center" height="2" bgcolor="ghostwhite">
+					<td width="50">
+						<input type="checkbox" id="check_all_1" name="check_all_1">
+					</td>
+					
+					<td width="40">번 호</td>
+					<td colspan="3">곡정보</td>
+					<td align="left">앨 범</td>
+					<td width="40">듣 기</td>
+					<td width="40">다 운</td>
+					<td width="40">뮤 비</td>
+				</tr>
+				<c:forEach var="row" items="${Aanana}" varStatus="vs">
+					<tr>
+						<td align="center"><input type="checkbox" class="normalCheck_1" id="snum${row.snum}" name="snum" value="${row.snum}"></td>
+						<td align="center">${vs.count}</td>
+						<td><img class="albumimage" src="${row.image}"></td>
+						<td width="40">
+							<button type="button" class="icon" name="lyrics" value="${row.snum}">
+								<img src="resources/image/lyrics_icon.png" width="30" height="30">
+							</button>
+						</td>
+						<td>
+							<div>
+								<button type="button" class="playbutten" name="sname" value="${row.snum}">${row.sname}</button>
+							</div>
+							<div class="singername">${row.singername}</div>
+						</td>
+						<td class="stitle">${row.stitle}</td>
+						<td align="center">
+							<button type="button" class="playbutten" name="sname" value="${row.snum}">
+								<img src="resources/image/play_icon.png" width="30" height="30">
+							</button>
+						</td>
+						<td align="center"><a href="dnload?dnfile=${row.downloadfile}"> 
+						<img src="resources/image/download_icon.png" width="30" height="30">
+						</a>
+						</td>
+						<td align="center">
+							<button type="button" class="icon" name="musicurl" value="${row.musicurl}">
+								<img src="resources/image/videos_icon.png" width="30" height="30">
+							</button>
+						</td>
+					</tr>
+				</c:forEach>
+			</table>
+			<c:if test="${empty Aanana}">
+				<h2 align="center">곡으로 검색한 결과가 없습니다.</h2>
+			</c:if>
+			<div id="totalSearch">
+				<a href="mSearch?keyword=${UserKeyword}&searchType=sname">곡 검색 전체보기></a>
+			</div>
 
- 	</div>
- 	<div id="singernameSearchAjax">
-      <!-- 아티스트명 검색 -->
-      <h1>아티스트 검색 결과 (${Banana2})</h1>
-      <button type="button" onclick="getCheckboxValue()">플레이리스트</button>
-      <input type="hidden" id="snumVal" name="snumVal" value="">
-      <table style="width: 100%;" border="1">
-         <tr align="center" height="2" bgcolor="ghostwhite">
-            <td width="50">
-               <input type="checkbox" id="check_all_3" name="check_all_3">
-            </td>
-            <td width="40">번 호</td>
-            <td>Image</td>
-            <td>곡 명</td>
-            <td>가 수</td>
-            <td>앨범명</td>
-            <td>downloadfile</td>
-         </tr>
-         <c:forEach var="row" items="${Banana}" varStatus="vs">
-            <tr>
-               <td align="center">
-                  <input type="checkbox" class="normalCheck_3" id="snum${row.snum}" name="snum" value="${row.snum}">
-               </td>
-               <td align="center">${vs.count}</td>
-               <td>
-                  <img src="${row.image}" width="70" height="70">
-               </td>
-               <td>
-                  <button type="button" name="sname" value="${row.snum}">${row.sname}</button>
-               </td>
-               <td>${row.singername}</td>
-               <td>${row.stitle}</td>
-               <td>
-                  <a href="dnload?dnfile=${row.downloadfile}">${row.downloadfile}</a>
-               </td>
-            </tr>
-         </c:forEach>
-      </table>
-      <c:if test="${empty Banana}">
-         <h2>아티스트로 검색한 결과가 없습니다.</h2>
-      </c:if>
-      <div id="totalSearch">
-         <a href="mSearch?keyword=${UserKeyword}&searchType=singername">아티스트 검색 전체보기></a>
-      </div>
-      </div>
-      <!--------------------------------------------------아티스트 검색 end----------------------------------------------------- -->
-      <!-- 가사검색 -->
-      <div id="lyricsSearchAjax">
-      <h1>가사 검색 결과 (${Canana2})</h1>
-      <button type="button" onclick="getCheckboxValue()">플레이리스트</button>
-      <input type="hidden" id="snumVal" name="snumVal" value="">
-      <table style="width: 100%;" border="1">
-         <tr align="center" height="2" bgcolor="ghostwhite">
-            <td width="50">
-               <input type="checkbox" id="check_all_4" name="check_all_4">
-            </td>
-            <td width="40">번 호</td>
-            <td>Image</td>
-            <td>곡 명</td>
-            <td>가 수</td>
-            <td>앨범명</td>
-            <td>downloadfile</td>
-         </tr>
-         <c:forEach var="row" items="${Canana}" varStatus="vs">
-            <tr>
-               <td align="center">
-                  <input type="checkbox" class="normalCheck_4" id="snum${row.snum}" name="snum" value="${row.snum}">
-               </td>
-               <td align="center">${vs.count}</td>
-               <td>
-                  <img src="${row.image}" width="70" height="70">
-               </td>
-               <td>
-                  <button type="button" name="sname" value="${row.snum}">${row.sname}</button>
-               </td>
-               <td>${row.singername}</td>
-               <td>${row.stitle}</td>
-               <td>
-                  <a href="dnload?dnfile=${row.downloadfile}">${row.downloadfile}</a>
-               </td>
-            </tr>
-         </c:forEach>
-      </table>
-      <c:if test="${empty Canana}">
-         <h2>가사로 검색한 결과가 없습니다.</h2>
-      </c:if>
-      <div id="totalSearch">
-         <a href="mSearch?keyword=${UserKeyword}&searchType=lyrics">가사 검색 전체보기></a>
-      </div>
-      </div>
-   </form>
-   <br>
-   <footer>
-      <div id="footerinfo">
-         <a href="javascript:;" class="footergroup" id="introcompany">회사 소개</a>
-         &nbsp;&nbsp; <font class="footerbar">|</font> &nbsp;&nbsp;
-         <a href="javascript:;" class="footergroup" id="termsp">이용약관</a>
-         &nbsp;&nbsp; <font class="footerbar">|</font> &nbsp;&nbsp;
-         <a href="javascript:;" class="footergroup" id="privacy">개인정보처리방침</a>
-         &nbsp;&nbsp; <font class="footerbar">|</font> &nbsp;&nbsp;
-         <a href="javascript:;" class="footergroup" id="youth">청소년보호정책</a>
-      </div>
-      <div id="footerlist">
-         <font>G-MUSIC</font> &nbsp;&nbsp; <font class="footerbar">|</font> &nbsp;&nbsp; 그린 컴퓨터 아카데미 &nbsp;&nbsp; <font class="footerbar">|</font> &nbsp;&nbsp; 공동작업 : 김지수, 남철우, 정재필, 정현근 &nbsp;&nbsp; <font class="footerbar">|</font> &nbsp;&nbsp; 사업자등록번호 : ???-??-????? <br> 문의전화 : 0000-0000 (평일 09:00 ~ 05:00) &nbsp;&nbsp; <font class="footerbar">|</font> &nbsp;&nbsp; 이메일 : gproject @ naver.com
-      </div>
-   </footer>
+		</div>
+		<div id="singernameSearchAjax">
+			<!-- 아티스트명 검색 -->
+			<h1 align="center">아티스트 검색 결과 (${Banana2})</h1>
+			<button type="button" onclick="getCheckboxValue()">플레이리스트</button>
+			<input type="hidden" id="snumVal" name="snumVal" value="">
+			<table id="table">
+				<tr class="category" align="center" height="2" bgcolor="ghostwhite">
+					<td width="50">
+						<input type="checkbox" id="check_all_2" name="check_all_2">
+					</td>
+					<td width="40">번 호</td>
+					<td colspan="3">곡정보</td>
+					<td align="left">앨 범</td>
+					<td width="40">듣 기</td>
+					<td width="40">다 운</td>
+					<td width="40">뮤 비</td>
+				</tr>
+				<c:forEach var="row" items="${Banana}" varStatus="vs">
+					<tr>
+						<td align="center"><input type="checkbox" class="normalCheck_2" id="snum${row.snum}" name="snum" value="${row.snum}"></td>
+						<td align="center">${vs.count}</td>
+						<td><img class="albumimage" src="${row.image}"></td>
+						<td width="40">
+							<button type="button" class="icon" name="lyrics"
+								value="${row.snum}">
+								<img src="resources/image/lyrics_icon.png" width="30" height="30">
+							</button>
+						</td>
+						<td>
+							<div>
+								<button type="button" class="playbutten" name="sname" value="${row.snum}">${row.sname}</button>
+							</div>
+							<div class="singername">${row.singername}</div>
+						</td>
+						<td class="stitle">${row.stitle}</td>
+						<td align="center">
+							<button type="button" class="playbutten" name="sname" value="${row.snum}">
+								<img src="resources/image/play_icon.png" width="30" height="30">
+							</button>
+						</td>
+						<td align="center"><a
+							href="dnload?dnfile=${row.downloadfile}"> <img
+								src="resources/image/download_icon.png" width="30" height="30">
+						</a></td>
+						<td align="center">
+							<button type="button" class="icon" name="musicurl" value="${row.musicurl}">
+								<img src="resources/image/videos_icon.png" width="30" height="30">
+							</button>
+						</td>
+					</tr>
+				</c:forEach>
+			</table>
+			<c:if test="${empty Banana}">
+				<h2 align="center">아티스트로 검색한 결과가 없습니다.</h2>
+			</c:if>
+			<div id="totalSearch">
+				<a href="mSearch?keyword=${UserKeyword}&searchType=singername">아티스트
+					검색 전체보기></a>
+			</div>
+		</div>
+		<!--------------------------------------------------아티스트 검색 end----------------------------------------------------- -->
+		<!-- 가사검색 -->
+		<div id="lyricsSearchAjax">
+			<h1 align="center">가사 검색 결과 (${Canana2})</h1>
+			<button type="button" onclick="getCheckboxValue()">플레이리스트</button>
+			<input type="hidden" id="snumVal" name="snumVal" value="">
+			<table id="table">
+				<tr  class="category" align="center" height="2" bgcolor="ghostwhite">
+					<td width="50">
+						<input type="checkbox" id="check_all_3" name="check_all_3">
+					</td>
+					<td width="40">번 호</td>
+					<td colspan="3">곡정보</td>
+					<td align="left">앨 범</td>
+					<td width="40">듣 기</td>
+					<td width="40">다 운</td>
+					<td width="40">뮤 비</td>
+				</tr>
+				<c:forEach var="row" items="${Canana}" varStatus="vs">
+					<tr>
+						<td align="center"><input type="checkbox" class="normalCheck_3" id="snum${row.snum}" name="snum" value="${row.snum}"></td>
+						<td align="center">${vs.count}</td>
+						<td><img class="albumimage" src="${row.image}"></td>
+						<td width="40">
+							<button type="button" class="icon" name="lyrics" value="${row.snum}">
+								<img src="resources/image/lyrics_icon.png" width="30" height="30">
+							</button>
+						</td>
+						<td>
+							<div>
+								<button type="button" class="playbutten" name="sname" value="${row.snum}">${row.sname}</button>
+							</div>
+							<div class="singername">${row.singername}</div>
+						</td>
+						<td class="stitle">${row.stitle}</td>
+						<td align="center">
+							<button type="button" class="playbutten" name="sname" value="${row.snum}">
+								<img src="resources/image/play_icon.png" width="30" height="30">
+							</button>
+						</td>
+						<td align="center"><a href="dnload?dnfile=${row.downloadfile}"> 
+						<img src="resources/image/download_icon.png" width="30" height="30"></a>
+						</td>
+						<td align="center">
+							<button type="button" class="icon" name="musicurl"value="${row.musicurl}">
+								<img src="resources/image/videos_icon.png" width="30" height="30">
+							</button>
+						</td>
+					</tr>
+				</c:forEach>
+			</table>
+			<c:if test="${empty Canana}">
+				<h2 align="center">가사로 검색한 결과가 없습니다.</h2>
+			</c:if>
+			<div id="totalSearch">
+				<a href="mSearch?keyword=${UserKeyword}&searchType=lyrics">가사 검색 전체보기></a>
+			</div>
+		</div>
+	</form>
+	<br>
+	<footer>
+		<div id="footerinfo">
+			<a href="javascript:;" class="footergroup" id="introcompany">회사소개</a> &nbsp;&nbsp;
+			 <font class="footerbar">|</font> &nbsp;&nbsp; <a href="javascript:;" class="footergroup" id="termsp">이용약관</a>&nbsp;&nbsp; 
+			 <font class="footerbar">|</font> &nbsp;&nbsp; <a href="javascript:;" class="footergroup" id="privacy">개인정보처리방침</a>&nbsp;&nbsp; 
+			 <font class="footerbar">|</font> &nbsp;&nbsp; <a href="javascript:;" class="footergroup" id="youth">청소년보호정책</a>
+		</div>
+		<div id="footerlist">
+			<font>G-MUSIC</font> &nbsp;&nbsp; <font class="footerbar">|</font>
+			&nbsp;&nbsp; 그린 컴퓨터 아카데미 &nbsp;&nbsp; <font class="footerbar">|</font>
+			&nbsp;&nbsp; 공동작업 : 김지수, 남철우, 정재필, 정현근 &nbsp;&nbsp; <font class="footerbar">|</font> &nbsp;&nbsp; 사업자등록번호 : ???-??-????? <br>
+			문의전화 : 0000-0000 (평일 09:00 ~ 05:00) &nbsp;&nbsp; <font class="footerbar">|</font> &nbsp;&nbsp; 이메일 : gproject @ naver.com
+		</div>
+	</footer>
 
 </body>
 </html>

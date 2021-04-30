@@ -42,8 +42,12 @@
 	<update id="update">
 		UPDATE music set 
 		sname=#{sname}, stitle=#{stitle}, singername=#{singername}, 
-		releasedate=#{releasedate}, genre=#{genre}, lyrics=#{lyrics}, country=#{country}, 
-		musicurl=#{musicurl}, downloadfile=#{downloadfile}, image=#{image} 
+		releasedate=#{releasedate}, genre=#{genre}, 
+		<if test="lyrics != null">lyrics=#{lyrics},</if>
+		<if test="downloadfile != null">downloadfile=#{downloadfile},</if>
+		<if test="image != null">image=#{image},</if>
+		country=#{country}, musicurl=#{musicurl}
+		
 		WHERE snum=#{snum} 
 	</update> 
 	
