@@ -139,7 +139,7 @@ a {
 
 /* section */
 #section {
-	height: 900px;
+	height: 1000px;
 	margin: 0 auto; /* 중앙정렬 */
 	width: 75%;
 	display: grid;
@@ -272,13 +272,14 @@ a {
 
 </head>
 <body>
+	
 	<div id="header">
 		<ul id="headermenu">
 			<!-- 조건주고 로그인 상태면 로그인 없애고 로그아웃으로 -->
 			<!-- <li>로그아웃</li> -->
 
 			<li><button>
-					<a href="passbuy">이용권구매</a>
+					<a href="payPage">이용권구매</a>
 				</button></li>
 			<c:if test="${loginID == null}">
 				<li><button>
@@ -297,6 +298,7 @@ a {
 						<a href="mypage?id=${loginID}"> 마이페이지</a>
 					</button></li>
 			</c:if>
+					<li><a href="management">dddd</a></li>
 		</ul>
 	</div>
 	<!-- header -->
@@ -348,7 +350,7 @@ a {
 					</c:if>
 				</div>
 			</div>
-
+			
 			<!-- 일일,주간,월간 차트리스트 -->
 			<div id="chart" role="group">
 				<h3>** G-MUSIC 차트 **</h3>

@@ -46,7 +46,7 @@ a {
    color: #fff;
 }
 
-#id, #password {
+#phone, #email {
    height: 40px;
    width: 366px;
 }
@@ -83,30 +83,25 @@ a {
    font-size: 5px;
 }
 </style>
-
    <c:if test="${message!=null}">
-      <script>
-         alert('${message}');
-      </script>
+        alert(${message});
    </c:if>
+
 
 </head>
 <body>
    <div id= loginf_location>
    <div ><a href="home" id="logo">GMUSIC</a></div><br><br>
-   <form action="mlogin" method="get">
+   <form action="searchIDCheck" method="get">
       <table>
-      <tr>
-            <td><input type="text" id="id"  name="id" placeholder="아이디">
+         <tr>
+            <td><input type="text" id="email" name="email" placeholder="이메일">
+         </tr>
+      	<tr>
+            <td><input type="text" id="phone"  name="phone" placeholder="전화번호">
          </tr>
          <tr>
-            <td><input type="password" id="password" name="password" placeholder="비밀번호">
-         <tr style="text-align: right;">
-            <td><a href="searchID" class="searchID">아이디 찾기</a>&nbsp; 
-            <a href="searchPassword" class="searchPassword">비밀번호 찾기</a></td>
-         </tr>
-         <tr>
-         <td><input type="submit" id="login_button2" value="로그인" ></td> 
+         <td><input type="submit" id="login_button2" value="확인" ></td> 
          </tr>
       </table>
    </form>

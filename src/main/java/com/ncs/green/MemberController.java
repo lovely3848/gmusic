@@ -3,6 +3,9 @@ package com.ncs.green;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -11,11 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import criteria.Criteria;
+import criteria.PageMaker;
 import service.GmemberService;
 import service.MailSendService;
 import vo.GmemberVO;
@@ -32,6 +39,73 @@ public class MemberController {
 	// 메일 보내는거
 	@Autowired
 	private MailSendService mss;
+
+// ----------------------------회원관리 페이지 ----------------------------------------------	
+	@RequestMapping(value = "/management")
+	public ModelAndView managment(ModelAndView mv, HttpServletRequest request) {
+		mv.setViewName("adminpage/management");
+		return mv;
+	}
+
+	@RequestMapping(value = "/memberpointchange")
+	public ModelAndView memberpointchange(ModelAndView mv, HttpServletRequest request, GmemberVO vo) {
+		service.pointChange(vo);
+		List<GmemberVO> list = service.selectList();
+		if (list != null) {
+			mv.addObject("Banana", list);
+		}
+		mv.setViewName("adminpage/membermanagement");
+		return mv;
+
+	}
+
+	@RequestMapping(value = "/membergradechange")
+	public ModelAndView membergradechange(ModelAndView mv, HttpServletRequest request, GmemberVO vo) {
+		service.gradeChange(vo);
+
+		List<GmemberVO> list = service.selectList();
+		if (list != null) {
+			mv.addObject("Banana", list);
+		}
+		mv.setViewName("adminpage/membermanagement");
+		return mv;
+
+	}
+
+	@RequestMapping(value = "/memberdeletes")
+	public ModelAndView memberdeletes(ModelAndView mv, HttpServletRequest request, GmemberVO vo) {
+		service.delete(vo);
+
+		List<GmemberVO> list = service.selectList();
+		if (list != null) {
+			mv.addObject("Banana", list);
+		}
+
+		mv.setViewName("adminpage/membermanagement");
+		return mv;
+
+	}
+
+	@RequestMapping(value = "/membermanagement")
+	public ModelAndView membermanagment(ModelAndView mv, HttpServletRequest request, Criteria cri,
+			PageMaker pageMaker) {
+		cri.setSnoEno();
+		mv.addObject("Banana", service.searchMemberList(cri));
+		List<GmemberVO> vo = new ArrayList<GmemberVO>();
+		vo = service.searchMemberList(cri);
+
+		for (GmemberVO gmemberVO : vo) {
+			System.out.println(gmemberVO);
+		}
+
+		pageMaker.setCri(cri);
+		pageMaker.setTotalRow(service.searchRowCount(cri));
+
+		mv.addObject("pageMaker", pageMaker);
+		mv.setViewName("adminpage/membermanagement");
+		return mv;
+
+	}
 
 // -----------------------------이용약관 및 회원가입 ---------------------------------------
 	@RequestMapping(value = "/checkterm")
@@ -242,7 +316,10 @@ public class MemberController {
 					request.getSession().setAttribute("loginGRADE", vo.getGrade());
 					request.getSession().setAttribute("loginPW", password);
 					request.getSession().setAttribute("userPickGenre1", vo.getGenre1()); // 섹션 1_1부분을 위해 추가
-					System.out.println("마이장르 확인용 => "+vo.getGenre1());
+					// 로그인한 회원 정보 세션저장된 값
+					vo.setPassword(null); // vo에서 비밀번호 지움
+					request.getSession().setAttribute("loginVO", vo);// 세션 통합 (비밀번호 제외)
+					System.out.println("마이장르 확인용 => " + vo.getGenre1());
 //					mv.addObject("message", "로그인 성공!");
 					rttr.addFlashAttribute("message", "로그인 성공!");
 					mv.setViewName("redirect:home");
@@ -385,5 +462,84 @@ public class MemberController {
 	}
 
 	// ----------------------------------마이페이지------------------------------------
+	@RequestMapping(value = "/payPage")
+	public ModelAndView payPage(ModelAndView mv, HttpServletRequest request) {
+		mv.setViewName("payment/passbuy");
+		return mv;
+	}
+	@RequestMapping(value = "/searchID")
+	public ModelAndView searchID(ModelAndView mv) {
+		mv.setViewName("member/searchIDPage");
+		return mv;
+	}// searchID
+	
+	@RequestMapping(value = "/searchIDCheck")
+	public ModelAndView searchIDCheck(ModelAndView mv, HttpServletRequest request, GmemberVO vo) {
+		String phone = vo.getPhone();
+		vo = service.searchIDCheck(vo);
+		if(vo != null) {
+			if(vo.getPhone().equals(phone)) {
+				mv.addObject("message","회원님의 아이디는 "+vo.getId()+" 입니다.");
+				mv.setViewName("member/memberloginpage");
+			}else {
+				mv.addObject("message","아이디 또는 이메일이 가입정보와 일치하지 않습니다.");
+				mv.setViewName("member/searchIDPage");
+			}
+		}
+		return mv;
+	}// searchIDCheck
+	
+	@RequestMapping(value = "/searchPassword")
+	public ModelAndView searchPassword(ModelAndView mv) {
+		mv.setViewName("member/searchPasswordPage");
+		return mv;
+	}// searchPassword
+
+	@RequestMapping(value = "/searchPasswordCheck")
+	public ModelAndView searchPasswordCheck(ModelAndView mv, HttpServletRequest request, GmemberVO vo) {
+		String email = vo.getEmail();
+		vo = service.selectOne(vo);
+		if (vo != null) {
+			if (vo.getEmail().equals(email)) {
+				System.out.println("*test*test* => " + vo.getEmail() + "  " + vo.getId());
+
+				String pswd = "";
+				StringBuffer sb = new StringBuffer();
+				StringBuffer sc = new StringBuffer("!@#$%^&*-=?~"); // 특수문자 모음, {}[] 같은 비호감문자는 뺌
+				// 대문자 4개를 임의 발생
+				sb.append((char) ((Math.random() * 26) + 65)); // 첫글자는 대문자, 첫글자부터 특수문자 나오면 안 이쁨
+
+				for (int i = 0; i < 3; i++) {
+					sb.append((char) ((Math.random() * 26) + 65)); // 아스키번호 65(A) 부터 26글자 중에서 택일
+				}
+				// 소문자 4개를 임의발생
+				for (int i = 0; i < 4; i++) {
+					sb.append((char) ((Math.random() * 26) + 97)); // 아스키번호 97(a) 부터 26글자 중에서 택일
+				}
+				// 숫자 2개를 임의 발생
+				for (int i = 0; i < 2; i++) {
+					sb.append((char) ((Math.random() * 10) + 48)); // 아스키번호 48(1) 부터 10글자 중에서 택일
+				}
+				// 특수문자를 두개 발생시켜 랜덤하게 중간에 끼워 넣는다
+				sb.setCharAt(((int) (Math.random() * 3) + 1), sc.charAt((int) (Math.random() * sc.length() - 1))); // 대문자3개중
+																													// 하나
+				sb.setCharAt(((int) (Math.random() * 4) + 4), sc.charAt((int) (Math.random() * sc.length() - 1))); // 소문자4개중
+																													// 하나
+
+				pswd = sb.toString();
+				System.out.println("****임시비밀번호 확인test => " + pswd);
+
+				vo.setPassword(passwordEncoder.encode(pswd));
+				service.update(vo);
+				mss.sendAuthMail(vo.getEmail(), vo.getId(), pswd);
+				mv.addObject("message", "회원님의 비밀번호로 임시 비밀번호를 보냈습니다. 임시 비밀번호로 로그인 후 변경 바랍니다.");
+				mv.setViewName("member/memberloginpage");
+			} else {
+				mv.addObject("message", "아이디 또는 이메일이 가입정보와 일치하지 않습니다.");
+				mv.setViewName("member/searchPasswordPage");
+			}
+		}
+		return mv;
+	}// searchPasswordCheck
 
 }

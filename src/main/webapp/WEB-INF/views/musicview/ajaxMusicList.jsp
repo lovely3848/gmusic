@@ -7,26 +7,28 @@
 <script>
 $(function() {//ready
 	$(".albumimageButton").click(function() {
-		
-		var buttonSnumVal = $(this).attr('value')+',';
-
-		url = "playlist";
-		window.open(url, "playlistView","toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
-		$('.musiclistForm').attr('action',url);
-		$('.musiclistForm').attr('method',"post");
-		$('.musiclistForm').attr('target',"playlistView");
-
-		// 항목 추가
-		var addsnumVal = $('input[name=snumVal]').val();
-		console.log('addsnumVal => ' + addsnumVal);
-		if (addsnumVal != null) {
-		   $('input[name=snumVal]').attr('value',addsnumVal+buttonSnumVal);
-		}else{
-			$('input[name=snumVal]').attr('value',buttonSnumVal);
+		if(${loginVO.grade == 'c' || loginVO == null}){
+			location.href='payPage';
+		}else {
+			var buttonSnumVal = $(this).attr('value')+',';
+	
+			url = "playlist";
+			window.open(url, "playlistView","toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=340,height=720");
+			$('.musiclistForm').attr('action',url);
+			$('.musiclistForm').attr('method',"post");
+			$('.musiclistForm').attr('target',"playlistView");
+	
+			// 항목 추가
+			var addsnumVal = $('input[name=snumVal]').val();
+			console.log('addsnumVal => ' + addsnumVal);
+			if (addsnumVal != null) {
+			   $('input[name=snumVal]').attr('value',addsnumVal+buttonSnumVal);
+			}else{
+				$('input[name=snumVal]').attr('value',buttonSnumVal);
+			}
+			
+			$('.musiclistForm').submit(); 
 		}
-		
-		$('.musiclistForm').submit(); 
-		
 	});
 });//ready
 </script>

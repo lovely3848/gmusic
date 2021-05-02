@@ -7,12 +7,14 @@
 <script>
 $(function() {//ready
 	$(".albumimageButton3").click(function() {
-		
-		var buttonSnumVal = $(this).attr('value');
-
-		url = buttonSnumVal+"?amp;autoplay=1";
-		window.open(url, "videoView","toolbar=no,location=no,status=no,scrollbars=no,resizable=no,width=600,height=400");
-
+		if(${loginVO.grade == 'c' || loginVO == null}){
+			location.href='payPage';
+		}else {
+			var buttonSnumVal = $(this).attr('value');
+	
+			url = buttonSnumVal+"?amp;autoplay=1";
+			window.open(url, "videoView","toolbar=no,location=no,status=no,scrollbars=no,resizable=no,width=600,height=400");
+		}
 	});
 });//ready
 </script>

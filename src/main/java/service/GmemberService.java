@@ -2,6 +2,7 @@ package service;
 
 import java.util.List;
 
+import criteria.Criteria;
 import vo.GmemberVO;
 
 public interface GmemberService {
@@ -28,6 +29,14 @@ public interface GmemberService {
 	
 	// id, email, phone 중복확인
 	public int userDuplicationCheck(GmemberVO vo);
-
+	public int pointChange(GmemberVO vo);
+	public int gradeChange(GmemberVO vo);
+	
+	//회원리스트 페이지 
+	public List<GmemberVO> searchMemberList(Criteria cri);
+	public int searchRowCount(Criteria cri);
+	
+	//아이디 찾기
+	public GmemberVO searchIDCheck(GmemberVO vo);
 	
 }

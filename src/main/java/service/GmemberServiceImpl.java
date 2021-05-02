@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import criteria.Criteria;
 import util.GmemberDAO;
 import vo.GmemberVO;
 
@@ -54,6 +55,28 @@ public class GmemberServiceImpl implements GmemberService {
 		return dao.userDuplicationCheck(vo);
 	}
 
+	public int pointChange(GmemberVO vo) {
+		// TODO Auto-generated method stub
+		return dao.pointChange(vo);
+	}
 
+	public int gradeChange(GmemberVO vo) {
+		// TODO Auto-generated method stub
+		return dao.gradeChange(vo);
+	}
+
+	public List<GmemberVO> searchMemberList(Criteria cri) {
+		return dao.searchMemberList(cri);
+	}
+
+	public int searchRowCount(Criteria cri) {
+		// TODO Auto-generated method stub
+		return dao.searchRowCount(cri);
+	}
+
+	//아이디 찾기
+	public GmemberVO searchIDCheck(GmemberVO vo) {
+		return dao.searchIDCheck(vo);
+	}
 
 }

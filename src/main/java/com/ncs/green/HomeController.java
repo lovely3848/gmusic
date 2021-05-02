@@ -164,16 +164,5 @@ public class HomeController {
 		mv.addObject("part", part);
 		return mv;
 	}// 차트 컨트롤러입니다.
-	
-	/*-------------------------결제 관련-------------------------*/
-	
-	@RequestMapping(value = "/passbuy")
-	public ModelAndView passbuy(ModelAndView mv, HttpServletRequest request) {
-
-		mv.setViewName("payment/passbuy");
-		
-		return mv;
-	}// passbuy
-	
 
 } // class

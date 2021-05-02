@@ -12,15 +12,15 @@ var pCheck=false;
 var p2Check=false;
 
 $(function(){
-	$('#genre1').val('${vo.genre1}').prop("selected",true);
-	$('#password').focusout(function() {
-		pCheck=pwCheck();
-	}); //password
+	   $('#genre1').val('${vo.genre1}').prop("selected",true);
+	   $('#password').focusout(function() {
+	      pCheck=pwCheck();
+	   }); //password
 
-	$('#password2').focusout(function() {
-		p2Check=pw2Check();
-	}); //ready
-}); //password2
+	   $('#password2').focusout(function() {
+	      p2Check=pw2Check();
+	   }); //ready
+	}); //password2
 //--------------- js파일이 적용이안되서 직접 입력------------------
 function pwCheck(){
 	var password=$("#password").val();

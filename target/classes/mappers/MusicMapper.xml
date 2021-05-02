@@ -3,83 +3,73 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ncs.MusicMapper">
 
+   <!--cart 리스트 -->
+   <select id="cartlist" resultType="vo.MusicVO">
+      select snum from mylist where id = #{id}
+   </select>
+   
 	<!-- ******************************* -->
 	<select id="selectList" resultType="vo.MusicVO">
-		select * from music order by releasedate desc , sname
+		select * from music order by
+		releasedate desc , sname
 	</select>
 
 	<select id="selectOne" resultType="vo.MusicVO"> <!-- 노래 재생목록을 위한 sql -->
 
 		select snum, sname, stitle, singername, releasedate, genre,
 		replace(lyrics,'-','') lyrics, country, musicurl,
-		downloadfile, image, count from music where snum=#{snum}
+		downloadfile, image,
+		count from music where snum=#{snum}
 
 	</select>
 
 	<select id="musicList" resultType="vo.MusicVO">
-		select snum, sname, stitle, singername, releasedate, genre, replace(lyrics,'-','') lyrics,
+		select snum, sname, stitle,
+		singername, releasedate, genre, replace(lyrics,'-','') lyrics,
 		country, musicurl, downloadfile, image, count, rnum
-		from (select m.* , ROW_NUMBER() OVER(order by releasedate desc , sname) rnum from music m )
+		from (select m.* ,
+		ROW_NUMBER() OVER(order by releasedate desc , sname) rnum from music m
+		)
 		where rnum between #{sno} and #{eno}
 	</select>
 
 	<select id="totalRowCount" resultType="int">
 		select count(*) from music
 	</select>
-	
-	<insert id="insert">
-		<selectKey keyProperty="snum" resultType="int" order="BEFORE">
-			SELECT NVL(MAX(snum),0)+1 FROM music
-		</selectKey>
-			INSERT INTO music VALUES(
-			#{snum},
-			#{sname}, #{stitle}, #{singername}, #{releasedate}, #{genre}, 
-			<if test="lyrics != null">#{lyrics},</if>
-			<if test="lyrics == null">default,</if>
-			#{country}, #{musicurl}, #{downloadfile}, #{image}, default)
-	</insert>
 
-	<update id="update">
-		UPDATE music set 
-		sname=#{sname}, stitle=#{stitle}, singername=#{singername}, 
-		releasedate=#{releasedate}, genre=#{genre}, 
-		<if test="lyrics != null">lyrics=#{lyrics},</if>
-		<if test="downloadfile != null">downloadfile=#{downloadfile},</if>
-		<if test="image != null">image=#{image},</if>
-		country=#{country}, musicurl=#{musicurl}
-		
-		WHERE snum=#{snum} 
-	</update> 
-	
-	<delete id="delete">
-		DELETE from music where snum=#{snum}
-	</delete> 
-	
 	<!-- ********section1_2번. 4개 최신곡 이미지 표현하는 섹션 -->
 	<select id="releasedateList" resultType="vo.MusicVO">
-		 select snum, sname, stitle, singername, releasedate, genre, replace(lyrics,'-','') lyrics, 
-		 country, musicurl, downloadfile, image, count, rnum 
-		 from (select m.*, ROW_NUMBER() OVER(order by releasedate desc , sname) rnum 
-		 from music m ) where rnum between #{sno} and #{eno}
+		select snum, sname, stitle, singername, releasedate, genre,
+		replace(lyrics,'-','') lyrics,
+		country, musicurl, downloadfile, image, count, rnum
+		from (select m.*, ROW_NUMBER() OVER(order by releasedate desc , sname)
+		rnum
+		from music m ) where rnum between #{sno} and #{eno}
 	</select>
-	
+
 	<select id="releasedateRowCount" resultType="int">
-		select count(*) from music
+		select count(*) from
+		music
 	</select>
 	<!-- section1_2번. 4개 최신곡 이미지 표현하는 섹션************** -->
-	
+
 	<select id="genreList" resultType="vo.MusicVO">
 		<!-- select * from music where genre=#{genre} order by releasedate desc 
 			, sname -->
-		select snum, sname, stitle, singername, releasedate, genre, replace(lyrics,'-','') lyrics,
-		country, musicurl, downloadfile, image, count, rnum
-		from (select m.*, ROW_NUMBER() OVER(order by releasedate desc , sname) rnum
-		from (select * from music where genre= #{genre} ) m ) 
+		select snum, sname, stitle, singername, releasedate, genre,
+		replace(lyrics,'-','') lyrics,
+		country, musicurl, downloadfile, image,
+		count, rnum
+		from (select m.*, ROW_NUMBER() OVER(order by releasedate
+		desc , sname) rnum
+		from (select * from music where genre= #{genre} ) m
+		)
 		where rnum between #{sno} and #{eno}
 	</select>
 
 	<select id="genreRowCount" resultType="int">
-		select count(*) from music where genre = #{genre}
+		select count(*) from music
+		where genre = #{genre}
 	</select>
 
 	<update id="musicCount"> <!-- count를 위한 sql -->
@@ -87,41 +77,70 @@
 	</update>
 	<!-- ////////////////////////////////////////////////////////// -->
 	<sql id="search2">
-	  	<bind name="keyVal" value="'%'+keyword+'%'"/>
-	  <choose>
-	  	<when test="searchType=='all'.toString()">   
-	  		and upper(sname) Like  '%' || upper(#{keyword}) || '%' 
-	  		or upper(singername) Like  '%' || upper(#{keyword}) || '%' 
-	  		or upper(lyrics) Like  '%' || upper(#{keyword}) || '%' )
-	  	</when>
-	  	<when test="searchType=='singername'.toString()">   
-	  		and upper(singername) Like upper(#{keyVal}))
-	  	</when>
-	  	<when test="searchType=='lyrics'.toString()">   
-	  		and upper(lyrics) Like upper(#{keyVal}))
-	  	</when>
-	  	<when test="searchType=='sname'.toString()">   
-	  		and upper(sname) Like upper(#{keyVal}))
-	  	</when>
-	  	<otherwise>)</otherwise> 
-	  </choose> 
+		<bind name="keyVal" value="'%'+keyword+'%'" />
+		<choose>
+			<when test="searchType=='all'.toString()">
+				and upper(sname) Like '%' || upper(#{keyword}) || '%'
+				or upper(singername) Like '%' || upper(#{keyword}) || '%'
+				or upper(lyrics) Like '%' || upper(#{keyword}) || '%' )
+			</when>
+			<when test="searchType=='singername'.toString()">
+				and upper(singername) Like upper(#{keyVal}))
+			</when>
+			<when test="searchType=='lyrics'.toString()">
+				and upper(lyrics) Like upper(#{keyVal}))
+			</when>
+			<when test="searchType=='sname'.toString()">
+				and upper(sname) Like upper(#{keyVal}))
+			</when>
+			<otherwise>)</otherwise>
+		</choose>
 	</sql>
-	
-	 <select id="searchSnameList" resultType="vo.MusicVO">
+
+	<select id="searchSnameList" resultType="vo.MusicVO">
 	 <![CDATA[
 	 select snum,image,sname,singername,stitle,downloadfile,genre,rnum from
 	 (select m.* , ROW_NUMBER() OVER(order by count desc) rnum from (select snum, image, replace(sname,' ','') sname, replace(singername,' ','') singername, stitle, downloadfile, genre,
 	  replace(lyrics,' ','') lyrics,count from music) m 
 	   where snum > 0 ]]>
-	  <include refid="search2"></include>
-	  where rnum between #{sno} and #{eno}
+		<include refid="search2"></include>
+		where rnum between #{sno} and #{eno}
 	</select>
-	
+
 	<select id="searchRowCountSname" resultType="int">
 	<![CDATA[ 	
 		select count(*) from music where ( snum > 0 ]]>
 		<!-- 조건 id : search -->
-		<include refid="search2"></include>  
-	</select>			
+		<include refid="search2"></include>
+	</select>
+	<!--추가 수정 삭제 -->
+	<insert id="insert">
+		<selectKey keyProperty="snum" resultType="int"
+			order="BEFORE">
+			SELECT NVL(MAX(snum),0)+1 FROM music
+		</selectKey>
+		INSERT INTO music VALUES(
+		#{snum},
+		#{sname}, #{stitle}, #{singername}, #{releasedate}, #{genre},
+		<if test="lyrics != null">#{lyrics},</if>
+		<if test="lyrics == null">default,</if>
+		#{country}, #{musicurl}, #{downloadfile}, #{image}, default)
+	</insert>
 
+	<update id="update">
+		UPDATE music set
+		sname=#{sname}, stitle=#{stitle}, singername=#{singername},
+		releasedate=#{releasedate}, genre=#{genre},
+		<if test="lyrics != null">lyrics=#{lyrics},</if>
+		<if test="downloadfile != null">downloadfile=#{downloadfile},</if>
+		<if test="image != null">image=#{image},</if>
+		country=#{country}, musicurl=#{musicurl}
+
+		WHERE snum=#{snum}
+	</update>
+
+	<delete id="delete">
+		DELETE from music where snum=#{snum}
+	</delete>
+	<!--추가 수정 삭제 -->
 </mapper>  

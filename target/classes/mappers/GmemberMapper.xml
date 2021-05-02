@@ -2,6 +2,49 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ncs.GmemberMapper">
+<!--id 찾기  -->
+	<select id="searchIDCheck" resultType="vo.GmemberVO">
+      select * from gmember where email=#{email}
+   </select>
+
+	<!--회원검색기능 -->
+	<sql id="search">
+		<if test="keyword != null">
+			<bind name="keyVal" value="'%' + keyword + '%'" />
+		</if>
+		<choose>
+			<when test="searchType=='all'.toString()">
+			    and id Like #{keyVal}
+				or email Like #{keyVal})
+				<!-- and title Like CONCAT('%',CONCAT(#{keyword},'%')) -->
+			</when>
+			<otherwise>
+				)
+			</otherwise>
+		</choose>
+	</sql>
+
+	<!-- SearchCriteria PageList -->  <!-- 부등호 기호를 태그가 아닌 기호라고 처리해줌 CDATA -->
+	<select id="searchRowCount" resultType="int">
+<![CDATA[
+	select count(*) from gmember where (point >= 0 ]]>
+		<!-- 조건 id : search -->
+		<include refid="search"></include>
+	</select>
+	<select id="searchMemberList" resultType="vo.GmemberVO">
+<![CDATA[
+	select id, email , autopay , point , phone, grade, rnum from
+	(select g.* , ROW_NUMBER() OVER(order by id) rnum from gmember g
+	where point >= 0]]><include refid="search"></include>
+		where rnum between #{sno} and #{eno}
+	</select> <!-- DB의 출력순서를 나타내는 rnum은 pk를 제외하곤 order by 이전에 값이 정해지므로 ROW_NUMBER()와 OVER() 
+		함수를 쓴다. -->
+
+	<!-- 회원 리스트 -->
+	<select id="selectList" resultType="vo.GmemberVO">
+		select * from gmember order
+		by id
+	</select>
 
 	<insert id="insert">
 		insert into gmember values(
@@ -11,54 +54,63 @@
 		default,default
 		)
 	</insert>
-	<!-- 회원 정보조회  -->
+	<!-- 회원 정보조회 -->
 	<select id="selectOne" resultType="vo.GmemberVO">
-		select * from gmember where	id=#{id}
+		select * from gmember where
+		id=#{id}
 	</select>
-<!-- 내정보 수정  -->
+	<!-- 내정보 수정 -->
 	<update id="update">
-		update gmember set password = #{password} ,genre1 = #{genre1} where id = #{id}
+		update gmember set password = #{password} ,genre1 =
+		#{genre1} where id = #{id}
 	</update>
-<!-- 내정보 수정  -->
-<!-- 프로필 수정  -->	
+	<!-- 내정보 수정 -->
+	<!-- 프로필 수정 -->
 	<update id="imageupdate">
-		update gmember set uploadfile = #{uploadfile} where id = #{id}
+		update gmember set uploadfile = #{uploadfile} where
+		id = #{id}
 	</update>
-<!-- 프로필 수정  -->
-<!-- 회원 탈퇴  -->
+	<!-- 프로필 수정 -->
+	<!-- 회원 탈퇴 -->
 	<delete id="delete">
-	DELETE from gmember where id=#{id}
+		DELETE from gmember where id=#{id}
 	</delete>
-<!-- 회원 탈퇴  -->	
+	<!-- 회원 탈퇴 -->
 
 	<!-- 회원 가입시 키값 저장 -->
 	<update id="updateAuthkey">
 		update gmember set authkey =
-		#{authkey} where email = #{email}
+		#{authkey} where email =
+		#{email}
 	</update>
 
 	<!-- 이메일 인증후 로그인 가능하게 바꾸는 값 -->
- 	<update id="updateAuthkeyconfirm">
+	<update id="updateAuthkeyconfirm">
 		update gmember set authkey = 'Y'
 		where id = #{id}
 	</update>
-	
+
 	<!-- id, email, phone 중복확인 -->
 	<select id="userDuplicationCheck" resultType="int">
-		select count(*) from gmember where 
-		
+		select count(*) from gmember where
+
 		<choose>
 			<when test="id != null and !id.equals('')">
-			id = #{id}
+				id = #{id}
 			</when>
 			<when test="email != null and !email.equals('')">
-			email = #{email}
+				email = #{email}
 			</when>
 			<when test="phone != null and !phone.equals('')">
-			phone = #{phone}
+				phone = #{phone}
 			</when>
 		</choose>
-		
 	</select>
 
+	<update id="memberpointchange">
+		update gmember set point = #{point} where id = #{id}
+	</update>
+	<update id="membergradechange">
+		update gmember set grade = #{grade} where id = #{id}
+	</update>
 </mapper>  

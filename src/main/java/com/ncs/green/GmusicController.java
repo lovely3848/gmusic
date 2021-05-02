@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,6 @@ import service.ChartService;
 import service.MusicService;
 import vo.ChartVO;
 import vo.MusicVO;
-import vo.NoticeVO;
 
 @Controller
 public class GmusicController {
@@ -34,13 +34,84 @@ public class GmusicController {
 	@Autowired
 	ChartService chartService;
 
+	// 장바구니
+	   @RequestMapping(value = "/cartView")
+	   public ModelAndView cartView(HttpServletRequest request, ModelAndView mv) {
+
+	      // 파라미터로 값을 받음
+	      String cartVal = request.getParameter("cartVal");
+	      System.out.println("************** getParameter cartVal => " + cartVal);
+	      HttpSession session = request.getSession(false);
+	      String id = (String) session.getAttribute("loginID");
+	      // 스트링 배열 "," 기준으로 쪼개 담음
+	      if (cartVal != null && cartVal.length() > 0) {
+	         String splitcartVal[] = cartVal.split(",");
+	         int intcartVal[] = new int[splitcartVal.length];
+
+	         for (int i = 0; i < splitcartVal.length; i++) {
+	            intcartVal[i] = Integer.parseInt(splitcartVal[i]);
+	         }
+	         List<MusicVO> list = new ArrayList<MusicVO>();
+	         List<MusicVO> list2 = new ArrayList<MusicVO>();
+	         for (int i = 0; i < intcartVal.length; i++) {
+	            MusicVO vo = new MusicVO();
+	            vo.setSnum(intcartVal[i]);
+	            vo = service.selectOne(vo);
+	            list.add(vo);
+	         }
+
+	         for (int i = 0; i < intcartVal.length; i++) {
+	            if (!list2.contains(list.get(i))) {
+	               list2.add(list.get(i));
+	            }
+	         }
+
+	         mv.addObject("Banana", list2);
+	         
+	         intcartVal = new int[list2.size()];
+	         for (int i = 0; i < intcartVal.length; i++) {
+	            intcartVal[i] = list2.get(i).getSnum();
+	         }
+
+	         // 아이디에 해당하는 snum 값을 mylist에 담기
+	         List<MusicVO> myList = service.cartlist(id);
+	         int myCartVal[] = new int[myList.size()];
+	         for (int i = 0; i < myList.size(); i++) {
+	            myCartVal[i] = myList.get(i).getSnum();
+	         }
+	         // 0,0,0,3,2,0 이 아닌숫자를 카운트
+	         int count = 0;
+
+	         for (int i = 0; i < intcartVal.length; i++) {
+	            for (int j = 0; j < myCartVal.length; j++) {
+	                  if (intcartVal[i] == myCartVal[j]) {
+	                     intcartVal[i] = 0;
+	                     count++;
+	                  }
+	            }
+	         }
+	         int myMusic = count;
+	         int allMusic = intcartVal.length;
+	         int payMusic = intcartVal.length - count;
+
+	         mv.addObject("myMusic", myMusic);
+	         mv.addObject("allMusic", allMusic);
+	         mv.addObject("price", payMusic * 300);
+	      }
+
+	      request.getSession().setAttribute("cartValSession", cartVal);
+	      mv.setViewName("payment/cartPage");
+
+	      return mv;
+
+	   }
+
 	@RequestMapping(value = "/musicCount")
 	public void musicCount(HttpServletRequest request, ModelAndView mv, MusicVO vo, ChartVO cvo) {
 
 		vo = service.selectOne(vo); // vo값 불러오기
 		vo.setCount(vo.getCount() + 1); // count + 1
 		service.musicCount(vo);
-
 		// 일간 count +
 		cvo = chartService.dailyOne(cvo); // vo값 불러오기
 		cvo.setCount(cvo.getCount() + 1);
@@ -286,7 +357,7 @@ public class GmusicController {
 		String musicurl = "https://www.youtube.com/embed/" + vo.getMusicurl();
 		System.out.println("musicurl => " + musicurl);
 		vo.setMusicurl(musicurl);
-		
+
 		if (service.update(vo) > 0) {
 			rttr.addFlashAttribute("message", vo.getSnum() + "번 곡이 수정되었습니다.");
 			mv.setViewName("redirect:musiclist");
@@ -342,7 +413,6 @@ public class GmusicController {
 		return mv;
 	}// genrelist
 
-	// playlist
 	@RequestMapping(value = "/playlist")
 	public ModelAndView playlist(HttpServletRequest request, ModelAndView mv) {
 		// 파라미터로 값을 받음

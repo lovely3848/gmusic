@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import criteria.Criteria;
 import vo.GmemberVO;
 
 @Repository
@@ -56,5 +57,26 @@ public class GmemberDAO {
 	public int userDuplicationCheck(GmemberVO vo) {
 		return sqlSession.selectOne(NS + "userDuplicationCheck", vo);
 	}
+	//포인트변경
+	public int pointChange(GmemberVO vo) {
+		return sqlSession.update(NS + "memberpointchange", vo);
+	}
+	//등급변경
+	public int gradeChange(GmemberVO vo) {
+		return sqlSession.update(NS + "membergradechange", vo);
+	}
+	//페이징
+	public List<GmemberVO> searchMemberList(Criteria cri) {
+		return sqlSession.selectList(NS + "searchMemberList", cri);
+	}
 
+	public int searchRowCount(Criteria cri) {
+		return sqlSession.selectOne(NS+"searchRowCount",cri);
+	}
+	//페이징
+	// 아이디 찾기
+	public GmemberVO searchIDCheck(GmemberVO vo) {
+		return sqlSession.selectOne(NS+"searchIDCheck",vo);
+	}
+	
 }

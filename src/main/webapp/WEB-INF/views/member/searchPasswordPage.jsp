@@ -46,7 +46,7 @@ a {
    color: #fff;
 }
 
-#id, #password {
+#id, #email {
    height: 40px;
    width: 366px;
 }
@@ -94,19 +94,16 @@ a {
 <body>
    <div id= loginf_location>
    <div ><a href="home" id="logo">GMUSIC</a></div><br><br>
-   <form action="mlogin" method="get">
+   <form action="searchPasswordCheck" method="get">
       <table>
       <tr>
             <td><input type="text" id="id"  name="id" placeholder="아이디">
          </tr>
          <tr>
-            <td><input type="password" id="password" name="password" placeholder="비밀번호">
-         <tr style="text-align: right;">
-            <td><a href="searchID" class="searchID">아이디 찾기</a>&nbsp; 
-            <a href="searchPassword" class="searchPassword">비밀번호 찾기</a></td>
+            <td><input type="text" id="email" name="email" placeholder="이메일">
          </tr>
          <tr>
-         <td><input type="submit" id="login_button2" value="로그인" ></td> 
+         <td><input type="submit" id="login_button2" value="확인" ></td> 
          </tr>
       </table>
    </form>

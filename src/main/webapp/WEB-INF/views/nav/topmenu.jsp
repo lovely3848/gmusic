@@ -31,7 +31,6 @@
 				<li><a href="qna">1:1 문의</a>
 				<li><a href="faq">FAQ</a>
 			</ul>
-		<li><a href="musicinsertf">음악추가</a>
 	</ul>
 </body>
 </html>
