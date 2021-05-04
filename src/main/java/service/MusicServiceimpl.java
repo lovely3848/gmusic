@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import criteria.Criteria;
 import util.MusicDAO;
 import vo.MusicVO;
+import vo.MyListVO;
 
 @Service
 public class MusicServiceimpl implements MusicService {
@@ -78,6 +79,11 @@ public class MusicServiceimpl implements MusicService {
 	// 가격확인을 위한 list확인
 	public List<MusicVO> cartlist(String id) {
 		return dao.cartlist(id);
+	}
+
+	@Override
+	public int myListInsert(MyListVO vo) {
+		return dao.myListInsert(vo);
 	}
 
 }

@@ -152,64 +152,89 @@ body {
 }
 </style>
 <script>
-	function deleteButton(snum) {
-		var snum = snum;
-		var cartValSession = $('#cartValss').val();
-		var cartValsplit = cartValSession.split(',');
-		var cartVal = '';
+   function deleteButton(snum) {
+      var snum = snum;
+      var cartValSession = $('#cartValss').val();
+      var cartValsplit = cartValSession.split(',');
+      var cartVal = '';
 
-		for (var i = 0; i < cartValsplit.length - 1; i++) {
-			if (cartValsplit[i] == snum) {
-				cartValsplit[i]='';
-			}
-			
-			if (cartValsplit[i] != '') {
-				cartVal += cartValsplit[i] + ',';
-			}
-		}
-		
-		$.ajax({
-			type : 'post',
-			url : 'cartView?cartVal=' + cartVal,
-			success : function(resultPage) {
-				console.log("ajax 성공");
-				$('.content').html('');
-				$('.content').html(resultPage);
-			},
-			error : function() {
-				console.log("ajax 실패");
-			}
-		});
-		$('#cartValss').val(cartVal);
-		opener.document.getElementById("cartVal").value = cartVal;
-		var url = '/green/cartView?cartVal=' + $('#cartValss').val();
-		window.history.replaceState({}, document.title, url);
+      for (var i = 0; i < cartValsplit.length - 1; i++) {
+         if (cartValsplit[i] == snum) {
+            cartValsplit[i]='';
+         }
+         
+         if (cartValsplit[i] != '') {
+            cartVal += cartValsplit[i] + ',';
+         }
+      }
+      
+      $.ajax({
+         type : 'post',
+         url : 'cartView?cartVal=' + cartVal,
+         success : function(resultPage) {
+            console.log("ajax 성공");
+            $('.content').html('');
+            $('.content').html(resultPage);
+         },
+         error : function() {
+            console.log("ajax 실패");
+         }
+      });
+      $('#cartValss').val(cartVal);
+      opener.document.getElementById("cartVal").value = cartVal;
+      var url = '/green/cartView?cartVal=' + $('#cartValss').val();
+      window.history.replaceState({}, document.title, url);
 
-		if(cartVal == ''){
-			alert("다운로드 리스트가 존재하지 않습니다.");
-			self.close();
-		}
-		
-	}
-	
-	function cancelButton() {
-		var answer = confirm("다운로드를 취소 하시겠습니까?\n\n현재 창이 닫힙니다.");
-		if (answer) {
-			self.close();
-		}else{
-			return false;
-		}
-	}
-	
-	function payButton() {
-		
-	}
-	
+      if(cartVal == ''){
+         alert("다운로드 리스트가 존재하지 않습니다.");
+         self.close();
+      }
+      
+   }
+   
+   function cancelButton() { 
+      var answer = confirm("다운로드를 취소 하시겠습니까?\n\n현재 창이 닫힙니다.");
+      if (answer) {
+         self.close();
+      }else{
+         return false;
+      }
+   }
+   
+   function payButton() {
+      var check = confirm("결제 하시겠습니까?");
+      var cartlength = ${allMusic-myMusic};
+      alert(cartlength);
+         if(check == true){
+            if (${loginVO.point} < ${price}) {
+               alert("현재 포인트가 부족합니다.\n충전 후 이용해 주세요");
+            }else{
+                location.href="cartView?code=pay&cartVal=" + $('#cartValss').val();
+                alert("${Banana[0].downloadfile}");
+                $(".sss").each( function(i) {
+                console.log(i);
+                location.href="dnload?dnfile="+i;
+                	 $( this ).trigger("click");
+                } );
+             }
+         }else{
+            return false;
+         }
+   }
+   
+$(function() { //ready
+$('.sss').on('click', function () {
+	var downloadfile = $(this).val();
+	location.href="dnload?dnfile="+downloadfile;
+
+});
+   
+});//ready *
 </script>
 <c:if test="${message!=null}">
 	<script>
-		alert('${message}');
-	</script>
+      alert('${message}');
+   </script>
 </c:if>
 </head>
 <body>
@@ -235,6 +260,7 @@ body {
 									</td>
 									<td class="won">300원</td>
 									<td>
+										<button id="${vs.index}" class="sss" name="sss" value="${row.downloadfile}">a</button>
 										<button type="button" class="deleteButton" onclick="deleteButton(${row.snum})">X</button>
 									</td>
 								</tr>

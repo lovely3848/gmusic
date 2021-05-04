@@ -45,11 +45,61 @@
 		$('#searchBtn').on(
 				"click",
 				function() {
-					self.location = "membermanagement" + "${pageMaker.makeQuery(1)}"
-							+ "&searchType=" + $('#searchType').val()
-							+ "&keyword=" + $('#keyword').val();
+					self.location = "membermanagement"
+							+ "${pageMaker.makeQuery(1)}" + "&searchType="
+							+ $('#searchType').val() + "&keyword="
+							+ $('#keyword').val();
 					// => ?currPage=7&rowPerPage=10&searchType=tc&keyword=java
 				}); //click
+	});//ready
+	$(function(){
+		$('.memberdelete').click(function() {
+			var id = $(this).val();
+			var result = confirm('정말 삭제 하시겠습니까?')
+			if(result == true){
+				$.ajax({ // nav topmenu
+					type : 'Get',
+					url : 'memberdeletes?id=' + id,  // 컨트롤러에서 selectOne sql문을 이용하여 id에 해당하는 값을 불러오기 위한 전달
+					success : function() {
+						$(location).attr("href", "management");
+					},
+					error : function() {
+					}
+				});//ajax	
+			}else{
+				return false
+			}
+				$(location).attr("href", "management");
+		});	
+		$('.memberpointchange').click(function() {
+			var id = $(this).val();
+			var result = prompt('포인트를 입력하세요', 0);
+				$.ajax({ // nav topmenu
+					type : 'Get',
+					url : 'memberpointchange?point=' + result + '&id=' + id,  // 컨트롤러에서 selectOne sql문을 이용하여 id에 해당하는 값을 불러오기 위한 전달
+					success : function() {
+						$(location).attr("href", "management");
+					},
+					error : function() {
+					}
+				});//ajax	
+		});	
+		$('.membergradechange').click(function() {
+			var id = $(this).val();
+			do{
+			var result = prompt('회원등급을 입력하세요', 'c');
+			}while(result != 'c' && result != 'vvip' && result != 'vip' && result != 'admin')
+			
+				$.ajax({ // nav topmenu
+					type : 'Get',
+					url : 'membergradechange?grade=' + result + '&id=' + id,  // 컨트롤러에서 selectOne sql문을 이용하여 id에 해당하는 값을 불러오기 위한 전달
+					success : function() {
+						$(location).attr("href", "management");
+					},
+					error : function() {
+					}
+			});//ajax	
+		});	
 	});//ready
 </script>
 </head>
@@ -60,7 +110,7 @@
 			<form action="membermanagement" id="search" name="search" class="search">
 				<select name="searchType" id="searchType" style="display: none">
 					<option value="all" selected>All</option>
-				</select> 
+				</select>
 				<input type="text" name="keyword" id="keyword" maxlength="35" size="50" style="vertical-align: middle;" value="${UserKeyword}">
 				<button type="button" id="searchBtn" style="vertical-align: middle;">Search</button>
 			</form>
@@ -99,50 +149,50 @@
 					</c:otherwise>
 				</c:choose>
 				<td>
-					<button class="button" id="membergradechange" value="${row.id}">change</button>
+					<button class="membergradechange" value="${row.id}">change</button>
 				</td>
 				<td>
-					<button class="button" id="memberpointchange" value="${row.id}">change</button>
+					<button class="memberpointchange" value="${row.id}">change</button>
 				</td>
 				<td>
-					<button class="button" id="memberdelete" value="${row.id}">
+					<button class="memberdelete" value="${row.id}">
 						<img src="resources/image/delete.png" width="20px" height="20px">
 					</button>
 				</td>
 			</tr>
 		</c:forEach>
 	</table>
-			<div align="center">
-			<!-- ver 01 : pageMaker.makeQuery(?) -->
-			<!-- ver 02 : pageMaker.searchQuery(?) -->
-			<!-- 1) First << , Prev < : enabeld 여부 -->
-			<c:if test="${pageMaker.prev && pageMaker.sPageNo>1}">
-				<a href="qna${pageMaker.searchQuery(1)}">&#8666;</a>&nbsp; <!-- First -->
-				<!-- "qna?currPage=1" -->
-				<a href="qna${pageMaker.searchQuery(pageMaker.sPageNo-1)}">&#8636;</a>
-				<!-- Prev -->
-			</c:if>
-
-			<!-- 2) sPage~ePage까지 displayPageNo 값 만큼 출력 -->
-			<c:forEach var="i" begin="${pageMaker.sPageNo}" end="${pageMaker.ePageNo}">
-				<c:if test="${i==pageMaker.cri.currPage}">
-					<font style="font-weight: bold;" color="navy">${i}&nbsp;</font>
-				</c:if>
-				<c:if test="${i!=pageMaker.cri.currPage}">
-					<a href="qna${pageMaker.searchQuery(i)}">${i}</a>&nbsp;
+	<div align="center">
+		<!-- ver 01 : pageMaker.makeQuery(?) -->
+		<!-- ver 02 : pageMaker.searchQuery(?) -->
+		<!-- 1) First << , Prev < : enabeld 여부 -->
+		<c:if test="${pageMaker.prev && pageMaker.sPageNo>1}">
+			<a href="membermanagement${pageMaker.searchQuery(1)}">&#8666;</a>&nbsp; <!-- First -->
+			<!-- "membermanagement?currPage=1" -->
+			<a href="membermanagement${pageMaker.searchQuery(pageMaker.sPageNo-1)}">&#8636;</a>
+			<!-- Prev -->
 		</c:if>
 
-				<!-- 삼항식과 비교 
+		<!-- 2) sPage~ePage까지 displayPageNo 값 만큼 출력 -->
+		<c:forEach var="i" begin="${pageMaker.sPageNo}" end="${pageMaker.ePageNo}">
+			<c:if test="${i==pageMaker.cri.currPage}">
+				<font style="font-weight: bold;" color="navy">${i}&nbsp;</font>
+			</c:if>
+			<c:if test="${i!=pageMaker.cri.currPage}">
+				<a href="membermanagement${pageMaker.searchQuery(i)}">${i}</a>&nbsp;
+		</c:if>
+
+			<!-- 삼항식과 비교 
 		<c:out value="${i==pageMaker.cri.currPage ? 'class=active' : ''}"/>
 		-->
-			</c:forEach>
+		</c:forEach>
 
-			<!-- 3) Next > , Last >> : enabled 여부 -->
-			<c:if test="${pageMaker.next && pageMaker.ePageNo>0}">
-				<a href="qna${pageMaker.searchQuery(pageMaker.ePageNo+1)}">&nbsp;&nbsp;&#8640;</a>&nbsp; <!-- Next -->
-				<a href="qna${pageMaker.searchQuery(pageMaker.lastPageNo)}">&#8667;</a>&nbsp;&nbsp; <!-- Last -->
+		<!-- 3) Next > , Last >> : enabled 여부 -->
+		<c:if test="${pageMaker.next && pageMaker.ePageNo>0}">
+			<a href="membermanagement${pageMaker.searchQuery(pageMaker.ePageNo+1)}">&nbsp;&nbsp;&#8640;</a>&nbsp; <!-- Next -->
+			<a href="membermanagement${pageMaker.searchQuery(pageMaker.lastPageNo)}">&#8667;</a>&nbsp;&nbsp; <!-- Last -->
 
-			</c:if>
-		</div>
+		</c:if>
+	</div>
 </body>
 </html>

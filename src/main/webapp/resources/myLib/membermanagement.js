@@ -1,6 +1,6 @@
 $(function(){
-	$('#memberdelete').click(function() {
-		var id = $('#memberdelete').attr('value');
+	$('.memberdelete').click(function() {
+		var id = $('.memberdelete').attr('value');
 		var result = confirm('정말 삭제 하시겠습니까?')
 		if(result == true){
 			$.ajax({ // nav topmenu
@@ -17,8 +17,8 @@ $(function(){
 		}
 			$(location).attr("href", "management");
 	});	
-	$('#memberpointchange').click(function() {
-		var id = $('#memberpointchange').attr('value');
+	$('.memberpointchange').click(function() {
+		var id = $('.memberpointchange').attr('value');
 		var result = prompt('포인트를 입력하세요', 0);
 			$.ajax({ // nav topmenu
 				type : 'Get',
@@ -30,8 +30,8 @@ $(function(){
 				}
 			});//ajax	
 	});	
-	$('#membergradechange').click(function() {
-		var id = $('#membergradechange').attr('value');
+	$('.membergradechange').click(function() {
+		var id = $('.membergradechange').attr('value');
 		do{
 		var result = prompt('회원등급을 입력하세요', 'c');
 		}while(result != 'c' && result != 'vvip' && result != 'vip' && result != 'admin')

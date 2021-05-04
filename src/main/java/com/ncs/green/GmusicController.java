@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,9 +22,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import criteria.Criteria;
 import criteria.PageMaker;
 import service.ChartService;
+import service.GmemberService;
 import service.MusicService;
 import vo.ChartVO;
+import vo.GmemberVO;
 import vo.MusicVO;
+import vo.MyListVO;
 
 @Controller
 public class GmusicController {
@@ -32,79 +36,131 @@ public class GmusicController {
 	MusicService service;
 
 	@Autowired
+	GmemberService memberservice;
+
+	@Autowired
 	ChartService chartService;
 
-	// 장바구니
-	   @RequestMapping(value = "/cartView")
-	   public ModelAndView cartView(HttpServletRequest request, ModelAndView mv) {
+	// 장바구니 현재는 최신음악에서 회원등급 c나 vip의 경우에 다운로드를 클릭시 작동하는 컨트롤러이다
+	@RequestMapping(value = "/cartView")
+	public ModelAndView cartView(HttpServletRequest request, ModelAndView mv) {
 
-	      // 파라미터로 값을 받음
-	      String cartVal = request.getParameter("cartVal");
-	      System.out.println("************** getParameter cartVal => " + cartVal);
-	      HttpSession session = request.getSession(false);
-	      String id = (String) session.getAttribute("loginID");
-	      // 스트링 배열 "," 기준으로 쪼개 담음
-	      if (cartVal != null && cartVal.length() > 0) {
-	         String splitcartVal[] = cartVal.split(",");
-	         int intcartVal[] = new int[splitcartVal.length];
+		// 파라미터로 값을 받음
+		String cartVal = request.getParameter("cartVal");
+		System.out.println("************** getParameter cartVal => " + cartVal);
+		HttpSession session = request.getSession(false);
+		String id = (String) session.getAttribute("loginID");
+		String code = request.getParameter("code");
+		// 스트링 배열 "," 기준으로 쪼개 담음
+		if (cartVal != null && cartVal.length() > 0) {
+			String splitcartVal[] = cartVal.split(",");
+			int intcartVal[] = new int[splitcartVal.length];
 
-	         for (int i = 0; i < splitcartVal.length; i++) {
-	            intcartVal[i] = Integer.parseInt(splitcartVal[i]);
-	         }
-	         List<MusicVO> list = new ArrayList<MusicVO>();
-	         List<MusicVO> list2 = new ArrayList<MusicVO>();
-	         for (int i = 0; i < intcartVal.length; i++) {
-	            MusicVO vo = new MusicVO();
-	            vo.setSnum(intcartVal[i]);
-	            vo = service.selectOne(vo);
-	            list.add(vo);
-	         }
+			for (int i = 0; i < splitcartVal.length; i++) {
+				intcartVal[i] = Integer.parseInt(splitcartVal[i]);
+			}
+			// playlist처럼 값을 받아와서 list에 값을 넣어주는방식을 따라함
+			List<MusicVO> list = new ArrayList<MusicVO>();
+			// 중복을 막기위해 list2를 선언
+			List<MusicVO> list2 = new ArrayList<MusicVO>();
+			for (int i = 0; i < intcartVal.length; i++) {
+				MusicVO vo = new MusicVO();
+				vo.setSnum(intcartVal[i]);
+				vo = service.selectOne(vo);
+				list.add(vo);
+			}
 
-	         for (int i = 0; i < intcartVal.length; i++) {
-	            if (!list2.contains(list.get(i))) {
-	               list2.add(list.get(i));
-	            }
-	         }
+			// list에 contains함수를 이용 중복을 제거한뒤 list2에 add한다.
+			for (int i = 0; i < intcartVal.length; i++) {
+				if (!list2.contains(list.get(i))) {
+					list2.add(list.get(i));
+				}
+			}
 
-	         mv.addObject("Banana", list2);
-	         
-	         intcartVal = new int[list2.size()];
-	         for (int i = 0; i < intcartVal.length; i++) {
-	            intcartVal[i] = list2.get(i).getSnum();
-	         }
+			mv.addObject("Banana", list2);
+			// list2값넘겨주기
 
-	         // 아이디에 해당하는 snum 값을 mylist에 담기
-	         List<MusicVO> myList = service.cartlist(id);
-	         int myCartVal[] = new int[myList.size()];
-	         for (int i = 0; i < myList.size(); i++) {
-	            myCartVal[i] = myList.get(i).getSnum();
-	         }
-	         // 0,0,0,3,2,0 이 아닌숫자를 카운트
-	         int count = 0;
+			// intcartVal의 크기 재설정
+			intcartVal = new int[list2.size()];
+			int dnVal[] = new int[list2.size()];
 
-	         for (int i = 0; i < intcartVal.length; i++) {
-	            for (int j = 0; j < myCartVal.length; j++) {
-	                  if (intcartVal[i] == myCartVal[j]) {
-	                     intcartVal[i] = 0;
-	                     count++;
-	                  }
-	            }
-	         }
-	         int myMusic = count;
-	         int allMusic = intcartVal.length;
-	         int payMusic = intcartVal.length - count;
+			// list2의 snum을 배열안에 담기
+			for (int i = 0; i < intcartVal.length; i++) {
+				cartVal = "";
+				cartVal += list2.get(i).getSnum() + ",";
+				intcartVal[i] = list2.get(i).getSnum();
+				dnVal[i] = list2.get(i).getSnum();
 
-	         mv.addObject("myMusic", myMusic);
-	         mv.addObject("allMusic", allMusic);
-	         mv.addObject("price", payMusic * 300);
-	      }
+			}
 
-	      request.getSession().setAttribute("cartValSession", cartVal);
-	      mv.setViewName("payment/cartPage");
+			// 아이디에 해당하는 snum 값을 mylist에 담기
+			List<MusicVO> myList = service.cartlist(id);
+			int myCartVal[] = new int[myList.size()];
+			for (int i = 0; i < myList.size(); i++) {
 
-	      return mv;
+				myCartVal[i] = myList.get(i).getSnum();
 
-	   }
+			}
+			// cart테이블에 내가 가진 곡을 비교하여 없는 값만 나타내기 위한 코드
+			int count = 0;
+			// 내가 가지고 있는 곡이라면 값이 0으로 대입되고 count된다
+			for (int i = 0; i < intcartVal.length; i++) {
+				for (int j = 0; j < myCartVal.length; j++) {
+					if (intcartVal[i] == myCartVal[j]) {
+						intcartVal[i] = 0;
+						count++;
+					}
+				}
+			}
+			// 내가 가진 곡의 개수
+			int myMusic = count;
+			// 내가 선택한 곡의 개수(다운로드 클릭시)
+			int allMusic = intcartVal.length;
+			// 내가 결제해야할 곡의 개수
+			int payMusic = intcartVal.length - count;
+
+			mv.addObject("myMusic", myMusic);
+			mv.addObject("allMusic", allMusic);
+			mv.addObject("price", payMusic * 300);
+			Arrays.sort(intcartVal);
+
+			if ("pay".equals(code)) {
+				for (int i = 0; i < intcartVal.length; i++) {
+					if (intcartVal[i] != 0) {
+						MyListVO vo = new MyListVO();
+						vo.setSnum(intcartVal[i]);
+						vo.setId(id);
+						service.myListInsert(vo);
+					}
+				}
+				
+				GmemberVO vo = new GmemberVO();
+				vo.setId(id);
+				vo = memberservice.selectOne(vo);
+				if (vo != null && vo.getPoint() - (payMusic * 300) > 0) {
+					vo.setPoint(vo.getPoint() - (payMusic * 300));
+					memberservice.pointChange(vo);
+				}
+				List<String> list3 = new ArrayList<String>();
+				request.getSession().setAttribute("loginVO", vo);
+				for (int i = 0; i < dnVal.length; i++) {
+					MusicVO vo2 = new MusicVO();
+					vo2.setSnum(intcartVal[i]);
+					service.selectOne(vo2);
+					list3.add("location.href=dnload?dnfile="+vo2.getDownloadfile());
+				}
+				mv.addObject("Apple", list3);
+				
+			}
+
+		}
+		/* if(pay코드랑 같이오면 update) */
+		request.getSession().setAttribute("cartValSession", cartVal);
+		mv.setViewName("payment/cartPage");
+		// cartPage는 playList와 비슷한 페이지라 할수있다
+		return mv;
+
+	}
 
 	@RequestMapping(value = "/musicCount")
 	public void musicCount(HttpServletRequest request, ModelAndView mv, MusicVO vo, ChartVO cvo) {

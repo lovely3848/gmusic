@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import criteria.Criteria;
 import vo.MusicVO;
+import vo.MyListVO;
 
 // ** Board CRUD 구현
 @Repository
@@ -83,5 +84,9 @@ public class MusicDAO {
 
 	public List<MusicVO> cartlist(String id) {
 		return sqlSession.selectList(NS + "cartlist", id);
+	}
+
+	public int myListInsert(MyListVO vo) {
+		return sqlSession.insert(NS + "myListInsert", vo);
 	}
 } // class

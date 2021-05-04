@@ -4,6 +4,7 @@ import java.util.List;
 
 import criteria.Criteria;
 import vo.MusicVO;
+import vo.MyListVO;
 
 public interface MusicService {
 
@@ -40,5 +41,7 @@ public interface MusicService {
 	public List<MusicVO> searchSnameList(Criteria cri);
 
 	public List<MusicVO> cartlist(String id);
+
+	public int myListInsert(MyListVO vo);
 
 }// interface
