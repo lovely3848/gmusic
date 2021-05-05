@@ -82,14 +82,10 @@ public class GmusicController {
 
 			// intcartVal의 크기 재설정
 			intcartVal = new int[list2.size()];
-			int dnVal[] = new int[list2.size()];
 
 			// list2의 snum을 배열안에 담기
 			for (int i = 0; i < intcartVal.length; i++) {
-				cartVal = "";
-				cartVal += list2.get(i).getSnum() + ",";
 				intcartVal[i] = list2.get(i).getSnum();
-				dnVal[i] = list2.get(i).getSnum();
 
 			}
 
@@ -97,9 +93,7 @@ public class GmusicController {
 			List<MusicVO> myList = service.cartlist(id);
 			int myCartVal[] = new int[myList.size()];
 			for (int i = 0; i < myList.size(); i++) {
-
 				myCartVal[i] = myList.get(i).getSnum();
-
 			}
 			// cart테이블에 내가 가진 곡을 비교하여 없는 값만 나타내기 위한 코드
 			int count = 0;
@@ -122,35 +116,32 @@ public class GmusicController {
 			mv.addObject("myMusic", myMusic);
 			mv.addObject("allMusic", allMusic);
 			mv.addObject("price", payMusic * 300);
-			Arrays.sort(intcartVal);
+			// 결제 버튼을 누를시 code값 pay가 들어온다면 실행한다
 
 			if ("pay".equals(code)) {
+				// intcartVal 배열에 있는 값중 0을 제외한 값을 insert한다 (위쪽부분에서 0은 내가 소유한 곡을 0으로 변환했음)
 				for (int i = 0; i < intcartVal.length; i++) {
 					if (intcartVal[i] != 0) {
 						MyListVO vo = new MyListVO();
+						// 해당하는 음악번호와 아이디 값을 넣어준다
 						vo.setSnum(intcartVal[i]);
 						vo.setId(id);
 						service.myListInsert(vo);
 					}
 				}
-				
 				GmemberVO vo = new GmemberVO();
 				vo.setId(id);
 				vo = memberservice.selectOne(vo);
+				// 결제시 내가 가진 포인트가 결제금액과 비교했을때 0보다 작으면 결제가 안되도록 설정
 				if (vo != null && vo.getPoint() - (payMusic * 300) > 0) {
 					vo.setPoint(vo.getPoint() - (payMusic * 300));
 					memberservice.pointChange(vo);
 				}
-				List<String> list3 = new ArrayList<String>();
-				request.getSession().setAttribute("loginVO", vo);
-				for (int i = 0; i < dnVal.length; i++) {
-					MusicVO vo2 = new MusicVO();
-					vo2.setSnum(intcartVal[i]);
-					service.selectOne(vo2);
-					list3.add("location.href=dnload?dnfile="+vo2.getDownloadfile());
-				}
-				mv.addObject("Apple", list3);
-				
+				// 결제후 포인트값을 새로고침해주기 위한 세션값 적용
+				request.getSession().setAttribute("loginVO", vo);// 세션 통합 (비밀번호 제외)
+				mv.addObject("aaa", 'T');
+				mv.setViewName("jsonView");
+				return mv;
 			}
 
 		}

@@ -49,27 +49,36 @@ public class MemberController {
 
 	@RequestMapping(value = "/memberpointchange")
 	public ModelAndView memberpointchange(ModelAndView mv, HttpServletRequest request, GmemberVO vo) {
+		HttpSession session = request.getSession(false);
 		service.pointChange(vo);
 		List<GmemberVO> list = service.selectList();
 		if (list != null) {
 			mv.addObject("Banana", list);
 		}
+		vo.setId((String) session.getAttribute("loginID"));
+		vo = service.selectOne(vo);
+		vo.setPassword(null);
 		mv.setViewName("adminpage/membermanagement");
+		request.getSession().setAttribute("loginVO", vo);// 세션 통합 (비밀번호 제외)
 		return mv;
 
 	}
 
 	@RequestMapping(value = "/membergradechange")
 	public ModelAndView membergradechange(ModelAndView mv, HttpServletRequest request, GmemberVO vo) {
+		HttpSession session = request.getSession(false);
 		service.gradeChange(vo);
 
 		List<GmemberVO> list = service.selectList();
 		if (list != null) {
 			mv.addObject("Banana", list);
 		}
+		vo.setId((String) session.getAttribute("loginID"));
+		vo = service.selectOne(vo);
+		vo.setPassword(null);
 		mv.setViewName("adminpage/membermanagement");
+		request.getSession().setAttribute("loginVO", vo);// 세션 통합 (비밀번호 제외)
 		return mv;
-
 	}
 
 	@RequestMapping(value = "/memberdeletes")
@@ -467,28 +476,29 @@ public class MemberController {
 		mv.setViewName("payment/passbuy");
 		return mv;
 	}
+
 	@RequestMapping(value = "/searchID")
 	public ModelAndView searchID(ModelAndView mv) {
 		mv.setViewName("member/searchIDPage");
 		return mv;
 	}// searchID
-	
+
 	@RequestMapping(value = "/searchIDCheck")
 	public ModelAndView searchIDCheck(ModelAndView mv, HttpServletRequest request, GmemberVO vo) {
 		String phone = vo.getPhone();
 		vo = service.searchIDCheck(vo);
-		if(vo != null) {
-			if(vo.getPhone().equals(phone)) {
-				mv.addObject("message","회원님의 아이디는 "+vo.getId()+" 입니다.");
+		if (vo != null) {
+			if (vo.getPhone().equals(phone)) {
+				mv.addObject("message", "회원님의 아이디는 " + vo.getId() + " 입니다.");
 				mv.setViewName("member/memberloginpage");
-			}else {
-				mv.addObject("message","아이디 또는 이메일이 가입정보와 일치하지 않습니다.");
+			} else {
+				mv.addObject("message", "아이디 또는 이메일이 가입정보와 일치하지 않습니다.");
 				mv.setViewName("member/searchIDPage");
 			}
 		}
 		return mv;
 	}// searchIDCheck
-	
+
 	@RequestMapping(value = "/searchPassword")
 	public ModelAndView searchPassword(ModelAndView mv) {
 		mv.setViewName("member/searchPasswordPage");

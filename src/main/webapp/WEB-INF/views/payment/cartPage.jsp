@@ -203,29 +203,56 @@ body {
    
    function payButton() {
       var check = confirm("결제 하시겠습니까?");
-      var cartlength = ${allMusic-myMusic};
-      alert(cartlength);
          if(check == true){
             if (${loginVO.point} < ${price}) {
                alert("현재 포인트가 부족합니다.\n충전 후 이용해 주세요");
             }else{
-                location.href="cartView?code=pay&cartVal=" + $('#cartValss').val();
-                alert("${Banana[0].downloadfile}");
-                $(".sss").each( function(i) {
-                console.log(i);
-                location.href="dnload?dnfile="+i;
-                	 $( this ).trigger("click");
-                } );
+            	$.ajax({
+                    type : 'post',
+                    url : 'cartView?code=pay&cartVal=' + $('#cartValss').val(),
+                    success : function(resultData) {
+                    	console.log(resultData.aaa);
+                    	if (resultData.aaa == 'T') {
+							
+                    	 $(".sss").each( function(i) {
+                             console.log(i);
+                             	 $( this ).trigger("click");
+                             	 fnSleep(100);
+                             } );
+	                    	location.reload();
+	    					alert("~~ 결제 성공 ~~");
+                    	}else{
+                    		location.reload();
+	    					alert("~~ 결제 실패 ~~");
+                    	}
+                    	
+                    },
+                    error : function() {
+                       console.log("ajax 실패");
+                    }
+                 });
+            	
+               
              }
          }else{
             return false;
          }
    }
    
+   fnSleep = function (delay){
+       
+       var start = new Date().getTime();
+       while (start + delay > new Date().getTime());
+
+   };
+   
 $(function() { //ready
+	   
+	   
 $('.sss').on('click', function () {
 	var downloadfile = $(this).val();
-	location.href="dnload?dnfile="+downloadfile;
+	 
+	 location.href="dnload?dnfile="+downloadfile;
 
 });
    
@@ -260,7 +287,7 @@ $('.sss').on('click', function () {
 									</td>
 									<td class="won">300원</td>
 									<td>
-										<button id="${vs.index}" class="sss" name="sss" value="${row.downloadfile}">a</button>
+										<button hidden id="${vs.index}" class="sss" name="sss" value="${row.downloadfile}"></button>
 										<button type="button" class="deleteButton" onclick="deleteButton(${row.snum})">X</button>
 									</td>
 								</tr>
