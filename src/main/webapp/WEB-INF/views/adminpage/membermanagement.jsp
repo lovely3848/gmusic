@@ -28,6 +28,14 @@
 	padding: 5px;
 }
 
+body {
+	margin: 0 auto;
+}
+
+#logo {
+	margin: 0 auto;
+}
+
 .category {
 	font-family: 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif;
 	font-size: 14px;
@@ -51,6 +59,23 @@
 							+ $('#keyword').val();
 					// => ?currPage=7&rowPerPage=10&searchType=tc&keyword=java
 				}); //click
+	});//ready
+
+	$(function() {
+		$('.pagingAjax1').click(function() {
+			var paging = $(this).attr('value1');
+			$.ajax({ // nav topmenu
+				type : 'Get',
+				url : paging,
+				success : function(resultPage) {
+					$('#section').html('');
+					$('#section').html(resultPage);
+				},
+				error : function() {
+					$('#section').html("~~ 오류발생 ~~");
+				}
+			});//ajax
+		});//click
 	});//ready
 </script>
 </head>
@@ -100,13 +125,13 @@
 					</c:otherwise>
 				</c:choose>
 				<td>
-					<button class="membergradechange button" value="${row.id}">change</button>
+					<button id="membergradechange" class="membergradechange button" value="${row.id}">change</button>
 				</td>
 				<td>
-					<button class="memberpointchange button" value="${row.id}">change</button>
+					<button id="memberpointchange" class="memberpointchange button" value="${row.id}">change</button>
 				</td>
 				<td>
-					<button class="memberdelete button" value="${row.id}">
+					<button class="memberdelete button" id="memberdelete" value="${row.id}">
 						<img src="resources/image/delete.png" width="20px" height="20px">
 					</button>
 				</td>
@@ -118,9 +143,9 @@
 		<!-- ver 02 : pageMaker.searchQuery(?) -->
 		<!-- 1) First << , Prev < : enabeld 여부 -->
 		<c:if test="${pageMaker.prev && pageMaker.sPageNo>1}">
-			<a href="membermanagement${pageMaker.searchQuery(1)}">&#8666;</a>&nbsp; <!-- First -->
+			<a href="javascript:;" class="pagingAjax1" value1="membermanagement${pageMaker.searchQuery(1)}">&#8666;</a>&nbsp; <!-- First -->
 			<!-- "membermanagement?currPage=1" -->
-			<a href="membermanagement${pageMaker.searchQuery(pageMaker.sPageNo-1)}">&#8636;</a>
+			<a href="javascript:;" class="pagingAjax1" value1="membermanagement${pageMaker.searchQuery(pageMaker.sPageNo-1)}">&#8636;</a>
 			<!-- Prev -->
 		</c:if>
 
@@ -130,18 +155,18 @@
 				<font style="font-weight: bold;" color="navy">${i}&nbsp;</font>
 			</c:if>
 			<c:if test="${i!=pageMaker.cri.currPage}">
-				<a href="membermanagement${pageMaker.searchQuery(i)}">${i}</a>&nbsp;
-		</c:if>
+				<a href="javascript:;" class="pagingAjax1" value1="membermanagement${pageMaker.searchQuery(i)}">${i}</a>&nbsp;
+      </c:if>
 
 			<!-- 삼항식과 비교 
-		<c:out value="${i==pageMaker.cri.currPage ? 'class=active' : ''}"/>
-		-->
+      <c:out value="${i==pageMaker.cri.currPage ? 'class=active' : ''}"/>
+      -->
 		</c:forEach>
 
 		<!-- 3) Next > , Last >> : enabled 여부 -->
 		<c:if test="${pageMaker.next && pageMaker.ePageNo>0}">
-			<a href="membermanagement${pageMaker.searchQuery(pageMaker.ePageNo+1)}">&nbsp;&nbsp;&#8640;</a>&nbsp; <!-- Next -->
-			<a href="membermanagement${pageMaker.searchQuery(pageMaker.lastPageNo)}">&#8667;</a>&nbsp;&nbsp; <!-- Last -->
+			<a href="javascript:;" class="pagingAjax1" value1="membermanagement${pageMaker.searchQuery(pageMaker.ePageNo+1)}">&nbsp;&nbsp;&#8640;</a>&nbsp; <!-- Next -->
+			<a href="javascript:;" class="pagingAjax1" value1="membermanagement${pageMaker.searchQuery(pageMaker.lastPageNo)}">&#8667;</a>&nbsp;&nbsp; <!-- Last -->
 
 		</c:if>
 	</div>

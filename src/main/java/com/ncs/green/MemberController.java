@@ -40,6 +40,46 @@ public class MemberController {
 	@Autowired
 	private MailSendService mss;
 
+	// --------------------회원권 결제 -------------------------------------
+	@RequestMapping(value = "/passbuy")
+	public ModelAndView passbuy(ModelAndView mv, HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		String grade = request.getParameter("grade");
+		System.out.println(grade);
+		GmemberVO vo = new GmemberVO();
+		if (session != null) {
+			vo.setId((String) session.getAttribute("loginID"));
+			vo = service.selectOne(vo);
+			if (vo.getPoint() >= 10000 && vo != null && "vvip".equals(grade)) {
+				vo.setPoint(vo.getPoint() - 10000);
+				vo.setGrade("vvip");
+				service.pointChange(vo);
+				service.gradeChange(vo);
+				mv.setViewName("redirect:home");
+			} else if (vo.getPoint() >= 5000 && vo != null && "vip".equals(grade)) {
+				vo.setPoint(vo.getPoint() - 5000);
+				vo.setGrade("vip");
+				service.pointChange(vo);
+				service.gradeChange(vo);
+				mv.setViewName("redirect:home");
+			} else if (vo.getPoint() >= 5000 && vo != null && "upgrade".equals(grade)) {
+				vo.setPoint(vo.getPoint() - 5000);
+				vo.setGrade("vvip");
+				service.pointChange(vo);
+				service.gradeChange(vo);
+				mv.setViewName("redirect:home");
+			} else {
+				mv.setViewName("payment/passbuy");
+			}
+		} else {
+			mv.addObject("messege", "로그인 후 이용해주세요");
+			mv.setViewName("member/memberloginpage");
+		}
+		vo.setPassword(null);
+		request.getSession().setAttribute("loginVO", vo);// 세션 통합 (비밀번호 제외)
+		return mv;
+	}
+
 // ----------------------------회원관리 페이지 ----------------------------------------------	
 	@RequestMapping(value = "/management")
 	public ModelAndView managment(ModelAndView mv, HttpServletRequest request) {
