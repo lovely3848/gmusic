@@ -73,7 +73,7 @@ public class MemberController {
 			}
 		} else {
 			mv.addObject("messege", "로그인 후 이용해주세요");
-			mv.setViewName("member/memberloginpage");
+			mv.setViewName("member/memberloginpage");s
 		}
 		vo.setPassword(null);
 		request.getSession().setAttribute("loginVO", vo);// 세션 통합 (비밀번호 제외)
