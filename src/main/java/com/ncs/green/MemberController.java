@@ -71,7 +71,7 @@ public class MemberController {
 			} else {
 				mv.setViewName("payment/passbuy");
 			}
-		} else {
+		} else {s
 			mv.addObject("messege", "로그인 후 이용해주세요");
 			mv.setViewName("member/memberloginpage");
 		}
