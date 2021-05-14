@@ -68,7 +68,7 @@ public class MemberController {
 				service.pointChange(vo);
 				service.gradeChange(vo);
 				mv.setViewName("redirect:home");
-			} else {
+			} else {ss
 				mv.setViewName("payment/passbuy");
 			}
 		} else {
