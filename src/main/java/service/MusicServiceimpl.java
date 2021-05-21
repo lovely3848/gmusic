@@ -82,8 +82,14 @@ public class MusicServiceimpl implements MusicService {
 	}
 
 	@Override
+	public MusicVO cartselectOne(MusicVO vo) {
+		return dao.cartselectOne(vo);
+	}
+
+	@Override
 	public int myListInsert(MyListVO vo) {
 		return dao.myListInsert(vo);
 	}
+
 
 }

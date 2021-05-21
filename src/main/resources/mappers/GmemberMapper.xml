@@ -51,7 +51,7 @@
 		#{id},#{password},#{sex},#{email},
 		#{phone},#{birthday},#{rid},#{genre1},
 		default,default,#{uploadfile},
-		default,default
+		default,30000
 		)
 	</insert>
 	<!-- 회원 정보조회 -->
@@ -110,6 +110,7 @@
 	<update id="memberpointchange">
 		update gmember set point = #{point} where id = #{id}
 	</update>
+	
 	<update id="membergradechange">
 		update gmember set grade = #{grade} where id = #{id}
 	</update>

@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,7 +43,7 @@ public class GmusicController {
 
 	// 장바구니 현재는 최신음악에서 회원등급 c나 vip의 경우에 다운로드를 클릭시 작동하는 컨트롤러이다
 	@RequestMapping(value = "/cartView")
-	public ModelAndView cartView(HttpServletRequest request, ModelAndView mv) {
+	public ModelAndView cartView(HttpServletRequest request, ModelAndView mv) { // 서블릿에 transaction을 적용
 
 		// 파라미터로 값을 받음
 		String cartVal = request.getParameter("cartVal");
@@ -117,25 +117,35 @@ public class GmusicController {
 			mv.addObject("allMusic", allMusic);
 			mv.addObject("price", payMusic * 300);
 			// 결제 버튼을 누를시 code값 pay가 들어온다면 실행한다
-
+			GmemberVO vo = new GmemberVO();
+			vo.setId(id);
+			vo = memberservice.selectOne(vo);
+			if ("vvip".equals(vo.getGrade())) {
+				mv.addObject("price", 0);
+				mv.addObject("myMusic", allMusic);
+			}
 			if ("pay".equals(code)) {
-				// intcartVal 배열에 있는 값중 0을 제외한 값을 insert한다 (위쪽부분에서 0은 내가 소유한 곡을 0으로 변환했음)
-				for (int i = 0; i < intcartVal.length; i++) {
-					if (intcartVal[i] != 0) {
-						MyListVO vo = new MyListVO();
-						// 해당하는 음악번호와 아이디 값을 넣어준다
-						vo.setSnum(intcartVal[i]);
-						vo.setId(id);
-						service.myListInsert(vo);
+				if (!"vvip".equals(vo.getGrade())) {
+					// intcartVal 배열에 있는 값중 0을 제외한 값을 insert한다 (위쪽부분에서 0은 내가 소유한 곡을 0으로 변환했음)
+					for (int i = 0; i < intcartVal.length; i++) {
+						if (intcartVal[i] != 0) {
+							MyListVO vos = new MyListVO();
+							// 해당하는 음악번호와 아이디 값을 넣어준다
+							vos.setSnum(intcartVal[i]);
+							vos.setId(id);
+							service.myListInsert(vos);
+							// cmd에 create unique index snum_id on mylist (snum, id);를 적용하고
+							// service.myListInsert(vo);가 2번이루어질경우
+							// 무결성에 위배되게된다.
+							// 이러한경우 에러가 발생하여 아래 코드를 전부 실행 x
+							// DB또한 롤백되어 결제또한 실행되지 않는다. (다운로드도 마찬가지)
+						}
 					}
-				}
-				GmemberVO vo = new GmemberVO();
-				vo.setId(id);
-				vo = memberservice.selectOne(vo);
-				// 결제시 내가 가진 포인트가 결제금액과 비교했을때 0보다 작으면 결제가 안되도록 설정
-				if (vo != null && vo.getPoint() - (payMusic * 300) > 0) {
-					vo.setPoint(vo.getPoint() - (payMusic * 300));
-					memberservice.pointChange(vo);
+					// 결제시 내가 가진 포인트가 결제금액과 비교했을때 0보다 작으면 결제가 안되도록 설정
+					if (vo != null && vo.getPoint() - (payMusic * 300) > 0) {
+						vo.setPoint(vo.getPoint() - (payMusic * 300));
+						memberservice.pointChange(vo);
+					}
 				}
 				// 결제후 포인트값을 새로고침해주기 위한 세션값 적용
 				request.getSession().setAttribute("loginVO", vo);// 세션 통합 (비밀번호 제외)
@@ -529,7 +539,7 @@ public class GmusicController {
 	// ** Image DownLoad
 	@RequestMapping(value = "/dnload")
 	public ModelAndView dnload(ModelAndView mv, @RequestParam("dnfile") String dnfile) {
-		dnfile = "D:/jaepil/MyWork/gproject/src/main/webapp/" + dnfile;
+		dnfile = "C:/NamCheolWoo/gproject/src/main/webapp/" + dnfile;
 		System.out.println("** dnfile => " + dnfile);
 		File file = new File(dnfile);
 

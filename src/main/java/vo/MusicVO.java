@@ -22,5 +22,4 @@ public class MusicVO {
    private int count;
    private String rnum; // 음악 차트 page에 따른 numbering을 1~10반복하지 않게 하기위한 rnum (sql 참조)
    private String id;
-   
 }

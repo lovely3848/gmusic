@@ -86,7 +86,12 @@ public class MusicDAO {
 		return sqlSession.selectList(NS + "cartlist", id);
 	}
 
+	public MusicVO cartselectOne(MusicVO vo) {
+		return sqlSession.selectOne(NS + "cartselectOne", vo);
+	}
+
 	public int myListInsert(MyListVO vo) {
 		return sqlSession.insert(NS + "myListInsert", vo);
 	}
+
 } // class

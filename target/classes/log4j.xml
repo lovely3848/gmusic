@@ -56,9 +56,9 @@
     => trace -> 위에 TRACE 추가
     => 실제는 DEBUG, WARN 이 주로 이용됨. 	
 	-->
-	<!-- <root>
+	<root>
 		<priority value="trace" />
 		<appender-ref ref="console" />
-	</root> -->
+	</root>
 	
 </log4j:configuration>

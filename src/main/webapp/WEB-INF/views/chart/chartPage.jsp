@@ -203,6 +203,60 @@
 		}
 	} //getCheckboxValue
 	
+	function payPage(){
+		if(${loginVO != null}){
+		location.href='payPage';
+		}else{
+		alert('로그인 또는 회원가입이 필요합니다.')	
+		}
+	}//payPage 
+	
+ 	function cartPage(){
+		
+ 		if(${loginVO != null}){
+	 			
+			// 선택된 목록 가져오기
+			const query = 'input[name="snum"]:checked';
+			const selectedEls = document.querySelectorAll(query);
+		  
+			// 선택된 목록에서 value 찾기
+			let result = '';
+			selectedEls.forEach((el) => {
+				result += el.value + ',';
+			});
+		    
+			// div에 출력 하기
+			document.getElementById('result').innerText
+			= result;
+		    
+			if(result != null && result.length > 0){
+				url = "cartView";
+				window.open(url, "cartView","toolbar=no,menubar=yes,scrollbars=no,resizable=no,width=720,height=620");
+			   
+				document.musiclistForm.action =url;
+				document.musiclistForm.method="post";
+				document.musiclistForm.target="cartView";
+			    
+				// 항목 추가
+				var addcartVal = $('input[name=cartVal]').val();
+				console.log('addcartVal => ' + addcartVal);
+				if (addcartVal != null) {
+				   $('input[name=cartVal]').attr('value',addcartVal+result);
+				}else{
+					$('input[name=cartVal]').attr('value',result);
+				}
+			 	 
+				document.musiclistForm.submit();
+				} else {
+				alert("선택된 곡이 없습니다.");
+			}
+ 		}else{
+ 			alert('로그인 또는 회원가입이 필요합니다.')	
+ 		}
+		
+	}
+		
+
 </script>
 <style>
 body {
@@ -530,9 +584,21 @@ a {
 			<h1 align="center" id="headname">${part}</h1>
 		</c:if>
 		<form name="musiclistForm">
-			<button type="button" onclick="getCheckboxValue()">플레이리스트</button>
+			<c:if test="${loginVO.grade == 'c' || loginVO == null}">
+				<button type="button" onclick="payPage()">플레이리스트</button>
+			</c:if>
+			<c:if test="${loginVO.grade == 'admin' || loginVO.grade == 'vvip' || loginVO.grade =='vip'}">
+				<button type="button" onclick="getCheckboxValue()">플레이리스트</button>
+			</c:if>
+			<c:if test="${loginVO.grade == 'c' || loginVO == null || loginVO.grade == 'vip'}">
+				<button type="button" onclick="cartPage()">다운로드</button>
+			</c:if>
+			<c:if test="${loginVO.grade == 'admin' || loginVO.grade == 'vvip'}">
+				<button type="button" onclick="cartPage()">다운로드</button>
+			</c:if>
 			<div id='result'></div>
 			<input type="hidden" id="snumVal" name="snumVal" value="${snumValSession}">
+			<input type="hidden" id="cartVal" name="cartVal" value="${cartValSession}">
 			<table id="table">
 				<tr class="category" align="center" height="2" bgcolor="ghostwhite">
 					<td width="50">
@@ -572,15 +638,15 @@ a {
 							</button>
 						</td>
 						<td align="center">
-							<c:if test="${loginVO.grade == 'c' || loginVO == null}">
+							<c:if test="${loginVO.grade == 'c' || loginVO == null ||  loginVO.grade == 'vip'}">
 								<a href="payPage">
 									<img src="resources/image/download_icon.png" width="30" height="30">
 								</a>
 							</c:if>
-							<c:if test="${loginVO.grade == 'admin' || loginVO.grade == 'vvip' || loginVO.grade =='vip'}">
-								<a href="dnload?dnfile=${row.downloadfile}">
+							<c:if test="${loginVO.grade == 'admin' || loginVO.grade == 'vvip'}">
+								<button type="button" class="sss" value="${row.downloadfile}">
 									<img src="resources/image/download_icon.png" width="30" height="30">
-								</a>
+								</button>
 							</c:if>
 						</td>
 						<td align="center">

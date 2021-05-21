@@ -2,12 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ncs.MusicMapper">
+	<!--cart 리스트 -->
+	<select id="cartlist" resultType="vo.MusicVO">
+		select snum from mylist where
+		id = #{id}
+	</select>
 
-   <!--cart 리스트 -->
-   <select id="cartlist" resultType="vo.MusicVO">
-      select snum from mylist where id = #{id}
-   </select>
-   
+	<select id="cartselectOne" resultType="vo.MusicVO">
+		select DISTINCT snum ,
+		sname ,singername from music where snum = #{snum}
+	</select>
 	<!-- ******************************* -->
 	<select id="selectList" resultType="vo.MusicVO">
 		select * from music order by
@@ -39,12 +43,15 @@
 
 	<!-- ********section1_2번. 4개 최신곡 이미지 표현하는 섹션 -->
 	<select id="releasedateList" resultType="vo.MusicVO">
-		select snum, sname, stitle, singername, releasedate, genre,
+		select snum, sname,
+		stitle, singername, releasedate, genre,
 		replace(lyrics,'-','') lyrics,
 		country, musicurl, downloadfile, image, count, rnum
-		from (select m.*, ROW_NUMBER() OVER(order by releasedate desc , sname)
+		from (select m.*,
+		ROW_NUMBER() OVER(order by releasedate desc , sname)
 		rnum
-		from music m ) where rnum between #{sno} and #{eno}
+		from music m )
+		where rnum between #{sno} and #{eno}
 	</select>
 
 	<select id="releasedateRowCount" resultType="int">
@@ -82,7 +89,8 @@
 			<when test="searchType=='all'.toString()">
 				and upper(sname) Like '%' || upper(#{keyword}) || '%'
 				or upper(singername) Like '%' || upper(#{keyword}) || '%'
-				or upper(lyrics) Like '%' || upper(#{keyword}) || '%' )
+				or
+				upper(lyrics) Like '%' || upper(#{keyword}) || '%' )
 			</when>
 			<when test="searchType=='singername'.toString()">
 				and upper(singername) Like upper(#{keyVal}))
@@ -121,7 +129,8 @@
 		</selectKey>
 		INSERT INTO music VALUES(
 		#{snum},
-		#{sname}, #{stitle}, #{singername}, #{releasedate}, #{genre},
+		#{sname}, #{stitle}, #{singername},
+		#{releasedate}, #{genre},
 		<if test="lyrics != null">#{lyrics},</if>
 		<if test="lyrics == null">default,</if>
 		#{country}, #{musicurl}, #{downloadfile}, #{image}, default)
@@ -129,7 +138,8 @@
 
 	<update id="update">
 		UPDATE music set
-		sname=#{sname}, stitle=#{stitle}, singername=#{singername},
+		sname=#{sname}, stitle=#{stitle},
+		singername=#{singername},
 		releasedate=#{releasedate}, genre=#{genre},
 		<if test="lyrics != null">lyrics=#{lyrics},</if>
 		<if test="downloadfile != null">downloadfile=#{downloadfile},</if>
@@ -143,7 +153,10 @@
 		DELETE from music where snum=#{snum}
 	</delete>
 	<!--추가 수정 삭제 -->
+
 	<insert id="myListInsert">
-      insert into mylist values(#{snum},#{id})
-   </insert>
+		insert into mylist values(#{snum},#{id})
+	</insert>
+
+
 </mapper>  

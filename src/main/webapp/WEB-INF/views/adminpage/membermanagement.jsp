@@ -7,10 +7,18 @@
 <script src="resources/myLib/jquery-3.2.1.min.js"></script>
 <script src="resources/myLib/membermanagement.js"></script>
 <style>
+body {
+	margin: 0 auto;
+}
+
 .button {
 	border: 0;
 	outline: 0;
 	background-color: white;
+}
+
+#searchdiv {
+	margin-left: 200px;
 }
 
 #table {
@@ -26,14 +34,6 @@
 	border-collapse: collapse;
 	border-color: #EEEEEF;
 	padding: 5px;
-}
-
-body {
-	margin: 0 auto;
-}
-
-#logo {
-	margin: 0 auto;
 }
 
 .category {
@@ -53,11 +53,20 @@ body {
 		$('#searchBtn').on(
 				"click",
 				function() {
-					self.location = "membermanagement"
-							+ "${pageMaker.makeQuery(1)}" + "&searchType="
-							+ $('#searchType').val() + "&keyword="
-							+ $('#keyword').val();
-					// => ?currPage=7&rowPerPage=10&searchType=tc&keyword=java
+					$.ajax({ // nav topmenu
+						type : 'Get',
+						url : "membermanagement"
+								+ "${pageMaker.searchQuery(1)}"
+								+ "&searchType=" + $('#searchType').val()
+								+ "&keyword=" + $('#keyword').val(),
+						success : function(resultPage) {
+							$('#section').html('');
+							$('#section').html(resultPage);
+						},
+						error : function() {
+							$('#section').html("~~ 오류발생 ~~");
+						}
+					});//ajax	
 				}); //click
 	});//ready
 
@@ -82,7 +91,6 @@ body {
 <body>
 	<div id="searchdiv">
 		<div id="logo">
-			<h1>GMUSIC</h1>
 			<form action="membermanagement" id="search" name="search" class="search">
 				<select name="searchType" id="searchType" style="display: none">
 					<option value="all" selected>All</option>
@@ -156,11 +164,11 @@ body {
 			</c:if>
 			<c:if test="${i!=pageMaker.cri.currPage}">
 				<a href="javascript:;" class="pagingAjax1" value1="membermanagement${pageMaker.searchQuery(i)}">${i}</a>&nbsp;
-      </c:if>
+		</c:if>
 
 			<!-- 삼항식과 비교 
-      <c:out value="${i==pageMaker.cri.currPage ? 'class=active' : ''}"/>
-      -->
+		<c:out value="${i==pageMaker.cri.currPage ? 'class=active' : ''}"/>
+		-->
 		</c:forEach>
 
 		<!-- 3) Next > , Last >> : enabled 여부 -->

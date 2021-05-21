@@ -42,6 +42,9 @@ public interface MusicService {
 
 	public List<MusicVO> cartlist(String id);
 
+	public MusicVO cartselectOne(MusicVO vo);
+
 	public int myListInsert(MyListVO vo);
+
 
 }// interface

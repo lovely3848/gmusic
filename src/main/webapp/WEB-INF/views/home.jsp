@@ -18,7 +18,9 @@
 <script src="resources/myLib/userPickGenre.js"></script>
 <script>
 	$(function() {
-		$('#searchBtn').on("click",function() {
+		$('#searchBtn').on(
+				"click",
+				function() {
 					self.location = "mSearch" + "?currPage=1"
 					/* +"${pageMaker.makeQuery(1)}" */
 					+ "&searchType=" + $('#searchType').val() + "&keyword="
@@ -231,6 +233,12 @@ a {
 	list-style: none;
 	font-weight: normal;
 }
+
+#showpoint {
+	font-size: 15px;
+	float: right;
+}
+
 /* ----------- login 부분--------- */
 
 /* section */
@@ -272,7 +280,7 @@ a {
 
 </head>
 <body>
-	
+
 	<div id="header">
 		<ul id="headermenu">
 			<!-- 조건주고 로그인 상태면 로그인 없애고 로그아웃으로 -->
@@ -298,7 +306,9 @@ a {
 						<a href="mypage?id=${loginID}"> 마이페이지</a>
 					</button></li>
 			</c:if>
-					<li><a href="management">dddd</a></li>
+				<li><a href="management">관리자페이지</a></li>
+			<c:if test="${loginVO.grade == 'admin' }">
+			</c:if>
 		</ul>
 	</div>
 	<!-- header -->
@@ -337,7 +347,12 @@ a {
 						<div id="loginsuccess" value1="${userPickGenre1}">
 							<!-- 로그인한 유저의 선호장르 -->
 							<div id="welcome" style="font-size: 23px">
-								<img src="resources/uploadImage/basicman1.jpg" width="40" height="40">${loginID}님 환영합니다!!<br> <br>
+								<img src="resources/uploadImage/basicman1.jpg" width="40" height="40">${loginID}님 환영합니다!!<br>
+								<div id="showpoint">
+									현재 포인트 ${loginVO.point}
+									<button>충전</button>
+								</div>
+								<br>
 								<a href="mlogout">
 									<button type="button" id=logout_btn>로그아웃</button>
 								</a>
@@ -350,7 +365,7 @@ a {
 					</c:if>
 				</div>
 			</div>
-			
+
 			<!-- 일일,주간,월간 차트리스트 -->
 			<div id="chart" role="group">
 				<h3>** G-MUSIC 차트 **</h3>

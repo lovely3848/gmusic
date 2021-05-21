@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class MyListVO {
-   private int snum;
-   private String id;
+	private int snum;
+	private String id;
 }

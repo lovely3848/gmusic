@@ -40,7 +40,7 @@ public class MemberController {
 	@Autowired
 	private MailSendService mss;
 
-	// --------------------회원권 결제 -------------------------------------
+//--------------------회원권 결제 -------------------------------------
 	@RequestMapping(value = "/passbuy")
 	public ModelAndView passbuy(ModelAndView mv, HttpServletRequest request) {
 		HttpSession session = request.getSession(false);

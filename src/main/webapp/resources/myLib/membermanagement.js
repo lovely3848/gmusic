@@ -11,7 +11,7 @@ $(function() {
 				},
 				error: function() {
 				}
-			});//ajax	
+			});//ajax   
 		} else {
 			return false
 		}
@@ -28,7 +28,7 @@ $(function() {
 			},
 			error: function() {
 			}
-		});//ajax	
+		});//ajax   
 	});
 	$('.membergradechange').click(function() {
 		var id = $(this).val();
@@ -44,6 +44,6 @@ $(function() {
 			},
 			error: function() {
 			}
-		});//ajax	
+		});//ajax   
 	});
 });//ready

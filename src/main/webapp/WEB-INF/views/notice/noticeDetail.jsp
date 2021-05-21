@@ -166,7 +166,7 @@ footer {
 
 
 			<li><button>
-					<a href="javascript:;">이용권구매</a>
+					<a href="payPage">이용권구매</a>
 				</button></li>
 			<c:if test="${loginID == null}">
 				<li><button>
